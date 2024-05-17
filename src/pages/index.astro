@@ -1,0 +1,141 @@
+---
+import Layout from '../layouts/Layout.astro';
+const data = await fetch('http://localhost:4321/api/get-count')
+.then(res => res.json())
+let numberOfEmails = data.message
+if (Astro.request.method === "POST") {
+	const data = await Astro.request.formData()
+	const email = data.get('email')
+	fetch('http://localhost:4321/api/save-email', {
+		method: 'POST',
+		body: JSON.stringify({ email }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	}).then(res => {
+		if (res.ok) {
+			console.log('Email saved')
+		} else {
+			console.error('Failed to save email')
+		}
+	}).catch(err => {
+		console.error(err)
+	})
+	console.log(email);
+}	
+---
+
+<Layout title="Welcome to Astro.">
+	<main>
+		<div class="container">
+			<h1><span class="rust-color">Rust</span> for <span class="js-color">JS</span> devs </h1>
+			<form method="post" class="input-container">
+				<input class="mail-input" type="text" name="email">
+				<button>Notifícame</button>
+			</form>
+			<span class="notification">¡Mas de {numberOfEmails} devs se han apuntado!</span>
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.notification {
+		color: #e6b70e;
+		margin-top: 1rem;
+		font-style: italic;
+	}
+	.input-container {
+		display: flex;
+	}
+	.input-container button {
+		background-color: white;
+		color: black;
+		border-top-right-radius: 8px;
+		border-bottom-right-radius: 8px;
+		padding: 0.5rem 1rem;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		cursor: pointer;
+	}
+	.container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.mail-input{
+		max-width: 400px;
+		color: white;
+		background-color: #1c1e22;
+		border-top-left-radius: 8px;
+		border-bottom-left-radius: 8px;
+		width: 100%;
+		padding: 0.5rem;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		font-size: 1.2rem;
+	}
+	.mail-input:focus {
+		outline:none;
+		border: 1px solid #E67F0E;
+	}
+	.rust-color {
+		color: #E67F0E;
+	}
+	.js-color {
+		color: #e6b70e;
+	}
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 800px;
+		max-width: calc(100% - 2rem);
+		color: white;
+		font-size: 20px;
+		line-height: 1.6;
+	}
+	.astro-a {
+		position: absolute;
+		top: -32px;
+		left: 50%;
+		transform: translatex(-50%);
+		width: 220px;
+		height: auto;
+		z-index: -1;
+	}
+	h1 {
+		font-size: 4rem;
+		font-weight: 700;
+		line-height: 1;
+		text-align: center;
+		margin-bottom: 1em;
+	}
+	.text-gradient {
+		background-image: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+	.instructions {
+		margin-bottom: 2rem;
+		border: 1px solid rgba(var(--accent-light), 25%);
+		background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
+		padding: 1.5rem;
+		border-radius: 8px;
+	}
+	.instructions code {
+		font-size: 0.8em;
+		font-weight: bold;
+		background: rgba(var(--accent-light), 12%);
+		color: rgb(var(--accent-light));
+		border-radius: 4px;
+		padding: 0.3em 0.4em;
+	}
+	.instructions strong {
+		color: rgb(var(--accent-light));
+	}
+	.link-card-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+		gap: 2rem;
+		padding: 0;
+	}
+</style>
