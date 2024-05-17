@@ -1,39 +1,29 @@
 ---
+import { createClient } from 'redis';
 import Layout from '../layouts/Layout.astro';
-const data = await fetch('http://localhost:4321/api/get-count')
-.then(res => res.json())
-let numberOfEmails = data.message
+const redis = createClient({ url: import.meta.env.VITE_REDIS_URL })
+await redis.connect()
+  //get the count of all the keys of the 'emails' set
+const count = await redis.sCard('emails')
 if (Astro.request.method === "POST") {
 	const data = await Astro.request.formData()
-	const email = data.get('email')
-	fetch('http://localhost:4321/api/save-email', {
-		method: 'POST',
-		body: JSON.stringify({ email }),
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	}).then(res => {
-		if (res.ok) {
-			console.log('Email saved')
-		} else {
-			console.error('Failed to save email')
-		}
-	}).catch(err => {
-		console.error(err)
-	})
-	console.log(email);
-}	
+	const email = data.get('email')?.toString()
+	if(!email) {
+		return
+	}
+	await redis.sAdd('emails', email)
+}	 
 ---
 
 <Layout title="Welcome to Astro.">
 	<main>
 		<div class="container">
-			<h1><span class="rust-color">Rust</span> for <span class="js-color">JS</span> devs </h1>
-			<form method="post" class="input-container">
+			<h1><span  class="rust-color">Rust</span> for <span class="js-color">JS</span> devs </h1>
+			<form method="post" action="" class="input-container">
 				<input class="mail-input" type="text" name="email">
 				<button>Notifícame</button>
 			</form>
-			<span class="notification">¡Mas de {numberOfEmails} devs se han apuntado!</span>
+			<span class="notification">¡Mas de {count} devs se han apuntado!</span>
 		</div>
 	</main>
 </Layout>
