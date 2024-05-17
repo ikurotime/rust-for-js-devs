@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 import { createClient } from 'redis'
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST = async ({ request }: { request: any }) => {
   // response.setHeader('Content-Type', 'application/json')
   const data = await request.json()
   console.log('request.body', data)
