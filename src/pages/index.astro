@@ -29,11 +29,19 @@ if (Astro.request.method === "POST") {
 				<button>Notifícame</button>
 			</form>
 			<span class="notification">¡Mas de {count} devs se han apuntado!</span>
+		<a class="link"href="/terminos-y-condiciones">Términos y condiciones</a>
 		</div>
 	</main>
 </Layout>
 
 <style>
+	.link{
+		color: #e3e3e3;
+		text-decoration: none;
+		margin-top: 1rem;
+		font-style: italic;
+		font-size: 1rem;
+	}
 	.notification {
 		color: #e6b70e;
 		margin-top: 1rem;
