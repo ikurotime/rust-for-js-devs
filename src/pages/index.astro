@@ -11,6 +11,10 @@ if (Astro.request.method === "POST") {
 	if(!email) {
 		return
 	}
+	const emails = await redis.sMembers('emails')
+	if (emails.includes(email)) {
+		return
+	}
 	await redis.sAdd('emails', email)
 }	 
 ---
