@@ -9,13 +9,14 @@ if (Astro.request.method === "POST") {
 	const data = await Astro.request.formData()
 	const email = data.get('email')?.toString()
 	if(!email) {
-		return
+		return new Response('Email is required', { status: 400 })
 	}
+	console.log({email})
 	const emails = await redis.sMembers('emails')
-	if (emails.includes(email)) {
-		return
+	console.log({emails})
+	if (!emails.includes(email)) {
+		await redis.sAdd('emails', email)
 	}
-	await redis.sAdd('emails', email)
 }	 
 ---
 
