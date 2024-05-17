@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro"
+
 ---
 
 <Layout title="términos de servicio">
@@ -8,6 +9,13 @@ import Layout from "../layouts/Layout.astro"
     <p>Te informaremos cuando el primer contenido sea liberado</p>
   </main>
 </Layout>
+<script>
+  import JSConfetti from 'js-confetti'
+
+const jsConfetti = new JSConfetti()
+
+jsConfetti.addConfetti()
+</script>
 <style>
   main {
    color: aliceblue
