@@ -1,5 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
-
 import { createClient } from 'redis'
 
 export const POST = async ({ request }: { request: any }) => {
