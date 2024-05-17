@@ -16,6 +16,7 @@ if (Astro.request.method === "POST") {
 	console.log({emails})
 	if (!emails.includes(email)) {
 		await redis.sAdd('emails', email)
+		Astro.redirect('/confirmado')
 	}
 }	 
 ---
