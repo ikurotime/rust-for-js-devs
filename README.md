@@ -1,54 +1,25 @@
-# Astro Starter Kit: Basics
+# Rust for JavaScript Developers 🦀
 
-```sh
-npm create astro@latest -- --template basics
-```
+## ¿Qué es esto? 🤔
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+Este es un blog que contiene una serie de ejemplos de código en Rust para desarrolladores de JavaScript. La idea es que puedas ver ejemplos de código en Rust y compararlos con JavaScript para que puedas entender las diferencias y similitudes entre ambos lenguajes.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## ¿Por qué Rust? 🦀
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+Rust es un lenguaje de programación de bajo nivel que se puede utilizar para escribir super rápido ⚡️, y es muy interesante.
 
-## 🚀 Project Structure
+## ¿Cómo puedo contribuir? 🚀
 
-Inside of your Astro project, you'll see the following folders and files:
+Si quieres contribuir, puedes abrir una issue dialogando sobre algún tema que te gustaría ver en el blog, o puedes hacer un pull request con ejemplos de código en Rust que te gustaría compartir con la comunidad.
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+En cuanto las estructuras para las páginas esten listas, se podrá empezar a escribir contenido y podrás contribuir en un tema en concreto.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## ¿Cómo puedo ver el blog? 📖
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+El blog estará disponible en [rustforjsdevs.com](https://rustforjsdevs.com).
 
-Any static assets, like images, can be placed in the `public/` directory.
 
-## 🧞 Commands
+## ¿Puedo compartirlo? 🤗
 
-All commands are run from the root of the project, from a terminal:
+¡Por supuesto! Puedes compartir el blog con quien quieras, y si quieres contribuir, ¡aún mejor! 🚀
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
