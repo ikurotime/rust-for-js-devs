@@ -24,18 +24,30 @@ if (Astro.request.method === "POST") {
 <Layout title="Rust for JS devs">
 	<main>
 		<div class="container">
-			<h1><span  class="rust-color">Rust</span> for <span class="js-color">JS</span> devs </h1>
-			<form method="post" action="" class="input-container">
-				<input class="mail-input" type="email" name="email">
-				<button>Notifícame</button>
-			</form>
-			<span class="notification">¡Mas de {count} devs se han apuntado!</span>
-		<a class="link"href="/terminos-y-condiciones">Términos y condiciones</a>
+			<div class="inner-container">
+				<h1 class="title"><span  class="rust-gradient">Rust</span> for <span class="js-color">JS</span> devs </h1>
+				<span>Aprende el lenguaje del
+					cangrejo, con ejemplos en JS</span>
+				<form method="post" action="" class="input-container">
+					<input class="mail-input" type="email" name="email">
+					<button>Notifícame</button>
+				</form>
+				<span class="notification">¡Mas de {count} devs se han apuntado!</span>
+			</div>
+			<div>
+				<img src="/RUSTJS.png" alt="" class="hero-image">
+			</div>
 		</div>
+		<a class="link"href="/terminos-y-condiciones">Términos y condiciones</a>
 	</main>
 </Layout>
 
 <style>
+	.hero-image {
+		width: 100%;
+		max-width: 1000px;
+	
+	}
 	.link{
 		color: #e3e3e3;
 		text-decoration: none;
@@ -60,10 +72,39 @@ if (Astro.request.method === "POST") {
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		cursor: pointer;
 	}
+	.title{
+		font-size: 84px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: 95.075%; /* 79.863px */
+		text-align: start;
+		margin-bottom: auto;
+	}
+	.rust-gradient{
+		background: linear-gradient(114deg, #F49300 0.59%, #F34A00 63.18%);
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+	.subtitle{
+		color: #CDCDCD;
+		font-size: 24px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: normal;
+	}
 	.container {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
+		width: 100%;
 		align-items: center;
+	}
+	.inner-container{
+		display: flex;
+		text-align: start;
+		justify-content: left;
+		flex-direction: column;
+		gap: 1rem;
 	}
 	.mail-input{
 		max-width: 400px;
