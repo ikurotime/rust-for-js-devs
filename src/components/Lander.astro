@@ -1,0 +1,65 @@
+<div class="container">
+  <img src="rustjs.png" alt="Logo of Rust and Javascript">
+  <div class="title-container">
+    <p class="title">Rust for <br> JavaScript <br> Developers</p>
+    <p>Learn Rust concepts with JavaScript examples</p>
+    <div class="cta-buttons">
+      <a href="/docs" class="button">Get Started</a>
+      <a href="/github" class="button button-outline">GitHub</a>
+  </div>
+
+</div>
+<style>
+  .container{
+    --min-content-pad-y: 4.5rem;
+  }
+  .title{
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+    text-align: left;
+  }
+  .container{
+    display: flex;
+    padding: var(--min-content-pad-y) var(--l-content-pad-x);
+    min-height: var(--l-min-content-height);
+    justify-content: center;
+    align-items: center;
+  }
+  img{
+    max-width: 400px;
+    width: 50%;
+  }
+  .title-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .cta-buttons{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+  .button{
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--sl-color-accent);
+    color: var(--sl-color-white);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+  .button:hover{
+    background-color: var(--sl-color-accent-high);
+  }
+  .button-outline{
+    background-color: transparent;
+    border: 2px solid var(--sl-color-accent);
+    color: var(--sl-color-accent);
+  }
+
+</style>

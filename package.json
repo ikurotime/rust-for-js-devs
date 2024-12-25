@@ -10,16 +10,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.7.0",
-    "@astrojs/vercel": "^7.6.0",
-    "@types/node": "^20.12.12",
-    "astro": "^4.8.6",
-    "js-confetti": "^0.12.0",
-    "redis": "^4.6.14",
-    "redis-om": "^0.4.3",
-    "typescript": "^5.4.5"
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/starlight": "^0.30.3",
+    "@astrojs/vercel": "^8.0.1",
+    "astro": "^5.1.1"
   },
   "devDependencies": {
+    "@types/node": "^20.12.12",
+    "typescript": "^5.4.5",
     "@vercel/node": "^3.1.5"
   }
 }
