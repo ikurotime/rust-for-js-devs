@@ -1,7 +1,62 @@
 ---
 title: Rust for JS Devs
+description: A guide to learning Rust for JavaScript developers
 pagefind: false
 template: splash
 hero:
-  title: "n/a"
+  title: "Rust for JavaScript Developers"
+  tagline: "Learn Rust concepts mapped to your JavaScript knowledge"
+  image:
+    file: /public/rustjs.png
+  actions:
+    - text: Start Learning
+      link: /overview/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/your-username/rust-for-js-devs
+      icon: github
+      variant: secondary
 ---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Why Learn Rust as a JS Developer?
+
+<CardGrid stagger>
+  <Card title="Memory Safety" icon="shield">
+    Rust's ownership system prevents memory-related bugs without a garbage collector.
+  </Card>
+  <Card title="Performance" icon="rocket">
+    Get C-like speed with modern syntax and productivity similar to JavaScript.
+  </Card>
+  <Card title="Concurrency" icon="random">
+    Write thread-safe code with Rust's ownership model and avoid race conditions.
+  </Card>
+  <Card title="Ecosystem Growth" icon="puzzle">
+    Rust is becoming essential for WebAssembly, systems programming, and more.
+  </Card>
+</CardGrid>
+
+## Course Structure
+
+<CardGrid>
+  <Card title="Introduction" icon="seti:rust">
+    Get started with Rust installation, basic syntax, and how Rust compares to JavaScript.
+  </Card>
+  <Card title="Language Fundamentals" icon="open-book">
+    Learn about variables, data types, control flow, and functions in Rust.
+  </Card>
+  <Card title="Ownership & Borrowing" icon="key">
+    Understand Rust's unique memory management through ownership, borrowing, and lifetimes.
+  </Card>
+  <Card title="Structs & Enums" icon="puzzle">
+    Learn how to structure your data using Rust's structs and enums compared to JS objects.
+  </Card>
+  <Card title="Error Handling" icon="warning">
+    See how Rust's Result and Option types provide safer alternatives to JS exceptions.
+  </Card>
+  <Card title="Practical Projects" icon="laptop">
+    Build real-world applications using Rust, from CLI tools to WebAssembly components.
+  </Card>
+</CardGrid>

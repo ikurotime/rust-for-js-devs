@@ -1,0 +1,379 @@
+---
+title: Functions in Rust
+description: Learn how to define and use functions in Rust compared to JavaScript
+---
+
+# Functions in Rust
+
+Functions are fundamental building blocks in any programming language. Let's explore how functions work in Rust and how they compare to JavaScript functions.
+
+## Basic Function Syntax
+
+### JavaScript Functions
+
+In JavaScript, you can define functions in several ways:
+
+```javascript
+// Function declaration
+function add(a, b) {
+  return a + b;
+}
+
+// Function expression
+const multiply = function(a, b) {
+  return a * b;
+};
+
+// Arrow function
+const subtract = (a, b) => a - b;
+```
+
+### Rust Functions
+
+In Rust, functions are defined with the `fn` keyword:
+
+```rust
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+```
+
+Key differences from JavaScript:
+1. Rust requires type annotations for parameters and return type
+2. The return type is specified with `->` after the parameter list
+3. The final expression without a semicolon is implicitly returned (no `return` keyword needed)
+
+## Function Parameters
+
+### JavaScript Parameters
+
+JavaScript is flexible with parameters:
+
+```javascript
+// Default parameters
+function greet(name = "World") {
+  return `Hello, ${name}!`;
+}
+
+// Rest parameters
+function sum(...numbers) {
+  return numbers.reduce((total, num) => total + num, 0);
+}
+
+// Destructuring parameters
+function printPerson({ name, age }) {
+  console.log(`${name} is ${age} years old`);
+}
+```
+
+### Rust Parameters
+
+Rust parameters are more strictly typed:
+
+```rust
+// Basic parameters
+fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
+}
+
+// Multiple parameters
+fn calculate_area(width: f64, height: f64) -> f64 {
+    width * height
+}
+
+// Passing by reference
+fn increment(value: &mut i32) {
+    *value += 1;
+}
+```
+
+## Return Values
+
+### JavaScript Return Values
+
+JavaScript functions can return any type, or nothing:
+
+```javascript
+function getData() {
+  return {
+    id: 1,
+    name: "Product",
+    price: 29.99
+  };
+}
+
+function logMessage(msg) {
+  console.log(msg);
+  // No explicit return, implicitly returns undefined
+}
+```
+
+### Rust Return Values
+
+Rust functions must declare their return type, or return `()` (unit type, similar to `void`):
+
+```rust
+// Return a specific type
+fn get_pi() -> f64 {
+    3.14159
+}
+
+// Return a tuple
+fn get_dimensions() -> (i32, i32) {
+    (1920, 1080)
+}
+
+// No return value (unit type)
+fn log_message(msg: &str) {
+    println!("{}", msg);
+    // Returns () implicitly
+}
+
+// Early return with explicit return statement
+fn find_even(numbers: &[i32]) -> Option<i32> {
+    for &num in numbers {
+        if num % 2 == 0 {
+            return Some(num);
+        }
+    }
+    None
+}
+```
+
+## Expressions vs. Statements
+
+A key difference between Rust and JavaScript is that Rust is more expression-oriented:
+
+```rust
+// In Rust, the function body is an expression
+fn get_value(x: i32) -> i32 {
+    // No return keyword or semicolon for the last expression
+    x * 2
+}
+
+// This is equivalent to:
+fn get_value_explicit(x: i32) -> i32 {
+    return x * 2;
+}
+```
+
+In JavaScript, you need the `return` keyword:
+
+```javascript
+function getValue(x) {
+  return x * 2;
+}
+```
+
+## Function Pointers and Closures
+
+### JavaScript Function References
+
+In JavaScript, functions are first-class citizens:
+
+```javascript
+// Passing functions as arguments
+function applyOperation(a, b, operation) {
+  return operation(a, b);
+}
+
+const result = applyOperation(5, 3, (a, b) => a + b);
+```
+
+### Rust Function Pointers and Closures
+
+Rust has both function pointers and closures:
+
+```rust
+// Function pointer
+fn apply_operation(a: i32, b: i32, operation: fn(i32, i32) -> i32) -> i32 {
+    operation(a, b)
+}
+
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+let result = apply_operation(5, 3, add);
+
+// Closures
+let result = apply_operation(5, 3, |a, b| a + b);
+```
+
+## Higher-Order Functions
+
+Both Rust and JavaScript support higher-order functions (functions that take or return other functions).
+
+### JavaScript Higher-Order Functions
+
+```javascript
+// Array map example
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(num => num * 2);
+```
+
+### Rust Higher-Order Functions
+
+```rust
+// Vec map example
+let numbers = vec![1, 2, 3, 4, 5];
+let doubled: Vec<i32> = numbers.iter().map(|&num| num * 2).collect();
+```
+
+## Function Scope and Capturing Environment
+
+### JavaScript Closures
+
+JavaScript closures can capture variables from their outer scope:
+
+```javascript
+function createCounter() {
+  let count = 0;
+  
+  return function increment() {
+    count += 1;
+    return count;
+  };
+}
+
+const counter = createCounter();
+console.log(counter()); // 1
+console.log(counter()); // 2
+```
+
+### Rust Closures
+
+Rust closures can also capture their environment, but with more explicit rules about ownership:
+
+```rust
+fn create_counter() -> impl FnMut() -> i32 {
+    let mut count = 0;
+    
+    move || {
+        count += 1;
+        count
+    }
+}
+
+fn main() {
+    let mut counter = create_counter();
+    println!("{}", counter()); // 1
+    println!("{}", counter()); // 2
+}
+```
+
+The `move` keyword indicates that the closure takes ownership of the captured variables.
+
+## Methods in Rust
+
+Rust has methods that are associated with types, similar to JavaScript's object methods:
+
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    // Constructor method (static method)
+    fn new(width: u32, height: u32) -> Rectangle {
+        Rectangle { width, height }
+    }
+    
+    // Instance method (uses &self)
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+    
+    // Mutable method (uses &mut self)
+    fn resize(&mut self, width: u32, height: u32) {
+        self.width = width;
+        self.height = height;
+    }
+}
+
+fn main() {
+    let mut rect = Rectangle::new(10, 20);
+    println!("Area: {}", rect.area());
+    rect.resize(30, 40);
+    println!("New area: {}", rect.area());
+}
+```
+
+This is conceptually similar to JavaScript classes:
+
+```javascript
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+  
+  area() {
+    return this.width * this.height;
+  }
+  
+  resize(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+}
+
+const rect = new Rectangle(10, 20);
+console.log("Area:", rect.area());
+rect.resize(30, 40);
+console.log("New area:", rect.area());
+```
+
+## Generic Functions
+
+Rust supports generic functions, similar to TypeScript's generics:
+
+```rust
+// Generic function
+fn first<T>(slice: &[T]) -> Option<&T> {
+    if slice.is_empty() {
+        None
+    } else {
+        Some(&slice[0])
+    }
+}
+
+// Usage
+let numbers = vec![1, 2, 3];
+let first_number = first(&numbers);
+
+let names = vec!["Alice", "Bob", "Charlie"];
+let first_name = first(&names);
+```
+
+TypeScript equivalent:
+
+```typescript
+// Generic function in TypeScript
+function first<T>(array: T[]): T | undefined {
+  if (array.length === 0) {
+    return undefined;
+  } else {
+    return array[0];
+  }
+}
+
+// Usage
+const numbers = [1, 2, 3];
+const firstNumber = first(numbers);
+
+const names = ["Alice", "Bob", "Charlie"];
+const firstName = first(names);
+```
+
+## Key Differences from JavaScript
+
+1. **Type Safety**: Rust functions have explicit parameter and return types
+2. **Ownership Rules**: Rust enforces ownership rules in function parameters and return values
+3. **Expression-based**: Functions can return the last expression without a `return` keyword
+4. **Methods**: Rust has implementation blocks (`impl`) for defining methods on types
+5. **Generic Functions**: Rust has powerful generics with constraints
+6. **Error Handling**: Rust encourages using Result/Option for error handling instead of exceptions
+
+In the next section, we'll explore [Collections](/language-fundamentals/collections/) in Rust - the equivalents of arrays, objects, and other data structures in JavaScript. 

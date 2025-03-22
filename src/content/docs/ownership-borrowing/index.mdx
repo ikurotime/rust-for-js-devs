@@ -1,0 +1,210 @@
+---
+title: Ownership and Borrowing
+description: Understanding Rust's unique memory management system
+---
+
+# Ownership and Borrowing: Rust's Memory Management
+
+Ownership is Rust's most unique feature and sets it apart from JavaScript and most other programming languages. It's a set of rules that the Rust compiler checks at compile time to manage memory safely without a garbage collector.
+
+## Memory Management in JavaScript vs. Rust
+
+### JavaScript's Approach
+
+In JavaScript, memory management is handled by a **garbage collector**:
+
+```javascript
+// JavaScript memory management
+let user = { name: "Alice", age: 30 };  // Object allocated on the heap
+
+// When 'user' goes out of scope or is reassigned,
+// the garbage collector will eventually reclaim the memory
+user = null; // Mark for garbage collection, but actual cleanup happens later
+```
+
+JavaScript developers don't need to worry about when memory is allocated or freed. The garbage collector automatically identifies and collects memory that's no longer in use.
+
+### Rust's Approach: Ownership
+
+Rust doesn't have a garbage collector. Instead, it uses a system of ownership with a set of rules checked at compile time:
+
+```rust
+// Rust memory management
+{
+    let user = String::from("Alice"); // Memory allocated on the heap
+    // 'user' is the owner of this string
+    
+    // At the end of this scope, 'user' goes out of scope
+    // Rust automatically calls the 'drop' function and frees the memory
+} // Memory is deterministically freed HERE, not at some future point
+```
+
+## The Rules of Ownership
+
+Rust's ownership system follows three main rules:
+
+1. Each value in Rust has a variable that's called its **owner**
+2. There can only be **one owner** at a time
+3. When the owner goes out of scope, the value will be **dropped** (memory freed)
+
+## Ownership Transfer in Rust
+
+In Rust, when you assign a heap-allocated value to another variable, the ownership transfers:
+
+```rust
+let s1 = String::from("hello");
+let s2 = s1; // Ownership moves from s1 to s2
+              
+// println!("{}", s1); // ❌ Error: s1 is no longer valid
+println!("{}", s2);   // ✅ Works
+```
+
+This is fundamentally different from JavaScript:
+
+```javascript
+let s1 = "hello"; // In JavaScript, primitive strings are immutable
+let s2 = s1;      // Creates a copy of the reference, both are valid
+
+console.log(s1);  // ✅ Works
+console.log(s2);  // ✅ Works
+
+// With objects:
+let obj1 = { name: "Alice" };
+let obj2 = obj1;  // Both variables reference the same object
+
+obj2.name = "Bob";
+console.log(obj1.name); // "Bob" - both reference the same object
+```
+
+## Borrowing: References in Rust
+
+Instead of transferring ownership, you can "borrow" values using references:
+
+```rust
+let s1 = String::from("hello");
+let len = calculate_length(&s1); // Borrow s1 (immutable reference)
+                                 
+println!("The length of '{}' is {}.", s1, len); // ✅ s1 is still valid
+
+fn calculate_length(s: &String) -> usize {
+    s.len() // Return the length, without taking ownership
+    // s goes out of scope here, but since it's just a reference,
+    // nothing happens to the original value
+}
+```
+
+### Mutable References
+
+References are immutable by default, but you can create mutable references:
+
+```rust
+let mut s = String::from("hello");
+change(&mut s); // Mutable reference
+
+fn change(s: &mut String) {
+    s.push_str(", world"); // Can modify the value through a mutable reference
+}
+```
+
+### Borrowing Rules
+
+Rust enforces strict rules for references:
+
+1. You can have **either** one mutable reference **or** any number of immutable references
+2. References must always be valid (no dangling references)
+
+```rust
+let mut s = String::from("hello");
+
+let r1 = &s;     // ✅ First immutable borrow
+let r2 = &s;     // ✅ Second immutable borrow - this is fine
+// let r3 = &mut s; // ❌ Error: cannot borrow as mutable while borrowed as immutable
+
+println!("{} and {}", r1, r2);
+// r1 and r2 are no longer used after this point
+
+let r3 = &mut s; // ✅ Now we can borrow mutably
+println!("{}", r3);
+```
+
+## Why This Matters
+
+The ownership system provides Rust with several advantages:
+
+1. **Memory safety without garbage collection**: No memory leaks, double frees, or null pointer dereferences
+2. **Concurrency without data races**: The compiler prevents many concurrency bugs at compile time
+3. **Predictable performance**: No garbage collection pauses
+4. **Smaller runtime**: No need to include a garbage collector
+
+## Common Ownership Patterns
+
+### Functions and Ownership
+
+When you pass a value to a function, ownership transfers to the function parameter:
+
+```rust
+fn main() {
+    let s = String::from("hello");
+    takes_ownership(s); // Ownership moves into the function
+    // println!("{}", s); // ❌ Error: s is no longer valid here
+    
+    let x = 5;
+    makes_copy(x); // i32 is copied, so x is still valid after
+    println!("{}", x); // ✅ Works
+}
+
+fn takes_ownership(some_string: String) {
+    println!("{}", some_string);
+} // some_string goes out of scope and `drop` is called
+
+fn makes_copy(some_integer: i32) {
+    println!("{}", some_integer);
+} // some_integer goes out of scope, nothing special happens
+```
+
+### Return Values and Ownership
+
+Functions can also return ownership:
+
+```rust
+fn main() {
+    let s1 = gives_ownership(); // Receives ownership from the function
+    
+    let s2 = String::from("hello");
+    let s3 = takes_and_gives_back(s2); // s2 is moved into the function,
+                                       // then its return value moves into s3
+} // s1 and s3 go out of scope and are dropped
+
+fn gives_ownership() -> String {
+    let some_string = String::from("hello");
+    some_string // Returns ownership to the caller
+}
+
+fn takes_and_gives_back(a_string: String) -> String {
+    a_string // Returns the same string back to the caller
+}
+```
+
+## JavaScript Comparison: Closest Concept
+
+JavaScript doesn't have a direct equivalent to Rust's ownership, but the closest concept might be understanding object references vs. primitive values:
+
+```javascript
+// Primitives are copied
+let num1 = 5;
+let num2 = num1; // Copy
+num2 = 10;
+console.log(num1); // Still 5
+
+// Objects are referenced
+let obj1 = { value: 5 };
+let obj2 = obj1; // Reference, not copy
+obj2.value = 10;
+console.log(obj1.value); // 10, because obj1 and obj2 reference the same object
+```
+
+## Conclusion
+
+Rust's ownership system is a fundamentally different way of thinking about memory management. It may seem restrictive at first compared to JavaScript's "anything goes" approach, but it ensures memory safety without runtime overhead.
+
+In the [next section](/ownership-borrowing/borrowing-in-depth/), we'll dive deeper into borrowing and how to work with more complex ownership patterns. 

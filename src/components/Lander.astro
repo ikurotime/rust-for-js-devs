@@ -1,65 +1,169 @@
 <div class="container">
-  <img src="rustjs.png" alt="Logo of Rust and Javascript">
-  <div class="title-container">
-    <p class="title">Rust for <br> JavaScript <br> Developers</p>
-    <p>Learn Rust concepts with JavaScript examples</p>
-    <div class="cta-buttons">
-      <a href="/docs" class="button">Get Started</a>
-      <a href="/github" class="button button-outline">GitHub</a>
+  <div class="hero-content">
+    <div class="logo-container">
+      <img src="rustjs.png" alt="Logo of Rust and Javascript" class="logo">
+    </div>
+    <div class="title-container">
+      <h1 class="title">Rust for JavaScript Developers</h1>
+      <p class="subtitle">Learn Rust the easy way, with concepts mapped to your JavaScript knowledge</p>
+      <div class="features">
+        <div class="feature">
+          <span class="emoji">⚡️</span>
+          <span>Performance focused</span>
+        </div>
+        <div class="feature">
+          <span class="emoji">🔒</span>
+          <span>Memory safety</span>
+        </div>
+        <div class="feature">
+          <span class="emoji">🧩</span>
+          <span>Modern syntax</span>
+        </div>
+      </div>
+      <div class="cta-buttons">
+        <a href="/overview" class="button button-primary">Get Started</a>
+        <a href="https://github.com/your-username/rust-for-js-devs" class="button button-outline">GitHub</a>
+      </div>
+    </div>
   </div>
-
 </div>
 <style>
-  .container{
-    --min-content-pad-y: 4.5rem;
-  }
-  .title{
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1.2;
-    margin: 0;
-    text-align: left;
-  }
-  .container{
-    display: flex;
+  .container {
+    --min-content-pad-y: 2rem;
     padding: var(--min-content-pad-y) var(--l-content-pad-x);
-    min-height: var(--l-min-content-height);
-    justify-content: center;
-    align-items: center;
-  }
-  img{
-    max-width: 400px;
-    width: 50%;
-  }
-  .title-container{
+    min-height: calc(100vh - 120px);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
-    gap: 1rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
   }
-  .cta-buttons{
+  
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    width: 100%;
+  }
+  
+  @media (min-width: 768px) {
+    .hero-content {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 4rem;
+    }
+  }
+  
+  .logo-container {
+    text-align: center;
+  }
+  
+  .logo {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+  }
+  
+  .logo:hover {
+    transform: scale(1.05);
+  }
+  
+  .title-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 600px;
+  }
+  
+  .title {
+    font-size: 2.75rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0;
+    background: linear-gradient(90deg, var(--sl-color-accent), var(--sl-color-accent-high));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .subtitle {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--sl-color-gray-3);
+    margin: 0;
+  }
+  
+  .features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  .feature {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    background-color: var(--sl-color-bg-subtle);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+  }
+  
+  .emoji {
+    font-size: 1.25rem;
+  }
+  
+  .cta-buttons {
     display: flex;
     gap: 1rem;
-    justify-content: center;
+    margin-top: 1rem;
   }
-  .button{
+  
+  .button {
     display: inline-block;
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
-    background-color: var(--sl-color-accent);
-    color: var(--sl-color-white);
     text-decoration: none;
     font-weight: 600;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
+    white-space: nowrap;
   }
-  .button:hover{
+  
+  .button-primary {
+    background-color: var(--sl-color-accent);
+    color: var(--sl-color-white);
+    box-shadow: 0 4px 12px rgba(var(--sl-color-accent-rgb), 0.25);
+  }
+  
+  .button-primary:hover {
     background-color: var(--sl-color-accent-high);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(var(--sl-color-accent-rgb), 0.3);
   }
-  .button-outline{
+  
+  .button-outline {
     background-color: transparent;
     border: 2px solid var(--sl-color-accent);
     color: var(--sl-color-accent);
   }
-
+  
+  .button-outline:hover {
+    background-color: rgba(var(--sl-color-accent-rgb), 0.1);
+    transform: translateY(-2px);
+  }
+  
+  @media (max-width: 768px) {
+    .title {
+      font-size: 2.25rem;
+    }
+    
+    .subtitle {
+      font-size: 1.1rem;
+    }
+  }
 </style>

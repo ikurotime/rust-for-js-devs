@@ -1,33 +1,152 @@
-/* Dark mode colors. */
+/* Custom CSS Variables */
 :root {
-	--sl-color-accent-low: #381c00;
-	--sl-color-accent: #9a5700;
-	--sl-color-accent-high: #f3bc8c;
-	--sl-color-white: #ffffff;
-	--sl-color-gray-1: #eeeded;
-	--sl-color-gray-2: #c2c2c2;
-	--sl-color-gray-3: #8c8b8b;
-	--sl-color-gray-4: #595858;
-	--sl-color-gray-5: #393838;
-	--sl-color-gray-6: #272626;
-	--sl-color-black: #181818;
-}
-/* Light mode colors. */
-:root[data-theme='light'] {
-	--sl-color-accent-low: #f8ceaa;
-	--sl-color-accent: #9c5800;
-	--sl-color-accent-high: #4c2800;
-	--sl-color-white: #181818;
-	--sl-color-gray-1: #272626;
-	--sl-color-gray-2: #393838;
-	--sl-color-gray-3: #595858;
-	--sl-color-gray-4: #8c8b8b;
-	--sl-color-gray-5: #c2c2c2;
-	--sl-color-gray-6: #eeeded;
-	--sl-color-gray-7: #f6f6f6;
-	--sl-color-black: #ffffff;
+	/* Rust orange color */
+	--sl-color-accent-low: #ffffff;
+	--sl-color-accent: #f74c00;
+	--sl-color-accent-high: #d44e1d;
+	--sl-color-accent-rgb: 247, 76, 0;
+	
+	/* JavaScript yellow accents */
+	--js-yellow: #f7df1e;
+	--js-yellow-rgb: 247, 223, 30;
+	
+	/* Code block styling */
+	--code-bg: #2b2b2b;
+	--code-border: 1px solid #444;
+	
+	/* Fonts */
+	--sl-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+	--sl-font-mono: 'Fira Code', 'JetBrains Mono', monospace;
+	
+	/* Content width */
+	--sl-content-width: 50rem;
+	--sl-content-padding: 1rem;
 }
 
+/* Dark mode adjustments */
+:root[data-theme='dark'] {
+	--sl-color-bg: #121212;
+	--sl-color-bg-nav: #1c1c1c;
+	--sl-color-bg-sidebar: #1c1c1c;
+	
+	/* Code blocks in dark mode */
+	--astro-code-color-text: #fff;
+	--astro-code-color-background: #2b2b2b;
+	--astro-code-token-constant: #f08d49;
+	--astro-code-token-string: #7ec699;
+	--astro-code-token-comment: #5c6370;
+	--astro-code-token-keyword: #cc99cd;
+	--astro-code-token-parameter: #e6c07b;
+	--astro-code-token-function: #61afef;
+	--astro-code-token-string-expression: #7ec699;
+	--astro-code-token-punctuation: #9da5b4;
+	--astro-code-token-link: #e6c07b;
+}
+
+/* Typography improvements */
 body {
-  -webkit-font-smoothing: auto;
+	font-family: var(--sl-font);
+	line-height: 1.6;
+	letter-spacing: -0.01em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 700;
+	line-height: 1.2;
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+}
+
+h1 {
+	font-size: 2.25rem;
+	font-weight: 800;
+	margin-top: 0;
+}
+
+h2 {
+	font-size: 1.75rem;
+	border-bottom: 1px solid var(--sl-color-gray-5);
+	padding-bottom: 0.25rem;
+}
+
+h3 {
+	font-size: 1.4rem;
+}
+
+code {
+	font-family: var(--sl-font-mono);
+	font-size: 0.9em;
+}
+
+/* Code block customization */
+astro-code, pre {
+	border-radius: 8px;
+	padding: 1rem;
+	overflow-x: auto;
+	border: var(--code-border);
+	margin: 1.5rem 0;
+}
+
+/* Language tabs in code blocks */
+.code-block-lang-tab {
+	background-color: #1a1a1a;
+	color: #ddd;
+	padding: 0.25rem 0.5rem;
+	border-radius: 4px 4px 0 0;
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	margin-bottom: -1rem;
+	display: inline-block;
+}
+
+.rust-tab {
+	background-color: var(--sl-color-accent-low);
+	color: white;
+}
+
+.javascript-tab {
+	background-color: var(--js-yellow);
+	color: black;
+}
+
+/* Content layout */
+.content {
+	max-width: var(--sl-content-width);
+	margin: 0 auto;
+	padding: 0 var(--sl-content-padding);
+}
+
+/* Card styling */
+.card {
+	border: 1px solid var(--sl-color-gray-5);
+	border-radius: 8px;
+	padding: 1.5rem;
+	margin: 1rem 0;
+	background-color: var(--sl-color-bg);
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+	h1 {
+		font-size: 1.75rem;
+	}
+	
+	h2 {
+		font-size: 1.5rem;
+	}
+	
+	h3 {
+		font-size: 1.25rem;
+	}
+	
+	astro-code {
+		font-size: 0.8rem;
+	}
 }
