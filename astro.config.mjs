@@ -56,11 +56,15 @@ export default defineConfig({
           items: [
             {
               label: 'What is Ownership?',
-              link: '/ownership-borrowing/'
+              link: '/ownership-borrowing/what-is-ownership'
             },
             {
               label: 'Borrowing in Depth',
               link: '/ownership-borrowing/borrowing-in-depth/'
+            },
+            {
+              label: 'Lifetimes',
+              link: '/ownership-borrowing/lifetimes/'
             }
           ]
         },
