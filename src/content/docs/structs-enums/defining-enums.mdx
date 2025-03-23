@@ -1,0 +1,596 @@
+---
+title: 'Defining Enums in Rust'
+description: 'Learn how to define and use enums in Rust and how they compare to JavaScript patterns'
+---
+
+# Defining Enums in Rust
+
+Enums (short for "enumerations") are a powerful feature in Rust that allow you to define a type by enumerating its possible variants. Coming from JavaScript, you might not be familiar with enums, but they solve problems that JavaScript developers typically handle with various patterns.
+
+## What are Enums?
+
+An enum is a type that can be one of several variants. Each variant can optionally hold data, making enums in Rust much more powerful than enums in many other languages.
+
+## JavaScript vs Rust: Representing Variants
+
+In JavaScript, when we need to represent a value that can be one of several options, we often use string constants or objects:
+
+```javascript
+// Using string constants
+const STATUS = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+function processOrder(order) {
+  if (order.status === STATUS.PENDING) {
+    // Process pending order
+  } else if (order.status === STATUS.APPROVED) {
+    // Process approved order
+  } else if (order.status === STATUS.REJECTED) {
+    // Process rejected order
+  }
+}
+```
+
+Rust uses enums for this purpose:
+
+```rust
+enum Status {
+    Pending,
+    Approved,
+    Rejected,
+}
+
+fn process_order(order: Order) {
+    match order.status {
+        Status::Pending => {
+            // Process pending order
+        },
+        Status::Approved => {
+            // Process approved order
+        },
+        Status::Rejected => {
+            // Process rejected order
+        },
+    }
+}
+```
+
+The key differences:
+- Rust's enum is a distinct type with well-defined variants
+- Rust's `match` statement ensures you handle all variants (more on this later)
+- Each variant can be referenced using the `::` operator
+
+## TypeScript Enums vs Rust Enums
+
+If you're a TypeScript user, you may be familiar with TypeScript's enum feature:
+
+```typescript
+enum Status {
+  Pending,
+  Approved,
+  Rejected
+}
+
+// TypeScript enums can be used like this:
+const status: Status = Status.Approved;
+```
+
+While they might look similar, Rust enums are much more powerful because each variant can contain different types of data, making them more like "discriminated unions" or "tagged unions" in functional programming.
+
+## Enums with Data
+
+One of the most powerful features of Rust enums is that each variant can contain different types of data.
+
+In JavaScript, we might represent this with objects that have a "type" field:
+
+```javascript
+// JavaScript tagged union pattern
+const message1 = {
+  type: 'text',
+  content: 'Hello, world!'
+};
+
+const message2 = {
+  type: 'image',
+  url: 'https://example.com/image.jpg',
+  dimensions: { width: 800, height: 600 }
+};
+
+function displayMessage(message) {
+  switch (message.type) {
+    case 'text':
+      console.log(`Text message: ${message.content}`);
+      break;
+    case 'image':
+      console.log(`Image at ${message.url} with dimensions ${message.dimensions.width}x${message.dimensions.height}`);
+      break;
+  }
+}
+```
+
+In Rust, we can use an enum with different data for each variant:
+
+```rust
+enum Message {
+    Text(String),
+    Image { url: String, dimensions: (u32, u32) },
+}
+
+fn display_message(message: &Message) {
+    match message {
+        Message::Text(content) => {
+            println!("Text message: {}", content);
+        },
+        Message::Image { url, dimensions } => {
+            println!("Image at {} with dimensions {}x{}", url, dimensions.0, dimensions.1);
+        },
+    }
+}
+
+fn main() {
+    let message1 = Message::Text(String::from("Hello, world!"));
+    let message2 = Message::Image {
+        url: String::from("https://example.com/image.jpg"),
+        dimensions: (800, 600),
+    };
+    
+    display_message(&message1);
+    display_message(&message2);
+}
+```
+
+Notice that:
+1. Each variant can contain different data (a String, or a struct-like object)
+2. We can destructure the data in the `match` statement
+3. The enum is one type (`Message`), but can represent multiple types of data
+
+## Different Ways to Define Enum Variants
+
+Rust enums can hold data in various ways:
+
+```rust
+enum Shape {
+    Circle(f64),                  // Tuple variant with one element (radius)
+    Rectangle(f64, f64),          // Tuple variant with two elements (width, height)
+    Triangle { a: f64, b: f64, c: f64 },  // Struct-like variant with named fields
+    Point,                        // Unit variant (no data)
+}
+
+fn calculate_area(shape: &Shape) -> f64 {
+    match shape {
+        Shape::Circle(radius) => std::f64::consts::PI * radius * radius,
+        Shape::Rectangle(width, height) => width * height,
+        Shape::Triangle { a, b, c } => {
+            // Heron's formula
+            let s = (a + b + c) / 2.0;
+            f64::sqrt(s * (s - a) * (s - b) * (s - c))
+        },
+        Shape::Point => 0.0,
+    }
+}
+```
+
+This flexibility allows enums to represent a wide range of data structures.
+
+## Option Enum: Representing Values That May Be Missing
+
+JavaScript uses `null` or `undefined` to represent missing values:
+
+```javascript
+function findUser(id) {
+  // Return user if found, or null if not found
+  return users.find(user => user.id === id) || null;
+}
+
+const user = findUser(123);
+if (user !== null) {
+  console.log(user.name);
+} else {
+  console.log("User not found");
+}
+```
+
+Rust has no `null` or `undefined`. Instead, it uses the `Option` enum:
+
+```rust
+enum Option<T> {
+    Some(T),
+    None,
+}
+
+fn find_user(id: u32) -> Option<User> {
+    // Return Some(user) if found, or None if not found
+    for user in &users {
+        if user.id == id {
+            return Some(user.clone());
+        }
+    }
+    None
+}
+
+fn main() {
+    match find_user(123) {
+        Some(user) => println!("{}", user.name),
+        None => println!("User not found"),
+    }
+    
+    // Or using the if let syntax
+    if let Some(user) = find_user(123) {
+        println!("{}", user.name);
+    } else {
+        println!("User not found");
+    }
+}
+```
+
+The `Option` enum is so fundamental to Rust that it's included in the prelude (automatically imported):
+
+```rust
+// These two are equivalent
+Option<i32>
+std::option::Option<i32>
+```
+
+And you don't need to qualify the variants:
+
+```rust
+let some_number = Some(5);  // Not Option::Some(5)
+let no_number: Option<i32> = None;  // Not Option::None
+```
+
+## Result Enum: Handling Success and Error
+
+JavaScript typically handles errors with exceptions or by returning error objects:
+
+```javascript
+// Using exceptions
+function divide(a, b) {
+  if (b === 0) {
+    throw new Error("Division by zero");
+  }
+  return a / b;
+}
+
+try {
+  const result = divide(10, 0);
+  console.log(result);
+} catch (error) {
+  console.error(`Error: ${error.message}`);
+}
+
+// Or returning error objects
+function safeDivide(a, b) {
+  if (b === 0) {
+    return { success: false, error: "Division by zero" };
+  }
+  return { success: true, value: a / b };
+}
+
+const result = safeDivide(10, 0);
+if (result.success) {
+  console.log(result.value);
+} else {
+  console.error(`Error: ${result.error}`);
+}
+```
+
+Rust uses the `Result` enum for error handling:
+
+```rust
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+
+fn divide(a: f64, b: f64) -> Result<f64, String> {
+    if b == 0.0 {
+        return Err(String::from("Division by zero"));
+    }
+    Ok(a / b)
+}
+
+fn main() {
+    match divide(10.0, 0.0) {
+        Ok(value) => println!("Result: {}", value),
+        Err(error) => println!("Error: {}", error),
+    }
+    
+    // Or using the if let syntax
+    if let Ok(value) = divide(10.0, 2.0) {
+        println!("Result: {}", value);
+    } else {
+        println!("An error occurred");
+    }
+    
+    // Or using the ? operator in functions that return Result
+    fn print_division_result() -> Result<(), String> {
+        let value = divide(10.0, 2.0)?;  // Return early if this is an Err
+        println!("Result: {}", value);
+        Ok(())
+    }
+}
+```
+
+Like `Option`, `Result` is included in the prelude, so you don't need to qualify it with a module path.
+
+## Methods on Enums
+
+Just like structs, you can define methods on enums using `impl`:
+
+```rust
+enum Message {
+    Text(String),
+    Image { url: String, dimensions: (u32, u32) },
+}
+
+impl Message {
+    fn send(&self) {
+        // Method implementation
+        match self {
+            Message::Text(content) => {
+                println!("Sending text message: {}", content);
+            },
+            Message::Image { url, dimensions } => {
+                println!("Sending image at {} with dimensions {}x{}", 
+                         url, dimensions.0, dimensions.1);
+            },
+        }
+    }
+    
+    fn is_text(&self) -> bool {
+        matches!(self, Message::Text(_))
+    }
+    
+    fn is_image(&self) -> bool {
+        matches!(self, Message::Image { .. })
+    }
+}
+
+fn main() {
+    let message = Message::Text(String::from("Hello, world!"));
+    message.send();
+    
+    println!("Is text? {}", message.is_text());
+    println!("Is image? {}", message.is_image());
+}
+```
+
+## TypeScript Discriminated Unions vs Rust Enums
+
+If you use TypeScript, you might be familiar with discriminated unions, which are similar to Rust enums:
+
+```typescript
+// TypeScript discriminated union
+type Message = 
+  | { type: 'text'; content: string }
+  | { type: 'image'; url: string; dimensions: { width: number, height: number } };
+
+function displayMessage(message: Message) {
+  switch (message.type) {
+    case 'text':
+      console.log(`Text message: ${message.content}`);
+      break;
+    case 'image':
+      console.log(`Image at ${message.url} with dimensions ${message.dimensions.width}x${message.dimensions.height}`);
+      break;
+  }
+}
+```
+
+While they serve a similar purpose, Rust enums are a built-in language feature with full type safety and exhaustiveness checking.
+
+## The null Object Pattern vs Option
+
+The null object pattern is a common JavaScript pattern:
+
+```javascript
+// Null object pattern
+class NullUser {
+  get name() { return "Guest"; }
+  get permissions() { return []; }
+  canAccess() { return false; }
+}
+
+function getUser(id) {
+  const user = findUserById(id);
+  return user || new NullUser();
+}
+
+// Now we can always use the returned object without null checks
+const user = getUser(123);
+console.log(user.name);  // Either real name or "Guest"
+```
+
+In Rust, we would use `Option` and handle the `None` case explicitly:
+
+```rust
+fn get_user(id: u32) -> Option<User> {
+    find_user_by_id(id)
+}
+
+fn main() {
+    let user = get_user(123);
+    let name = user.map_or("Guest", |u| &u.name);
+    println!("{}", name);  // Either real name or "Guest"
+    
+    let can_access = user.map_or(false, |u| u.can_access());
+    println!("Can access: {}", can_access);
+}
+```
+
+Rust encourages explicit handling of the null case with combinators like `map_or`, `unwrap_or`, etc.
+
+## Implementing Common Enum Patterns
+
+Let's look at how to implement some common patterns in both languages:
+
+### 1. State Machine
+
+JavaScript:
+
+```javascript
+const State = {
+  IDLE: 'IDLE',
+  LOADING: 'LOADING',
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR'
+};
+
+class StateMachine {
+  constructor() {
+    this.state = State.IDLE;
+    this.data = null;
+    this.error = null;
+  }
+  
+  start() {
+    this.state = State.LOADING;
+  }
+  
+  succeed(data) {
+    this.state = State.SUCCESS;
+    this.data = data;
+  }
+  
+  fail(error) {
+    this.state = State.ERROR;
+    this.error = error;
+  }
+  
+  reset() {
+    this.state = State.IDLE;
+    this.data = null;
+    this.error = null;
+  }
+}
+```
+
+Rust:
+
+```rust
+enum State<T, E> {
+    Idle,
+    Loading,
+    Success(T),
+    Error(E),
+}
+
+struct StateMachine<T, E> {
+    state: State<T, E>,
+}
+
+impl<T, E> StateMachine<T, E> {
+    fn new() -> Self {
+        StateMachine { state: State::Idle }
+    }
+    
+    fn start(&mut self) {
+        self.state = State::Loading;
+    }
+    
+    fn succeed(&mut self, data: T) {
+        self.state = State::Success(data);
+    }
+    
+    fn fail(&mut self, error: E) {
+        self.state = State::Error(error);
+    }
+    
+    fn reset(&mut self) where T: Default, E: Default {
+        self.state = State::Idle;
+    }
+    
+    fn is_loading(&self) -> bool {
+        matches!(self.state, State::Loading)
+    }
+    
+    fn data(&self) -> Option<&T> {
+        match &self.state {
+            State::Success(data) => Some(data),
+            _ => None,
+        }
+    }
+}
+```
+
+The Rust version integrates the data directly into the State enum, making it impossible to have inconsistent states.
+
+### 2. Command Pattern
+
+JavaScript:
+
+```javascript
+// Command objects
+const commands = {
+  add: (x, y) => x + y,
+  subtract: (x, y) => x - y,
+  multiply: (x, y) => x * y,
+  divide: (x, y) => x / y
+};
+
+function executeCommand(commandName, ...args) {
+  if (commandName in commands) {
+    return commands[commandName](...args);
+  }
+  throw new Error(`Unknown command: ${commandName}`);
+}
+
+console.log(executeCommand('add', 5, 3));       // 8
+console.log(executeCommand('multiply', 5, 3));  // 15
+```
+
+Rust:
+
+```rust
+enum Command {
+    Add(i32, i32),
+    Subtract(i32, i32),
+    Multiply(i32, i32),
+    Divide(i32, i32),
+}
+
+fn execute_command(command: Command) -> Result<i32, String> {
+    match command {
+        Command::Add(x, y) => Ok(x + y),
+        Command::Subtract(x, y) => Ok(x - y),
+        Command::Multiply(x, y) => Ok(x * y),
+        Command::Divide(x, y) => {
+            if y == 0 {
+                Err(String::from("Division by zero"))
+            } else {
+                Ok(x / y)
+            }
+        },
+    }
+}
+
+fn main() {
+    println!("{:?}", execute_command(Command::Add(5, 3)));       // Ok(8)
+    println!("{:?}", execute_command(Command::Multiply(5, 3)));  // Ok(15)
+    println!("{:?}", execute_command(Command::Divide(5, 0)));    // Err("Division by zero")
+}
+```
+
+The Rust version makes the command structure explicit and uses `Result` to handle errors properly.
+
+## Summary
+
+Enums in Rust are a powerful feature that allow you to:
+
+1. Define types with a finite set of variants
+2. Attach different data to each variant
+3. Use pattern matching to safely handle all cases
+4. Combine data and behavior with methods on enums
+
+They are similar to various patterns in JavaScript, such as:
+- String constants or objects for simple enumeration
+- Tagged unions for variants with different data
+- TypeScript discriminated unions for type safety
+- The null object pattern and nullable values
+
+Rust's enums are type-safe, exhaustive (the compiler ensures you handle all cases), and allow for clean, expressive code.
+
+In the next sections, we'll explore pattern matching with `match` and the more concise `if let` syntax for working with enums. 

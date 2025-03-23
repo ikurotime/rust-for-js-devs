@@ -10,7 +10,7 @@ hero:
     file: /public/rustjs.png
   actions:
     - text: Start Learning
-      link: /overview/
+      link: /getting-started/
       icon: right-arrow
       variant: primary
     - text: View on GitHub
@@ -33,30 +33,46 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
   <Card title="Concurrency" icon="random">
     Write thread-safe code with Rust's ownership model and avoid race conditions.
   </Card>
-  <Card title="Ecosystem Growth" icon="puzzle">
-    Rust is becoming essential for WebAssembly, systems programming, and more.
+  <Card title="WebAssembly" icon="puzzle">
+    Rust is a first-class language for WebAssembly, enabling high-performance web applications.
   </Card>
 </CardGrid>
 
 ## Course Structure
 
 <CardGrid>
-  <Card title="Introduction" icon="seti:rust">
-    Get started with Rust installation, basic syntax, and how Rust compares to JavaScript.
+  <Card title="Getting Started" icon="seti:rust">
+    Install Rust, write your first program, and learn the basics of Cargo - Rust's package manager.
   </Card>
-  <Card title="Language Fundamentals" icon="open-book">
-    Learn about variables, data types, control flow, and functions in Rust.
+  <Card title="Programming Concepts" icon="open-book">
+    Learn about variables, types, functions, and control flow with JavaScript comparisons.
   </Card>
-  <Card title="Ownership & Borrowing" icon="key">
+  <Card title="Ownership System" icon="key">
     Understand Rust's unique memory management through ownership, borrowing, and lifetimes.
   </Card>
-  <Card title="Structs & Enums" icon="puzzle">
-    Learn how to structure your data using Rust's structs and enums compared to JS objects.
+  <Card title="Data Structures" icon="puzzle">
+    Master structs, enums, and collections - the Rust equivalents of JavaScript objects and arrays.
   </Card>
   <Card title="Error Handling" icon="warning">
-    See how Rust's Result and Option types provide safer alternatives to JS exceptions.
+    Discover how Rust's Result and Option types provide safer alternatives to JavaScript exceptions.
   </Card>
   <Card title="Practical Projects" icon="laptop">
     Build real-world applications using Rust, from CLI tools to WebAssembly components.
+  </Card>
+</CardGrid>
+
+## From JavaScript to Rust
+
+This course is specifically designed for JavaScript developers. We'll highlight:
+
+<CardGrid>
+  <Card title="Syntax Comparisons" icon="document">
+    Side-by-side code examples comparing JavaScript and Rust approaches.
+  </Card>
+  <Card title="Mental Model Shifts" icon="brain">
+    Key conceptual differences to help you think in Rust coming from JavaScript.
+  </Card>
+  <Card title="Practical Applications" icon="rocket">
+    Real use cases where Rust can complement your JavaScript skills.
   </Card>
 </CardGrid>

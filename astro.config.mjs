@@ -1,11 +1,11 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-import vercel from '@astrojs/vercel/serverless';
+import vercelStatic from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
-  adapter: vercel(),
+  output: 'static',
+  adapter: vercelStatic(),
   integrations: [
     starlight({
       title: 'Rust For JS Devs',
@@ -27,32 +27,40 @@ export default defineConfig({
       },
       sidebar: [
         { label: 'Home', link: '/' },
-        { label: 'Documentation', link: '/overview/' },
+        { label: 'Getting Started', link: '/getting-started/' },
         {
-          label: 'Introduction',
+          label: '1. Introduction',
           items: [
-            { label: 'Why Rust?', link: '/introduction/' },
-            { label: 'Getting Started', link: '/introduction/getting-started/' }
+            { label: 'Why Rust for JS Devs?', link: '/introduction/' },
+            { label: 'Installation', link: '/introduction/installation/' },
+            { label: 'Hello World', link: '/introduction/hello-world/' },
+            { label: 'Hello Cargo', link: '/introduction/hello-cargo/' }
           ]
         },
         {
-          label: 'Language Fundamentals',
+          label: '2. Programming a Guessing Game',
+          items: [{ label: 'Building a Game', link: '/guessing-game/' }]
+        },
+        {
+          label: '3. Common Programming Concepts',
           items: [
             {
-              label: 'Variables and Types',
-              link: '/language-fundamentals/variables-and-types/'
+              label: 'Variables and Mutability',
+              link: '/common-concepts/variables-mutability/'
             },
-            {
-              label: 'Control Flow',
-              link: '/language-fundamentals/control-flow/'
-            },
-            { label: 'Functions', link: '/language-fundamentals/functions/' }
+            { label: 'Data Types', link: '/common-concepts/data-types/' },
+            { label: 'Functions', link: '/common-concepts/functions/' },
+            { label: 'Comments', link: '/common-concepts/comments/' },
+            { label: 'Control Flow', link: '/common-concepts/control-flow/' }
           ]
         },
         {
-          label: 'Ownership & Borrowing',
+          label: '4. Understanding Ownership',
           items: [
-            { label: 'Ownership System', link: '/ownership-borrowing/' },
+            {
+              label: 'What is Ownership?',
+              link: '/ownership-borrowing/'
+            },
             {
               label: 'Borrowing in Depth',
               link: '/ownership-borrowing/borrowing-in-depth/'
@@ -60,11 +68,35 @@ export default defineConfig({
           ]
         },
         {
-          label: 'Error Handling',
-          items: [{ label: 'Error Handling in Rust', link: '/error-handling/' }]
+          label: '5. Using Structs',
+          items: [
+            {
+              label: 'Defining Structs',
+              link: '/structs-enums/defining-structs/'
+            },
+            {
+              label: 'Example Program Using Structs',
+              link: '/structs-enums/struct-example/'
+            },
+            { label: 'Method Syntax', link: '/structs-enums/methods/' }
+          ]
         },
         {
-          label: 'Practical Projects',
+          label: '6. Enums and Pattern Matching',
+          items: [
+            { label: 'Defining Enums', link: '/structs-enums/defining-enums/' },
+            { label: 'The match Control Flow', link: '/structs-enums/match/' },
+            { label: 'Patterns with if let', link: '/structs-enums/if-let/' }
+          ]
+        },
+        {
+          label: '7. Error Handling',
+          items: [
+            { label: 'Error Handling Overview', link: '/error-handling/' }
+          ]
+        },
+        {
+          label: '8. Practical Projects',
           items: [
             {
               label: 'Simple Web Server',
