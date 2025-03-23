@@ -9,7 +9,7 @@ const isAboutPage = slug === "about";
 ---
 
 { isLander
-    ? <Lander />
+    ? <Lander><slot /></Lander>
     : isAboutPage
       ? null
       : <Default {...Astro.props}><slot /></Default>

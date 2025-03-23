@@ -4,75 +4,229 @@ description: A guide to learning Rust for JavaScript developers
 pagefind: false
 template: splash
 hero:
-  title: "Rust for JavaScript Developers"
-  tagline: "Learn Rust concepts mapped to your JavaScript knowledge"
-  image:
-    file: ../../assets/rustjs.png
-  actions:
-    - text: Start Learning
-      link: /getting-started/
-      icon: right-arrow
-      variant: primary
-    - text: View on GitHub
-      link: https://github.com/ikurotime/rust-for-js-devs
-      icon: github
-      variant: secondary
+  title: ""
+  tagline: ""
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
+import rustjslogo from '../../assets/rustjs.png';
 
-## Why Learn Rust as a JS Developer?
+<div class="home-wrapper">
+  <div class="hero-section">
+    <div class="animated-background">
+      <div class="glow rust-glow"></div>
+      <div class="glow js-glow"></div>
+    </div>
+    
+    <div class="hero-main">
+      <img src={rustjslogo.src} alt="Logo of Rust and Javascript" class="hero-logo" />
+      <div>
+        <h1 class="hero-title">Rust for JavaScript Developers</h1>
+        <p class="hero-subtitle">Learn Rust naturally by mapping concepts to your existing JavaScript knowledge</p>
+        
+        <div class="hero-actions">
+          <a href="/getting-started/" class="hero-button primary">
+            <span>Start Learning</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="button-icon">
+              <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+            </svg>
+          </a>
+          <a href="https://github.com/ikurotime/rust-for-js-devs" class="hero-button secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="button-icon">
+              <path fill-rule="evenodd" d="M10 .333A9.911 9.911 0 0 0 6.866 19.65c.5.092.678-.215.678-.477 0-.237-.01-1.017-.014-1.845-2.757.6-3.338-1.169-3.338-1.169a2.627 2.627 0 0 0-1.1-1.451c-.9-.615.07-.6.07-.6a2.084 2.084 0 0 1 1.518 1.021 2.11 2.11 0 0 0 2.884.823c.044-.503.268-.973.63-1.325-2.2-.25-4.516-1.1-4.516-4.9A3.832 3.832 0 0 1 4.7 7.068a3.56 3.56 0 0 1 .095-2.623s.832-.266 2.726 1.016a9.409 9.409 0 0 1 4.962 0c1.89-1.282 2.717-1.016 2.717-1.016.366.83.402 1.768.1 2.623a3.827 3.827 0 0 1 1.02 2.659c0 3.807-2.319 4.644-4.525 4.889a2.366 2.366 0 0 1 .673 1.834c0 1.326-.012 2.394-.012 2.72 0 .263.18.572.681.475A9.911 9.911 0 0 0 10 .333Z" clip-rule="evenodd" />
+            </svg>
+            <span>View on GitHub</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<CardGrid stagger>
-  <Card title="Memory Safety" icon="shield">
-    Rust's ownership system prevents memory-related bugs without a garbage collector.
-  </Card>
-  <Card title="Performance" icon="rocket">
-    Get C-like speed with modern syntax and productivity similar to JavaScript.
-  </Card>
-  <Card title="Concurrency" icon="random">
-    Write thread-safe code with Rust's ownership model and avoid race conditions.
-  </Card>
-  <Card title="WebAssembly" icon="puzzle">
-    Rust is a first-class language for WebAssembly, enabling high-performance web applications.
-  </Card>
-</CardGrid>
+  <div class="feature-section">
+  
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡️</div>
+        <h3>High Performance</h3>
+        <p>Get C-like speed with modern syntax and familiar developer experience</p>
+        <div class="card-highlight">As fast as C/C++, as ergonomic as JavaScript</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Memory Safety</h3>
+        <p>Prevent common bugs with Rust's ownership system without a garbage collector</p>
+        <div class="card-highlight">No more null pointer exceptions or memory leaks</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧩</div>
+        <h3>WebAssembly</h3>
+        <p>Build high-performance web applications with Rust's first-class WASM support</p>
+        <div class="card-highlight">The perfect JS companion for performance-critical code</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚀</div>
+        <h3>Concurrent Code</h3>
+        <p>Write thread-safe parallel code without race conditions</p>
+        <div class="card-highlight">Fearless concurrency guaranteed at compile time</div>
+      </div>
+    </div>
+  </div>
+  <div class="course-section">
+    <div class="section-background"></div>
+    <h2 class="section-title">Course Structure</h2>
+    <p class="intro-text">
+      Our step-by-step curriculum helps you progress from basic Rust concepts to advanced applications, 
+      with JavaScript comparisons at every stage.
+    </p>
+  
+    <div class="course-grid">
+      <div class="course-card">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="rust-icon">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <h3>Getting Started</h3>
+        <p>Install Rust, write your first program, and learn the basics of Cargo - Rust's package manager.</p>
+        <a href="/getting-started/" class="card-link">Start Here →</a>
+      </div>
+      
+      <div class="course-card">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </div>
+        <h3>Programming Concepts</h3>
+        <p>Learn about variables, types, functions, and control flow with JavaScript comparisons.</p>
+        <a href="/common-concepts/variables-mutability/" class="card-link">Explore →</a>
+      </div>
+      
+      <div class="course-card">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+          </svg>
+        </div>
+        <h3>Ownership System</h3>
+        <p>Understand Rust's unique memory management through ownership, borrowing, and lifetimes.</p>
+        <a href="/ownership-borrowing/what-is-ownership/" class="card-link">Discover →</a>
+      </div>
+      
+      <div class="course-card">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </div>
+        <h3>Data Structures</h3>
+        <p>Master structs, enums, and collections - the Rust equivalents of JavaScript objects and arrays.</p>
+        <a href="/structs-enums/defining-structs/" class="card-link">Learn More →</a>
+      </div>
+      
+      <div class="course-card">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <h3>Error Handling</h3>
+        <p>Discover how Rust's Result and Option types provide safer alternatives to JavaScript exceptions.</p>
+        <a href="/error-handling/" class="card-link">Explore →</a>
+      </div>
+      
+      <div class="course-card">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <h3>Practical Projects</h3>
+        <p>Build real-world applications using Rust, from CLI tools to WebAssembly components.</p>
+        <a href="/practical-projects/simple-web-server/" class="card-link">Build →</a>
+      </div>
+    </div>
+  </div>
 
-## Course Structure
+  <div class="cta-section">
+    <div class="cta-background"></div>
+    <div class="cta-content">
+      <h2>Ready to expand your skillset?</h2>
+      <p>Learn Rust's powerful features with JavaScript-oriented examples and explanations</p>
+    </div>
+    <div class="cta-buttons">
+      <a href="/getting-started/" class="cta-button primary">
+        Start Learning
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="button-icon">
+          <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+        </svg>
+      </a>
+      <a href="https://github.com/ikurotime/rust-for-js-devs" class="cta-button secondary">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="button-icon">
+          <path fill-rule="evenodd" d="M10 .333A9.911 9.911 0 0 0 6.866 19.65c.5.092.678-.215.678-.477 0-.237-.01-1.017-.014-1.845-2.757.6-3.338-1.169-3.338-1.169a2.627 2.627 0 0 0-1.1-1.451c-.9-.615.07-.6.07-.6a2.084 2.084 0 0 1 1.518 1.021 2.11 2.11 0 0 0 2.884.823c.044-.503.268-.973.63-1.325-2.2-.25-4.516-1.1-4.516-4.9A3.832 3.832 0 0 1 4.7 7.068a3.56 3.56 0 0 1 .095-2.623s.832-.266 2.726 1.016a9.409 9.409 0 0 1 4.962 0c1.89-1.282 2.717-1.016 2.717-1.016.366.83.402 1.768.1 2.623a3.827 3.827 0 0 1 1.02 2.659c0 3.807-2.319 4.644-4.525 4.889a2.366 2.366 0 0 1 .673 1.834c0 1.326-.012 2.394-.012 2.72 0 .263.18.572.681.475A9.911 9.911 0 0 0 10 .333Z" clip-rule="evenodd" />
+        </svg>
+        View on GitHub
+      </a>
+    </div>
+  </div>
 
-<CardGrid>
-  <Card title="Getting Started" icon="seti:rust">
-    Install Rust, write your first program, and learn the basics of Cargo - Rust's package manager.
-  </Card>
-  <Card title="Programming Concepts" icon="open-book">
-    Learn about variables, types, functions, and control flow with JavaScript comparisons.
-  </Card>
-  <Card title="Ownership System" icon="key">
-    Understand Rust's unique memory management through ownership, borrowing, and lifetimes.
-  </Card>
-  <Card title="Data Structures" icon="puzzle">
-    Master structs, enums, and collections - the Rust equivalents of JavaScript objects and arrays.
-  </Card>
-  <Card title="Error Handling" icon="warning">
-    Discover how Rust's Result and Option types provide safer alternatives to JavaScript exceptions.
-  </Card>
-  <Card title="Practical Projects" icon="laptop">
-    Build real-world applications using Rust, from CLI tools to WebAssembly components.
-  </Card>
-</CardGrid>
+  <div class="approach-section">
+    <div class="approach-background"></div>
+    <h2 class="section-title">From JavaScript to Rust</h2>
+    <p class="intro-text">
+      This course is specifically designed for JavaScript developers. We'll highlight the similarities and differences
+      to make your transition to Rust as smooth as possible.
+    </p>
+  
+    <div class="approach-grid">
+      <div class="approach-card">
+        <div class="approach-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+        </div>
+        <h3>Syntax Comparisons</h3>
+        <p>Side-by-side code examples comparing JavaScript and Rust approaches to the same problems.</p>
+        <div class="approach-tag">See the patterns</div>
+      </div>
+      
+      <div class="approach-card">
+        <div class="approach-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 16.08a6.5 6.5 0 0 1-1.5 4.17A9.9 9.9 0 0 1 12 22a9.9 9.9 0 0 1-4.5-1.75A6.5 6.5 0 0 1 6 16.08V5l6-3 6 3v11.08z"></path>
+            <line x1="12" y1="19" x2="12" y2="12"></line>
+            <polyline points="12 12 15 9"></polyline>
+            <polyline points="12 12 9 9"></polyline>
+          </svg>
+        </div>
+        <h3>Mental Model Shifts</h3>
+        <p>Key conceptual differences to help you think in Rust coming from JavaScript.</p>
+        <div class="approach-tag">Understand the why</div>
+      </div>
+      
+      <div class="approach-card">
+        <div class="approach-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9.5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2V17zM2 14h20M15 19v4M9 19v4M15 5V2M9 5V2"></path>
+          </svg>
+        </div>
+        <h3>Practical Applications</h3>
+        <p>Real use cases where Rust can complement your JavaScript skills and improve your projects.</p>
+        <div class="approach-tag">Build real things</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-## From JavaScript to Rust
-
-This course is specifically designed for JavaScript developers. We'll highlight:
-
-<CardGrid>
-  <Card title="Syntax Comparisons" icon="document">
-    Side-by-side code examples comparing JavaScript and Rust approaches.
-  </Card>
-  <Card title="Mental Model Shifts" icon="brain">
-    Key conceptual differences to help you think in Rust coming from JavaScript.
-  </Card>
-  <Card title="Practical Applications" icon="rocket">
-    Real use cases where Rust can complement your JavaScript skills.
-  </Card>
-</CardGrid>
