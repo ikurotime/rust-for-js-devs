@@ -4,13 +4,15 @@ import type { Props } from '@astrojs/starlight/props';
 import { Icon } from '@astrojs/starlight/components';
 import Search from "@astrojs/starlight/components/Search.astro";
 import SiteTitle from "@astrojs/starlight/components/SiteTitle.astro";
+import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
+import LanguageSelect from '@astrojs/starlight/components/LanguageSelect.astro';
 
 import config from '../../config';
 
 import HeaderLinks from "./HeaderLinks.astro";
 ---
 
-<div class="header sl-flex">
+<div class="header-layout sl-flex">
   <div class="sl-flex">
     <SiteTitle {...Astro.props} />
   </div>
@@ -32,26 +34,27 @@ import HeaderLinks from "./HeaderLinks.astro";
       </button> -->
       <Search {...Astro.props} />
     </div>
-    <!--
+    
     <ThemeSelect {...Astro.props} />
-    -->
+    <LanguageSelect {...Astro.props} />
+   
   </div>
 </div>
 
 <style>
-.header {
+.header-layout {
   gap: calc(var(--sl-nav-gap) + 0.5rem);
   align-items: center;
   height: 100%;
   justify-content: space-between;
 }
 @media (min-width: 50rem) {
-  .header {
+  .header-layout {
     gap: var(--sl-nav-gap);
   }
 }
 
-.header > div:first-child {
+.header-layout > div:first-child {
   flex: 0 0 auto;
 }
 
@@ -130,7 +133,7 @@ import HeaderLinks from "./HeaderLinks.astro";
   :global(:root:not([data-has-toc])) {
     --__toc-width: 0rem;
   }
-  .header {
+  .header-layout {
     --__sidebar-width: max(0rem, var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x));
     --__main-column-fr: calc(
       (
@@ -141,7 +144,7 @@ import HeaderLinks from "./HeaderLinks.astro";
     );
     display: grid;
     grid-template-columns:
-      /* 1 (site title): runs up until the main content column’s left edge or the width of the title, whichever is the largest  */
+      /* 1 (site title): runs up until the main content column's left edge or the width of the title, whichever is the largest  */
       minmax(
         calc(var(--__sidebar-width) + max(0rem, var(--__main-column-fr) - var(--sl-nav-gap))),
         auto

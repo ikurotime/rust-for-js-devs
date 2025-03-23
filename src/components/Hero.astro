@@ -1,16 +1,9 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
-import Lander from './Lander.astro';
 import Default from '@astrojs/starlight/components/Hero.astro';
 
 const slug = Astro.props.entry.slug;
-const isLander = slug === "";
 const isAboutPage = slug === "about";
 ---
 
-{ isLander
-    ? <Lander><slot /></Lander>
-    : isAboutPage
-      ? null
-      : <Default {...Astro.props}><slot /></Default>
-}
+{ !isAboutPage && <Default {...Astro.props}><slot /></Default> }

@@ -3,10 +3,23 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
+  redirects: {
+    '/': '/home'
+  },
   integrations: [
     starlight({
       title: 'Rust For JS Devs',
       description: 'Learn Rust concepts mapped to your JavaScript knowledge',
+      defaultLocale: 'en',
+      locales: {
+        // English docs in `src/content/docs/en/`
+        en: {
+          label: 'English'
+        },
+        es: {
+          label: 'Español'
+        }
+      },
       favicon: '/favicon.ico',
       logo: {
         src: './src/assets/rustjs.png',
@@ -16,14 +29,13 @@ export default defineConfig({
         github: 'https://github.com/ikurotime/rust-for-js-devs',
         twitter: 'https://twitter.com/ikurotime'
       },
-      customCss: ['./src/styles/custom.css', './src/styles/lander.css'],
+      customCss: ['./src/styles/custom.css'],
       components: {
         Header: './src/components/Header.astro',
-        Footer: './src/components/Footer.astro',
-        Hero: './src/components/Hero.astro'
+        Footer: './src/components/Footer.astro'
       },
       sidebar: [
-        { label: 'Home', link: '/' },
+        { label: 'Home', link: '/home' },
         { label: 'Getting Started', link: '/getting-started/' },
         {
           label: '1. Introduction',
@@ -100,9 +112,7 @@ export default defineConfig({
         },
         {
           label: '8. Error Handling',
-          items: [
-            { label: 'Error Handling Overview', link: '/error-handling/' }
-          ]
+          items: [{ label: 'Error Handling Home', link: '/error-handling/' }]
         },
         {
           label: '9. Practical Projects',

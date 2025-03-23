@@ -1,0 +1,221 @@
+---
+title: ¡Hola, Cargo!
+description: Aprende a usar Cargo, el gestor de paquetes y sistema de construcción de Rust
+---
+
+# ¡Hola, Cargo!
+
+Cargo es el gestor de paquetes y sistema de construcción de Rust. Es similar a npm o yarn en el ecosistema de JavaScript, pero con características adicionales para construir y probar tu código.
+
+## ¿Por Qué Usar Cargo?
+
+Si vienes de JavaScript, probablemente estás familiarizado con gestores de paquetes como npm o yarn. Cargo sirve para un propósito similar, pero es aún más central en el ecosistema de Rust:
+
+- **Gestión de Dependencias**: Como npm, Cargo descarga y gestiona las dependencias de tu proyecto
+- **Sistema de Construcción**: Cargo compila tu código, similar a webpack u otras herramientas de construcción
+- **Ejecutor de Tareas**: Cargo puede ejecutar pruebas, generar documentación y publicar paquetes
+
+## Creando un Nuevo Proyecto con Cargo
+
+En lugar de crear archivos manualmente como hicimos en la sección anterior, vamos a usar Cargo para crear un nuevo proyecto:
+
+```bash
+cargo new hello_cargo
+cd hello_cargo
+```
+
+Esto es similar a `npm init` o `yarn init` en JavaScript, pero en realidad crea más archivos iniciales.
+
+## Estructura del Proyecto
+
+Veamos lo que Cargo creó:
+
+```
+hello_cargo/
+├── Cargo.toml
+└── src/
+    └── main.rs
+```
+
+Esto es similar a una estructura de proyecto de JavaScript:
+
+| Rust | JavaScript | Propósito |
+|------|------------|---------|
+| `Cargo.toml` | `package.json` | Configuración del proyecto y dependencias |
+| `src/` | `src/` | Directorio de código fuente |
+| `target/` (creado posteriormente) | `node_modules/` | Artefactos de construcción y dependencias |
+
+## Entendiendo Cargo.toml
+
+Abre `Cargo.toml` y verás algo como:
+
+```toml
+[package]
+name = "hello_cargo"
+version = "0.1.0"
+edition = "2021"
+
+# Ver más claves y sus definiciones en https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+```
+
+Esto es similar a un archivo `package.json` en JavaScript:
+
+- `[package]` contiene metadatos sobre tu proyecto
+- `[dependencies]` es donde listarás bibliotecas externas (llamadas "crates" en Rust)
+
+## Viendo el Código Fuente
+
+Ahora, mira `src/main.rs`:
+
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+```
+
+Cargo creó un programa "Hello, world!" para nosotros automáticamente.
+
+## Construyendo y Ejecutando con Cargo
+
+Cargo proporciona comandos para construir y ejecutar tu proyecto:
+
+### Construyendo el Proyecto
+
+```bash
+cargo build
+```
+
+Esto crea un ejecutable en `target/debug/hello_cargo` (o `target\debug\hello_cargo.exe` en Windows).
+
+Esto es similar a usar un script de construcción en un proyecto de JavaScript, pero más estandarizado.
+
+### Ejecutando el Proyecto
+
+Puedes ejecutar el ejecutable construido directamente, o usar:
+
+```bash
+cargo run
+```
+
+Esto construirá (si es necesario) y luego ejecutará tu programa en un solo paso. Es similar a `npm start` o `yarn start` en proyectos de JavaScript.
+
+### Verificando Tu Código Sin Construir
+
+Si quieres verificar que tu código compila sin producir un ejecutable:
+
+```bash
+cargo check
+```
+
+Esto es más rápido que `cargo build` y útil durante el desarrollo, similar a usar un linter en JavaScript.
+
+## Construyendo para Producción
+
+Cuando estés listo para lanzar tu programa, usa:
+
+```bash
+cargo build --release
+```
+
+Esto crea un ejecutable optimizado en `target/release/` en lugar de `target/debug/`.
+
+Esto es similar a la diferencia entre construcciones de desarrollo y producción en empaquetadores de JavaScript como webpack.
+
+## Comandos de Cargo vs. Comandos de npm/yarn
+
+| Comando de Cargo | Equivalente en npm/yarn | Propósito |
+|---------------|---------------------|---------|
+| `cargo new` | `npm init`/`yarn init` | Crear un nuevo proyecto |
+| `cargo build` | `npm run build` | Construir el proyecto |
+| `cargo run` | `npm start` | Construir y ejecutar el proyecto |
+| `cargo test` | `npm test` | Ejecutar pruebas |
+| `cargo add` | `npm install`/`yarn add` | Añadir una dependencia |
+| `cargo doc` | N/A (JSDoc) | Generar documentación |
+| `cargo publish` | `npm publish` | Publicar en el registro |
+
+## Añadiendo Dependencias
+
+Para añadir dependencias a tu proyecto, puedes:
+
+1. Editar manualmente `Cargo.toml`:
+```toml
+[dependencies]
+ferris-says = "0.2"
+```
+
+2. O usar el comando `cargo add` (similar a `npm install`/`yarn add`):
+```bash
+cargo add ferris-says
+```
+
+Después de añadir una dependencia, ejecuta `cargo build` para descargarla y compilarla.
+
+## Actualizando Dependencias
+
+Para actualizar tus dependencias:
+
+```bash
+cargo update
+```
+
+Esto es similar a `npm update` o `yarn upgrade`.
+
+## Usando Crates Externos
+
+Vamos a modificar nuestro programa para usar un crate externo. Edita `src/main.rs`:
+
+```rust
+use ferris_says::say;
+use std::io::{stdout, BufWriter};
+
+fn main() {
+    let stdout = stdout();
+    let message = String::from("¡Hola Rustáceos!");
+    let width = message.chars().count();
+    
+    let mut writer = BufWriter::new(stdout.lock());
+    say(message.as_str(), width, &mut writer).unwrap();
+}
+
+```
+
+Ahora ejecuta el programa:
+
+```bash
+cargo run
+```
+
+Deberías ver un mensaje de Ferris, la mascota no oficial de Rust:
+
+```
+-------------------
+< ¡Hola Rustáceos! >
+-------------------
+              \
+               \
+                 _~^~^~_
+             \) /  o o  \ (/
+               '_   -   _'
+               / '-----' \
+```
+
+## Archivo Cargo.lock
+
+Después de construir tu proyecto, notarás un nuevo archivo llamado `Cargo.lock`. Esto es similar a `package-lock.json` o `yarn.lock` en proyectos de JavaScript. Registra las versiones exactas de las dependencias que se usaron para que tus construcciones sean reproducibles.
+
+## Resumen
+
+Cargo es una herramienta poderosa que combina:
+- Gestión de paquetes (como npm/yarn)
+- Sistema de construcción (como webpack)
+- Ejecutor de pruebas (como Jest)
+- Generador de documentación
+- Herramienta de publicación
+
+En el ecosistema de JavaScript, estas funciones a menudo se dividen entre múltiples herramientas, pero Cargo las reúne todas en un paquete cohesivo.
+
+## Próximos Pasos
+
+Ahora que entiendes los conceptos básicos de Cargo, pasemos a [construir un programa más sustancial](/es/guessing-game/) que te dará una mejor idea de la sintaxis y características de Rust. 

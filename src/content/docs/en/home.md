@@ -1,5 +1,5 @@
 ---
-title: Overview 
+title: Home 
 description: Learn Rust from a JavaScript developer's perspective
 ---
 

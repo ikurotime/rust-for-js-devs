@@ -1,0 +1,136 @@
+---
+title: ¡Hola, Mundo!
+description: Escribe tu primer programa en Rust y compáralo con JavaScript
+---
+
+# ¡Hola, Mundo!
+
+¡Vamos a escribir nuestro primer programa en Rust! Esta es una tradición al aprender un nuevo lenguaje de programación, y es una excelente manera de verificar que tu instalación de Rust está funcionando correctamente.
+
+## Creando un Directorio para el Proyecto
+
+Primero, vamos a crear un directorio para nuestro proyecto:
+
+```bash
+mkdir hello_world
+cd hello_world
+```
+
+## Creando un Archivo Fuente de Rust
+
+En Rust, los archivos fuente tienen una extensión `.rs`. Vamos a crear un archivo llamado `main.rs`:
+
+```bash
+touch main.rs   # En macOS/Linux
+# O
+echo > main.rs  # En Windows
+```
+
+Abre este archivo en tu editor y añade el siguiente código:
+
+```rust
+fn main() {
+    println!("¡Hola, Mundo!");
+}
+```
+
+## Comparando con JavaScript
+
+Así es como se vería un programa similar en JavaScript:
+
+```javascript
+console.log("¡Hola, Mundo!");
+```
+
+Vamos a comparar estos dos programas:
+
+| Rust | JavaScript | Notas |
+|------|------------|-------|
+| `fn main() { ... }` | No necesario | Los programas de Rust comienzan la ejecución desde la función `main` |
+| `println!("¡Hola, Mundo!");` | `console.log("¡Hola, Mundo!");` | Rust usa macros (con `!`) para imprimir |
+
+## Compilando y Ejecutando el Programa
+
+A diferencia de JavaScript, que es interpretado, Rust es un lenguaje compilado. Esto significa que necesitamos compilar nuestro código antes de ejecutarlo.
+
+### Compilando
+
+```bash
+rustc main.rs
+```
+
+Esto creará un archivo ejecutable en el mismo directorio.
+
+### Ejecutando
+
+En macOS/Linux:
+```bash
+./hello_world
+```
+
+En Windows:
+```bash
+.\hello_world.exe
+```
+
+Deberías ver:
+```
+¡Hola, Mundo!
+```
+
+## Entendiendo el Modelo de Compilación de Rust
+
+Este paso de compilación es una diferencia clave respecto a JavaScript:
+
+1. **JavaScript**: El código normalmente es interpretado en tiempo de ejecución (aunque la compilación JIT a menudo ocurre tras bambalinas)
+2. **Rust**: El código se compila con anticipación en un ejecutable binario
+
+Este modelo de compilación ofrece varias ventajas:
+- Detecta errores en tiempo de compilación en lugar de tiempo de ejecución
+- Produce ejecutables altamente optimizados y rápidos
+- No necesita un entorno de ejecución (como Node.js)
+
+## Estructura de Funciones
+
+Echemos otro vistazo a nuestra función de Rust:
+
+```rust
+fn main() {
+    println!("¡Hola, Mundo!");
+}
+```
+
+- `fn` declara una función (similar a `function` en JavaScript)
+- `main` es el nombre de la función (especial porque es el punto de entrada)
+- Los paréntesis vacíos `()` significan que esta función no toma parámetros
+- El código dentro de la función está encerrado en llaves `{}`
+
+## Macros vs. Funciones
+
+En nuestro ejemplo, `println!` es una macro, no una función. Puedes identificar las macros en Rust por el signo de exclamación (`!`).
+
+Las macros son más poderosas que las funciones porque pueden:
+- Generar código en tiempo de compilación
+- Tomar un número variable de argumentos
+- Implementar características que serían difíciles con funciones normales
+
+## El Punto y Coma en Rust
+
+Al igual que en JavaScript, las declaraciones en Rust terminan con un punto y coma (`;`). Pero en Rust, los puntos y coma también indican que una expresión no debe devolver un valor, lo que exploraremos más cuando discutamos las funciones en detalle.
+
+## Estilo de Formato de Rust
+
+Rust tiene un estilo de formato estándar, similar a cómo JavaScript tiene herramientas como Prettier:
+
+- 4 espacios para la indentación (no tabulaciones)
+- Llaves en la misma línea que las declaraciones de control de flujo
+
+Puedes formatear automáticamente tu código Rust con:
+
+```bash
+rustfmt main.rs
+```
+
+## Próximos Pasos
+
+Aunque puedes escribir todos tus programas así y compilarlos con `rustc`, la mayoría de los desarrolladores de Rust usan Cargo, el sistema de construcción y gestor de paquetes de Rust. Pasemos a [¡Hola, Cargo!](/es/introduction/hello-cargo/) para aprender cómo usarlo. 
