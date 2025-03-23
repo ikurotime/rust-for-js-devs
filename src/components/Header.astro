@@ -8,13 +8,13 @@ import ThemeSelect from "@astrojs/starlight/components/ThemeSelect.astro";
 import LanguageSelect from '@astrojs/starlight/components/LanguageSelect.astro';
 
 import config from '../../config';
-
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import HeaderLinks from "./HeaderLinks.astro";
 ---
 
 <div class="header-layout sl-flex">
   <div class="sl-flex">
-    <SiteTitle {...Astro.props} />
+    <SiteTitle {...Astro.props} siteTitleHref={getRelativeLocaleUrl(Astro.currentLocale ?? 'en', 'home')} />
   </div>
   <div class="middle-group">
     <div class="sl-flex">

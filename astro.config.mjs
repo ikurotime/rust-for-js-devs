@@ -4,7 +4,10 @@ import starlight from '@astrojs/starlight';
 // https://astro.build/config
 export default defineConfig({
   redirects: {
-    '/': '/home'
+    '/': {
+      status: 302,
+      destination: '/en/home/'
+    }
   },
   integrations: [
     starlight({

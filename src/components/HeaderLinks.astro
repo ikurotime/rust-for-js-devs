@@ -1,6 +1,10 @@
-<a class="links" href="/blog/">Blog</a>
-<a class="links" href="/home/">Docs</a>
-<a class="links sm" href="/docs/examples/">Examples</a>
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+---
+<a class="links" href={getRelativeLocaleUrl(Astro.currentLocale ?? 'en', 'blog')}>Blog</a>
+<a class="links" href={getRelativeLocaleUrl(Astro.currentLocale ?? 'en', 'home')}>Docs</a>
+<a class="links sm" href={getRelativeLocaleUrl(Astro.currentLocale ?? 'en', 'examples')}>Examples</a>
 
 <style>
   a.links {
