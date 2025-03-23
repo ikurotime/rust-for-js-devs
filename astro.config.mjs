@@ -9,7 +9,7 @@ export default defineConfig({
       description: 'Learn Rust concepts mapped to your JavaScript knowledge',
       favicon: '/favicon.ico',
       logo: {
-        src: './public/rustjs.png',
+        src: './src/assets/rustjs.png',
         alt: 'Rust for JavaScript Developers'
       },
       social: {
