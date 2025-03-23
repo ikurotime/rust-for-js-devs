@@ -1,0 +1,585 @@
+---
+title: 'Hash Maps in Rust'
+description: 'Learn how to use HashMaps in Rust compared to Objects and Maps in JavaScript'
+---
+
+# Hash Maps in Rust
+
+Hash maps in Rust (`HashMap<K, V>`) are similar to JavaScript objects and Map collections, allowing you to store key-value pairs. However, Rust's approach to hash maps includes strong typing, explicit handling of missing values, and ownership considerations.
+
+## JavaScript Object vs Map vs Rust HashMap
+
+Before diving in, let's compare the three main ways to handle key-value data:
+
+| Feature | JavaScript Object | JavaScript Map | Rust HashMap |
+|---------|------------------|----------------|--------------|
+| Key types | Strings, Symbols | Any value | Any type that implements `Hash` and `Eq` |
+| Value types | Any value | Any value | Any type |
+| Creation syntax | `{}` or `Object.create()` | `new Map()` | `HashMap::new()` |
+| Ordered | No (historically) | Yes (insertion order) | No |
+| Key access | `obj.key` or `obj["key"]` | `map.get(key)` | `map.get(&key)` |
+| Iteration | Various options | `for...of` | Various iterators |
+| Default values | Returns `undefined` | Returns `undefined` | Returns `None` |
+
+## Creating Hash Maps
+
+Let's compare how we create these data structures:
+
+```javascript
+// JavaScript Object
+const personObj = {
+  name: "Alice",
+  age: 30,
+  city: "New York"
+};
+
+// JavaScript Map
+const personMap = new Map();
+personMap.set("name", "Alice");
+personMap.set("age", 30);
+personMap.set("city", "New York");
+
+// Or from an array of key-value pairs
+const personMap2 = new Map([
+  ["name", "Alice"],
+  ["age", 30],
+  ["city", "New York"]
+]);
+```
+
+In Rust:
+
+```rust
+use std::collections::HashMap;
+
+// Empty hash map with type parameters
+let mut person: HashMap<String, String> = HashMap::new();
+person.insert(String::from("name"), String::from("Alice"));
+person.insert(String::from("age"), String::from("30"));
+person.insert(String::from("city"), String::from("New York"));
+
+// Or with different value types using an enum
+enum PersonData {
+    Text(String),
+    Number(i32),
+}
+
+let mut person_enum = HashMap::new();
+person_enum.insert(String::from("name"), PersonData::Text(String::from("Alice")));
+person_enum.insert(String::from("age"), PersonData::Number(30));
+person_enum.insert(String::from("city"), PersonData::Text(String::from("New York")));
+
+// From iterators (similar to JavaScript Map from array)
+let keys = vec![String::from("name"), String::from("age"), String::from("city")];
+let values = vec![String::from("Alice"), String::from("30"), String::from("New York")];
+
+let person_from_iter: HashMap<_, _> = keys.into_iter().zip(values.into_iter()).collect();
+```
+
+Key differences:
+- Rust requires you to specify types for keys and values
+- JavaScript objects have literal syntax (`{}`), while Rust requires explicit `HashMap::new()`
+- Rust's `collect()` method can create hash maps from iterator pairs
+- Rust hash maps are not ordered by default (unlike JavaScript Map)
+
+## Accessing Values
+
+JavaScript:
+
+```javascript
+// Object access
+const name = personObj.name; // "Alice"
+const age = personObj["age"]; // 30
+const missing = personObj.missing; // undefined (no error)
+
+// Map access
+const nameMap = personMap.get("name"); // "Alice"
+const missingMap = personMap.get("missing"); // undefined (no error)
+```
+
+Rust:
+
+```rust
+// Basic access returns an Option<&V>
+match person.get("name") {
+    Some(name) => println!("Name: {}", name),
+    None => println!("Name not found"),
+}
+
+// Or with if let
+if let Some(age) = person.get("age") {
+    println!("Age: {}", age);
+}
+
+// Shorthand with unwrap_or
+let city = person.get("city").unwrap_or(&String::from("Unknown"));
+println!("City: {}", city);
+
+// Direct indexing (panics if key doesn't exist)
+// let will_panic = person["missing"]; // This would panic at runtime
+
+// With entry API
+let score = person_enum.entry(String::from("score")).or_insert(PersonData::Number(0));
+// Now score is either the existing value or the newly inserted 0
+```
+
+Key differences:
+- Rust's `get` returns `Option<&V>`, forcing you to handle missing keys
+- JavaScript returns `undefined` for missing keys without requiring error handling
+- Rust allows direct indexing with `[]` but it will panic if the key doesn't exist
+- Rust's Entry API provides a powerful way to handle "get or insert" scenarios
+
+## Updating Values
+
+JavaScript:
+
+```javascript
+// Object update
+personObj.age = 31;
+personObj["city"] = "Boston";
+
+// Map update
+personMap.set("age", 31);
+personMap.set("city", "Boston");
+```
+
+Rust:
+
+```rust
+// Basic update
+person.insert(String::from("age"), String::from("31"));
+person.insert(String::from("city"), String::from("Boston"));
+
+// Conditional update with entry
+person.entry(String::from("visits")).or_insert(String::from("0"));
+
+// Update based on old value
+let visits = person.entry(String::from("visits")).or_insert(String::from("0"));
+*visits = (visits.parse::<i32>().unwrap() + 1).to_string();
+
+// Another pattern for updating based on old value
+if let Some(age) = person.get_mut("age") {
+    *age = String::from("32");
+}
+```
+
+Key differences:
+- Rust requires ownership for both keys and values when updating
+- Rust's entry API allows powerful conditional updates
+- Updating a value in place with `get_mut` requires dereferencing with `*`
+
+## Removing Entries
+
+JavaScript:
+
+```javascript
+// Object deletion
+delete personObj.age;
+
+// Map deletion
+personMap.delete("age");
+```
+
+Rust:
+
+```rust
+// Remove returns the removed value as Option<V>
+if let Some(removed_age) = person.remove("age") {
+    println!("Removed age: {}", removed_age);
+}
+
+// Or just remove without caring about the return
+person.remove("city");
+```
+
+Key differences:
+- Rust's `remove` returns the removed value wrapped in an `Option`
+- JavaScript's `delete` returns a boolean indicating success, but Map's `delete` returns true/false
+
+## Checking If a Key Exists
+
+JavaScript:
+
+```javascript
+// Object check
+const hasName = "name" in personObj; // true
+const hasNameOwn = Object.hasOwn(personObj, "name"); // true, checks own properties
+
+// Map check
+const hasNameMap = personMap.has("name"); // true
+```
+
+Rust:
+
+```rust
+// Using contains_key
+let has_name = person.contains_key("name"); // true
+
+// Or pattern matching on get
+let has_city = match person.get("city") {
+    Some(_) => true,
+    None => false,
+};
+
+// Or more concisely
+let has_age = person.get("age").is_some(); // true
+```
+
+## Iterating Over Hash Maps
+
+JavaScript:
+
+```javascript
+// Object iteration
+for (const key in personObj) {
+  console.log(`${key}: ${personObj[key]}`);
+}
+
+// More modern approaches
+Object.keys(personObj).forEach(key => {
+  console.log(`${key}: ${personObj[key]}`);
+});
+
+Object.entries(personObj).forEach(([key, value]) => {
+  console.log(`${key}: ${value}`);
+});
+
+// Map iteration
+personMap.forEach((value, key) => {
+  console.log(`${key}: ${value}`);
+});
+
+for (const [key, value] of personMap) {
+  console.log(`${key}: ${value}`);
+}
+```
+
+Rust:
+
+```rust
+// Iterate over references to key-value pairs
+for (key, value) in &person {
+    println!("{}: {}", key, value);
+}
+
+// Iterate over just keys
+for key in person.keys() {
+    println!("Key: {}", key);
+}
+
+// Iterate over just values
+for value in person.values() {
+    println!("Value: {}", value);
+}
+
+// Iterate with mutable references to values
+for (key, value) in &mut person {
+    if key == "visits" {
+        *value = String::from("10"); // Update the value
+    }
+}
+```
+
+Key differences:
+- Rust provides separate iterators for keys, values, and key-value pairs
+- You can iterate with references (`&person`) or mutable references (`&mut person`)
+- Iteration order is not guaranteed in Rust, unlike JavaScript Map
+- Rust requires dereferencing (`*value`) to modify values in place during iteration
+
+## Ownership with Hash Maps
+
+Rust's ownership system affects how hash maps work:
+
+```rust
+let name = String::from("name");
+let person_name = String::from("Alice");
+
+let mut map = HashMap::new();
+
+// These values are moved into the hash map
+map.insert(name, person_name);
+
+// Error! Can't use these variables anymore
+// println!("Key: {}", name); // Error: value borrowed after move
+// println!("Value: {}", person_name); // Error: value borrowed after move
+
+// Instead, we can use references in the hash map
+let city = String::from("city");
+let location = String::from("New York");
+
+let mut ref_map = HashMap::new();
+
+// Using references with explicit lifetimes would keep ownership
+// (more advanced, usually used in structs)
+// ref_map.insert(&city, &location);
+
+// Or we can clone values if we need to keep using them
+map.insert(city.clone(), location.clone());
+println!("Original: {}, {}", city, location); // Still valid
+```
+
+## Using Non-String Keys
+
+JavaScript Maps can use any value as a key:
+
+```javascript
+const userMap = new Map();
+const userObject = { id: 1 };
+
+userMap.set(userObject, "Alice's data");
+console.log(userMap.get(userObject)); // "Alice's data"
+```
+
+Rust HashMap can use any type that implements `Hash` and `Eq`:
+
+```rust
+use std::collections::HashMap;
+
+// Simple struct for a user
+#[derive(Hash, Eq, PartialEq, Debug)]
+struct User {
+    id: i32,
+    role: String,
+}
+
+fn main() {
+    let mut user_data = HashMap::new();
+    
+    let admin = User { id: 1, role: String::from("admin") };
+    user_data.insert(admin, "Alice's admin data");
+    
+    let staff = User { id: 2, role: String::from("staff") };
+    user_data.insert(staff, "Bob's staff data");
+    
+    // Now we can look up by User struct
+    let lookup = User { id: 1, role: String::from("admin") };
+    if let Some(data) = user_data.get(&lookup) {
+        println!("Found data: {}", data);
+    }
+}
+```
+
+The key differences:
+- Rust requires explicit implementation of `Hash`, `Eq`, and `PartialEq` traits
+- JavaScript can use any object as a key based on identity, not structure
+- Rust compares keys based on their content, not identity
+- Custom types need `#[derive(Hash, Eq, PartialEq)]` to be used as keys
+
+## Default Values and Entry API
+
+JavaScript often uses the `||` operator or nullish coalescing:
+
+```javascript
+// Object
+const count = personObj.count || 0; // Default to 0 if property doesn't exist or is falsy
+
+// Better with nullish coalescing
+const count2 = personObj.count ?? 0; // Default to 0 only if property is null/undefined
+
+// Map
+const countMap = personMap.get("count") ?? 0;
+```
+
+Rust's Entry API is more powerful:
+
+```rust
+// Get existing value or insert default
+let count = person.entry(String::from("count")).or_insert(String::from("0"));
+println!("Count: {}", count);
+
+// Insert default and then modify it
+let count_ref = person.entry(String::from("count")).or_insert(String::from("0"));
+*count_ref = (count_ref.parse::<i32>().unwrap() + 1).to_string();
+
+// or_insert_with takes a closure for computing the default value
+let visits = person.entry(String::from("visits")).or_insert_with(|| {
+    // This might be an expensive computation
+    String::from("1")
+});
+```
+
+Key differences:
+- Rust's Entry API provides atomic "check and update" operations
+- JavaScript relies on separate get/set operations or object operators
+- Rust can compute default values lazily with `or_insert_with`
+
+## Merging Hash Maps
+
+JavaScript:
+
+```javascript
+// Object merging with spread operator
+const defaults = { theme: "dark", language: "en" };
+const userPrefs = { language: "fr" };
+
+const merged = { ...defaults, ...userPrefs }; // { theme: "dark", language: "fr" }
+
+// Map merging
+const defaultMap = new Map([["theme", "dark"], ["language", "en"]]);
+const userMap = new Map([["language", "fr"]]);
+
+const mergedMap = new Map([...defaultMap, ...userMap]);
+```
+
+Rust:
+
+```rust
+let mut defaults = HashMap::new();
+defaults.insert(String::from("theme"), String::from("dark"));
+defaults.insert(String::from("language"), String::from("en"));
+
+let mut user_prefs = HashMap::new();
+user_prefs.insert(String::from("language"), String::from("fr"));
+
+// Extend will overwrite existing keys
+defaults.extend(user_prefs);
+// Now defaults contains { "theme": "dark", "language": "fr" }
+
+// Or selectively merge
+let mut merged = HashMap::new();
+for (key, value) in &defaults {
+    merged.insert(key.clone(), value.clone());
+}
+
+for (key, value) in &user_prefs {
+    merged.insert(key.clone(), value.clone());
+}
+```
+
+## Performance Considerations
+
+Hash maps in Rust use a high-performance hashing algorithm (SipHash by default):
+
+```rust
+// Create with capacity for better performance
+let mut scores = HashMap::with_capacity(10);
+
+// With custom hasher for specialized use cases
+use std::collections::hash_map::RandomState;
+let s = RandomState::new();
+let mut map = HashMap::with_hasher(s);
+
+// Third-party crates offer alternative hashers
+// Example using FnvHashMap from fnv crate
+// use fnv::FnvHashMap;
+// let mut map: FnvHashMap<String, i32> = FnvHashMap::default();
+```
+
+JavaScript provides less control over the underlying hash implementation:
+
+```javascript
+// The only performance hint is initial capacity for Map
+const map = new Map();
+
+// For objects, there's no standard way to hint capacity
+const obj = {};
+```
+
+## Advanced Patterns
+
+### Grouped Data
+
+JavaScript:
+
+```javascript
+// Grouping data by a key
+const people = [
+  { name: "Alice", dept: "Engineering" },
+  { name: "Bob", dept: "Sales" },
+  { name: "Charlie", dept: "Engineering" }
+];
+
+const byDepartment = {};
+for (const person of people) {
+  if (!byDepartment[person.dept]) {
+    byDepartment[person.dept] = [];
+  }
+  byDepartment[person.dept].push(person.name);
+}
+
+// Or with Map
+const deptMap = new Map();
+for (const person of people) {
+  if (!deptMap.has(person.dept)) {
+    deptMap.set(person.dept, []);
+  }
+  deptMap.get(person.dept).push(person.name);
+}
+```
+
+Rust:
+
+```rust
+struct Person {
+    name: String,
+    dept: String,
+}
+
+let people = vec![
+    Person { name: String::from("Alice"), dept: String::from("Engineering") },
+    Person { name: String::from("Bob"), dept: String::from("Sales") },
+    Person { name: String::from("Charlie"), dept: String::from("Engineering") },
+];
+
+let mut by_department: HashMap<String, Vec<String>> = HashMap::new();
+
+for person in &people {
+    by_department.entry(person.dept.clone())
+        .or_insert_with(Vec::new)
+        .push(person.name.clone());
+}
+
+// Now by_department has:
+// { "Engineering": ["Alice", "Charlie"], "Sales": ["Bob"] }
+```
+
+### Counting with HashMap
+
+JavaScript:
+
+```javascript
+// Count occurrences of elements
+const fruits = ["apple", "banana", "apple", "orange", "banana", "apple"];
+
+const counts = {};
+for (const fruit of fruits) {
+  counts[fruit] = (counts[fruit] || 0) + 1;
+}
+
+// Or with Map
+const countMap = new Map();
+for (const fruit of fruits) {
+  countMap.set(fruit, (countMap.get(fruit) || 0) + 1);
+}
+```
+
+Rust:
+
+```rust
+let fruits = vec!["apple", "banana", "apple", "orange", "banana", "apple"];
+
+let mut counts = HashMap::new();
+for fruit in &fruits {
+    let count = counts.entry(fruit).or_insert(0);
+    *count += 1;
+}
+
+// Now counts contains:
+// { "apple": 3, "banana": 2, "orange": 1 }
+```
+
+## Summary
+
+Hash maps in Rust provide a powerful way to handle key-value data with safety and performance:
+
+| Feature | JavaScript Approach | Rust Approach |
+|---------|---------------------|---------------|
+| Creation | Literal syntax or constructors | `HashMap::new()` |
+| Types | Dynamic typing | Static typing with generic parameters |
+| Missing keys | Returns `undefined` | Returns `Option<&V>` |
+| Updating | Direct assignment | Various methods including Entry API |
+| Iteration | Multiple options | Iterators for keys, values, or pairs |
+| Performance | Limited control | Configurable capacity and hashers |
+| Safety | Runtime errors possible | Compile-time checking |
+
+While working with hash maps in Rust requires more explicit handling than in JavaScript, it provides stronger guarantees and prevents common errors like accessing non-existent keys without handling the possibility of absence. 

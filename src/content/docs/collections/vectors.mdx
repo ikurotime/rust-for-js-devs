@@ -1,0 +1,419 @@
+---
+title: 'Vectors in Rust'
+description: 'Learn how to use Vectors in Rust compared to Arrays in JavaScript'
+---
+
+# Vectors in Rust
+
+In Rust, a vector (`Vec<T>`) is a growable, heap-allocated array. If you're coming from JavaScript, vectors are similar to JavaScript arrays but with strong typing and additional memory safety guarantees.
+
+## Creating Vectors
+
+Let's compare how we create arrays in JavaScript versus vectors in Rust:
+
+```javascript
+// JavaScript array creation
+let emptyArray = [];
+let numbers = [1, 2, 3, 4, 5];
+let mixedTypes = [1, 'hello', true]; // JavaScript arrays can mix types
+```
+
+In Rust:
+
+```rust
+// Empty vector with type annotation
+let empty_vec: Vec<i32> = Vec::new();
+
+// Vector with initial values using vec! macro
+let numbers = vec![1, 2, 3, 4, 5];
+
+// In Rust, all elements must be of the same type
+// This won't compile:
+// let mixed_types = vec![1, "hello", true];
+
+// You can use Vec::with_capacity for performance when you know the size
+let with_capacity = Vec::with_capacity(10); // Allocates space for 10 elements
+```
+
+Key differences:
+- Rust vectors must contain elements of the same type
+- In Rust, you specify the type (`Vec<T>`) where `T` is the element type
+- The `vec!` macro is a convenient way to create vectors with initial values
+- Rust offers `with_capacity` for performance optimization
+
+## Adding Elements to Vectors
+
+JavaScript:
+
+```javascript
+let fruits = ['apple', 'banana'];
+fruits.push('orange');
+fruits.unshift('strawberry'); // Add to front
+console.log(fruits); // ['strawberry', 'apple', 'banana', 'orange']
+```
+
+Rust:
+
+```rust
+let mut fruits = vec!["apple", "banana"];
+fruits.push("orange");
+// No direct equivalent to unshift, but you can use insert
+fruits.insert(0, "strawberry");
+println!("{:?}", fruits); // ["strawberry", "apple", "banana", "orange"]
+```
+
+Key differences:
+- Rust vectors must be declared as mutable (`mut`) to be modified
+- No direct `unshift` equivalent, but `insert` can be used with index 0
+- Rust requires the same type for all elements added to the vector
+
+## Accessing Vector Elements
+
+JavaScript:
+
+```javascript
+let numbers = [10, 20, 30, 40, 50];
+let first = numbers[0]; // 10
+let nonExistent = numbers[100]; // undefined (no error)
+```
+
+Rust has two ways to access elements:
+
+```rust
+let numbers = vec![10, 20, 30, 40, 50];
+
+// Method 1: Using indexing (panics if out of bounds)
+let first = numbers[0]; // 10
+// let will_panic = numbers[100]; // This would panic at runtime
+
+// Method 2: Using get (returns Option<&T>)
+match numbers.get(0) {
+    Some(value) => println!("First element: {}", value),
+    None => println!("No element found"),
+}
+
+// Or more concisely with if let
+if let Some(value) = numbers.get(100) {
+    println!("Element at index 100: {}", value);
+} else {
+    println!("No element at index 100");
+}
+```
+
+Key differences:
+- JavaScript returns `undefined` for out-of-bounds access, while Rust's `[]` operator panics
+- Rust's `get` method returns an `Option<&T>`, forcing you to handle the possibility of an out-of-bounds access
+- This approach prevents the common "undefined is not a function" errors in JavaScript
+
+## Removing Elements
+
+JavaScript:
+
+```javascript
+let numbers = [1, 2, 3, 4, 5];
+let last = numbers.pop(); // 5
+let first = numbers.shift(); // 1
+numbers.splice(1, 1); // Removes 1 element at index 1 (3)
+console.log(numbers); // [2, 4]
+```
+
+Rust:
+
+```rust
+let mut numbers = vec![1, 2, 3, 4, 5];
+let last = numbers.pop(); // Some(5)
+// No direct shift method, but we can use remove
+let first = numbers.remove(0); // 1
+numbers.remove(1); // Removes element at index 1 (3)
+println!("{:?}", numbers); // [2, 4]
+```
+
+Key differences:
+- Rust's `pop` returns an `Option<T>` since the vector might be empty
+- Rust has no direct `shift` equivalent, but `remove(0)` achieves the same result
+- Rust's `remove` is similar to JavaScript's `splice` when removing a single element
+
+## Iterating Over Vectors
+
+JavaScript:
+
+```javascript
+let numbers = [1, 2, 3, 4, 5];
+
+// For...of loop
+for (const num of numbers) {
+  console.log(num);
+}
+
+// forEach method
+numbers.forEach(num => console.log(num));
+
+// Map to create a new array
+let doubled = numbers.map(n => n * 2); // [2, 4, 6, 8, 10]
+
+// Filter to create a subset
+let evens = numbers.filter(n => n % 2 === 0); // [2, 4]
+```
+
+Rust:
+
+```rust
+let numbers = vec![1, 2, 3, 4, 5];
+
+// Basic for loop (immutable references)
+for num in &numbers {
+    println!("{}", num);
+}
+
+// Iterating with mutable references
+let mut nums = vec![1, 2, 3, 4, 5];
+for num in &mut nums {
+    *num *= 2; // Dereference to modify
+}
+println!("{:?}", nums); // [2, 4, 6, 8, 10]
+
+// Using iterator methods
+// Map
+let doubled: Vec<i32> = numbers.iter().map(|n| n * 2).collect();
+println!("{:?}", doubled); // [2, 4, 6, 8, 10]
+
+// Filter
+let evens: Vec<i32> = numbers.iter().filter(|&&n| n % 2 == 0).cloned().collect();
+println!("{:?}", evens); // [2, 4]
+```
+
+Key differences:
+- Rust's iterator methods (`map`, `filter`, etc.) don't modify the original vector
+- You need to call `collect()` to create a new vector from an iterator
+- Rust requires you to specify if you want references (`&`) or mutable references (`&mut`)
+- Dereferencing with `*` is needed to modify elements through mutable references
+
+## Using `for` Loop with Indices
+
+JavaScript:
+
+```javascript
+let fruits = ['apple', 'banana', 'orange'];
+
+// Using index
+for (let i = 0; i < fruits.length; i++) {
+  console.log(`${i}: ${fruits[i]}`);
+}
+
+// Using entries() method
+for (const [index, fruit] of fruits.entries()) {
+  console.log(`${index}: ${fruit}`);
+}
+```
+
+Rust:
+
+```rust
+let fruits = vec!["apple", "banana", "orange"];
+
+// Using index
+for i in 0..fruits.len() {
+    println!("{}: {}", i, fruits[i]);
+}
+
+// Using enumerate
+for (index, fruit) in fruits.iter().enumerate() {
+    println!("{}: {}", index, fruit);
+}
+```
+
+## Advanced Vector Patterns
+
+### Storing Different Types with Enums
+
+In JavaScript, arrays can store different types directly:
+
+```javascript
+let mixed = [42, "hello", true];
+```
+
+In Rust, vectors must contain elements of the same type, but you can use enums to store different types:
+
+```rust
+enum SpreadsheetCell {
+    Int(i32),
+    Float(f64),
+    Text(String),
+}
+
+let row = vec![
+    SpreadsheetCell::Int(42),
+    SpreadsheetCell::Text(String::from("hello")),
+    SpreadsheetCell::Float(3.14),
+];
+
+// Access with pattern matching
+for cell in &row {
+    match cell {
+        SpreadsheetCell::Int(i) => println!("Integer: {}", i),
+        SpreadsheetCell::Float(f) => println!("Float: {}", f),
+        SpreadsheetCell::Text(s) => println!("Text: {}", s),
+    }
+}
+```
+
+### Extending Vectors
+
+JavaScript:
+
+```javascript
+let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+let combined = [...arr1, ...arr2]; // [1, 2, 3, 4, 5, 6]
+
+// Or using concat
+let alsoCombined = arr1.concat(arr2);
+```
+
+Rust:
+
+```rust
+let vec1 = vec![1, 2, 3];
+let vec2 = vec![4, 5, 6];
+
+// Using extend
+let mut combined = vec1.clone();
+combined.extend(vec2.clone());
+println!("{:?}", combined); // [1, 2, 3, 4, 5, 6]
+
+// Or creating a new vector (less efficient)
+let mut all = Vec::new();
+all.extend(&vec1);
+all.extend(&vec2);
+```
+
+### Vector Slices
+
+JavaScript uses array methods or the slice method:
+
+```javascript
+let numbers = [1, 2, 3, 4, 5];
+let slice = numbers.slice(1, 4); // [2, 3, 4]
+```
+
+Rust uses slice references:
+
+```rust
+let numbers = vec![1, 2, 3, 4, 5];
+let slice = &numbers[1..4]; // [2, 3, 4]
+
+// Slices are references to a portion of the vector
+println!("{:?}", slice);
+
+// You can create a new vector from a slice
+let new_vec = slice.to_vec();
+```
+
+Key difference: Rust slices are references to the original vector, not new allocations.
+
+## Performance Considerations
+
+### Capacity and Reallocation
+
+In JavaScript, you rarely manage array capacity directly. In Rust, you can optimize vector performance:
+
+```rust
+// Pre-allocate capacity
+let mut with_capacity = Vec::with_capacity(1000);
+
+// Add elements without triggering reallocation
+for i in 0..1000 {
+    with_capacity.push(i);
+}
+
+// Check capacity vs length
+println!("Length: {}, Capacity: {}", with_capacity.len(), with_capacity.capacity());
+
+// Shrink to fit actual size
+with_capacity.shrink_to_fit();
+```
+
+### Memory Safety
+
+Rust's ownership system prevents common errors:
+
+```rust
+let mut v = vec![1, 2, 3, 4, 5];
+
+let first = &v[0]; // Immutable reference
+
+// This would cause a compile error:
+// v.push(6); // Can't modify while references exist
+
+println!("First: {}", first);
+// Now we can modify
+v.push(6);
+```
+
+This prevents scenarios in JavaScript where an array could be modified while you're iterating over it.
+
+## Dropping Vectors
+
+In JavaScript, arrays are garbage-collected:
+
+```javascript
+let arr = [1, 2, 3];
+arr = null; // Array may be garbage collected
+```
+
+In Rust, vectors are dropped when they go out of scope:
+
+```rust
+{
+    let v = vec![1, 2, 3];
+    // Do something with v
+} // v goes out of scope and is freed here
+```
+
+When a vector is dropped, all its elements are also dropped.
+
+## Working with Large Vectors
+
+For large datasets, JavaScript might use specialized methods:
+
+```javascript
+const largeArray = Array(1000000).fill(0);
+// Process in chunks
+for (let i = 0; i < largeArray.length; i += 1000) {
+  const chunk = largeArray.slice(i, i + 1000);
+  // Process chunk
+}
+```
+
+Rust can use similar approaches but with more control:
+
+```rust
+let large_vec = vec![0; 1000000]; // Create vector with 1,000,000 zeros
+
+// Process in chunks
+for chunk in large_vec.chunks(1000) {
+    // Process chunk
+    println!("Chunk length: {}", chunk.len());
+}
+
+// Or process in parallel using rayon
+// use rayon::prelude::*;
+// large_vec.par_chunks(1000).for_each(|chunk| {
+//     // Process chunk in parallel
+// });
+```
+
+## Summary
+
+Vectors in Rust are similar to JavaScript arrays in purpose but with important differences:
+
+| Feature | JavaScript Array | Rust Vector |
+|---------|-----------------|-------------|
+| Type safety | Can mix types | All elements must be same type |
+| Growth | Automatic | Automatic but controllable |
+| Out-of-bounds access | Returns undefined | Panics with `[]`, returns `Option` with `get()` |
+| Mutability | Always mutable | Must be declared mutable |
+| Memory management | Garbage collected | Automatically freed when out of scope |
+| Performance control | Limited | Fine-grained control over capacity |
+
+Understanding these differences helps JavaScript developers leverage Rust's vector type effectively while maintaining memory safety and performance. 
