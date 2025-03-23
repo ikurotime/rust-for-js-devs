@@ -128,9 +128,62 @@ astro-code, pre {
 
 /* Content layout */
 .content {
-	max-width: var(--sl-content-width);
+	max-width: 70ch;
 	margin: 0 auto;
-	padding: 0 var(--sl-content-padding);
+	line-height: 1.7;
+}
+
+.content p {
+	font-size: 1.05rem;
+	margin-bottom: 1.5rem;
+	color: var(--sl-color-text);
+}
+
+.content h1 {
+	font-size: 2.5rem;
+	margin-bottom: 2rem;
+	font-weight: 800;
+	color: var(--sl-color-white);
+	background: linear-gradient(90deg, var(--sl-color-white), rgba(255, 255, 255, 0.85));
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+.content h2 {
+	font-size: 1.8rem;
+	margin-top: 3rem;
+	margin-bottom: 1.25rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.content h3 {
+	font-size: 1.5rem;
+	margin-top: 2.5rem;
+	margin-bottom: 1rem;
+	color: var(--sl-color-white);
+}
+
+.content ul, .content ol {
+	padding-left: 1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+.content li {
+	margin-bottom: 0.5rem;
+}
+
+.content blockquote {
+	border-left: 4px solid var(--rust-color);
+	padding: 0.75rem 1.5rem;
+	margin: 1.5rem 0;
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.content blockquote p {
+	margin-bottom: 0;
 }
 
 /* Card styling */
@@ -566,7 +619,7 @@ astro-code, pre {
 	margin-bottom: var(--spacing-xl);
 	overflow: hidden;
 	border-radius: var(--border-radius);
-	min-height: 60vh;
+	min-height: 35vh;
 	display: flex;
 	align-items: center;
 	background-color: rgba(20, 20, 22, 0.6);
@@ -688,7 +741,7 @@ astro-code, pre {
 	height: 1.2em;
 }
 
-/* Feature section */
+/* Feature section styling */
 .feature-section, .course-section, .approach-section {
 	margin: var(--spacing-xl) 0;
 	position: relative;
@@ -1029,21 +1082,33 @@ astro-code, pre {
 }
 
 .cta-button.primary {
-	background: linear-gradient(45deg, var(--rust-color), #ff5e3a);
+	background: var(--rust-color);
 	color: white;
-	box-shadow: 0 8px 20px rgba(206, 66, 43, 0.3);
+	box-shadow: 0 4px 15px rgba(206, 66, 43, 0.3);
 }
 
-.cta-button.primary:hover {
-	transform: translateY(-3px);
-	box-shadow: 0 12px 25px rgba(206, 66, 43, 0.4);
+.cta-button.primary:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(45deg, var(--rust-color), #ff7e5f);
+	z-index: -1;
+	transition: opacity 0.3s ease;
+	opacity: 0;
+}
+
+.cta-button.primary:hover:before {
+	opacity: 1;
 }
 
 .cta-button.secondary {
 	background: rgba(255, 255, 255, 0.1);
-	backdrop-filter: blur(5px);
 	color: white;
 	border: 1px solid rgba(255, 255, 255, 0.2);
+	backdrop-filter: blur(5px);
 }
 
 .cta-button.secondary:hover {
@@ -1051,6 +1116,11 @@ astro-code, pre {
 	transform: translateY(-3px);
 	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 	border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cta-button:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .cta-button .button-icon {
@@ -1076,4 +1146,558 @@ astro-code, pre {
 		justify-content: center;
 		margin-top: var(--spacing-md);
 	}
+}
+
+/* Blog section styling */
+.blog-section {
+	position: relative;
+	margin: var(--spacing-xl) 0;
+	padding: var(--spacing-lg);
+	border-radius: var(--border-radius);
+	overflow: hidden;
+}
+
+.blog-background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	opacity: 0.8;
+	background: radial-gradient(circle at 30% 30%, rgba(40, 40, 55, 0.7), rgba(20, 20, 25, 0.9));
+	border-radius: var(--border-radius);
+	backdrop-filter: blur(5px);
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+	border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.blog-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: var(--spacing-md);
+	margin-top: var(--spacing-lg);
+}
+
+.blog-card {
+	background: rgba(30, 30, 35, 0.7);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: var(--border-radius);
+	padding: var(--spacing-md);
+	transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.blog-card:before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 3px;
+	background: linear-gradient(90deg, var(--rust-color), var(--js-color));
+	transform: scaleX(0);
+	transform-origin: left;
+	transition: transform 0.4s ease;
+}
+
+.blog-card:hover {
+	transform: translateY(-8px);
+	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+	background: rgba(40, 40, 45, 0.8);
+}
+
+.blog-card:hover:before {
+	transform: scaleX(1);
+}
+
+.blog-image {
+	width: 100%;
+	height: 180px;
+	border-radius: var(--border-radius);
+	overflow: hidden;
+	margin-bottom: var(--spacing-sm);
+}
+
+.blog-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.5s ease;
+}
+
+.blog-card:hover .blog-image img {
+	transform: scale(1.05);
+}
+
+.blog-meta {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: var(--spacing-xs);
+	font-size: 0.85rem;
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.blog-tag {
+	display: inline-block;
+	background: linear-gradient(45deg, rgba(206, 66, 43, 0.2), rgba(240, 219, 79, 0.2));
+	color: rgba(255, 255, 255, 0.9);
+	padding: 0.2rem 0.6rem;
+	border-radius: 20px;
+	font-size: 0.8rem;
+	font-weight: 500;
+}
+
+.blog-card h3 {
+	font-size: 1.3rem;
+	font-weight: 700;
+	margin: var(--spacing-xs) 0;
+	color: white;
+	line-height: 1.4;
+}
+
+.blog-card p {
+	font-size: 0.95rem;
+	line-height: 1.6;
+	color: rgba(255, 255, 255, 0.8);
+	margin-bottom: var(--spacing-sm);
+	flex-grow: 1;
+}
+
+.blog-link {
+	display: inline-flex;
+	align-items: center;
+	color: var(--rust-color);
+	font-weight: 600;
+	font-size: 0.9rem;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	margin-top: auto;
+	gap: 0.3rem;
+}
+
+.blog-link:hover {
+	color: var(--js-color);
+	gap: 0.5rem;
+}
+
+.blog-link-icon {
+	transition: transform 0.3s ease;
+}
+
+.blog-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: var(--spacing-md);
+}
+
+.view-all-link {
+	color: var(--rust-color);
+	font-weight: 600;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	transition: all 0.3s ease;
+	font-size: 1rem;
+}
+
+.view-all-link:hover {
+	color: var(--js-color);
+	gap: 0.6rem;
+}
+
+@media (max-width: 768px) {
+	.blog-section {
+		padding: var(--spacing-md);
+	}
+	
+	.blog-grid {
+		grid-template-columns: 1fr;
+	}
+	
+	.blog-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--spacing-xs);
+	}
+}
+
+/* Improved code blocks for docs */
+.content :global(pre) {
+	border-radius: var(--border-radius);
+	padding: 1.25rem;
+	margin: 1.5rem 0;
+	background: rgba(20, 20, 25, 0.8) !important;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+	position: relative;
+	overflow-x: auto;
+}
+
+.content :global(code) {
+	font-family: var(--sl-font-mono);
+	font-size: 0.9em;
+	padding: 0.2em 0.4em;
+	border-radius: 4px;
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.content :global(pre code) {
+	background: transparent;
+	padding: 0;
+	font-size: 0.95rem;
+	line-height: 1.7;
+}
+
+/* Code caption/filename */
+.code-caption {
+	background: rgba(30, 30, 35, 0.95);
+	color: rgba(255, 255, 255, 0.8);
+	font-family: var(--sl-font-mono);
+	font-size: 0.8rem;
+	padding: 0.5rem 1rem;
+	border-radius: var(--border-radius) var(--border-radius) 0 0;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-bottom: none;
+	margin-bottom: -1.5rem;
+	display: inline-block;
+}
+
+/* Language indicator */
+.content :global(pre)::before {
+	content: attr(data-language);
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 0.25rem 0.75rem;
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	border-radius: 0 var(--border-radius) 0 var(--border-radius);
+	background: var(--rust-color);
+	color: white;
+	opacity: 0.8;
+}
+
+.content :global(pre[data-language="javascript"])::before,
+.content :global(pre[data-language="js"])::before {
+	background: var(--js-color);
+	color: black;
+}
+
+/* Table styling */
+.content table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 2rem 0;
+	border-radius: var(--border-radius);
+	overflow: hidden;
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.content th {
+	background: rgba(35, 35, 40, 0.9);
+	color: white;
+	font-weight: 600;
+	text-align: left;
+	padding: 0.75rem 1rem;
+	border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.content td {
+	padding: 0.75rem 1rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+	background: rgba(25, 25, 30, 0.6);
+}
+
+.content tr:last-child td {
+	border-bottom: none;
+}
+
+.content tr:nth-child(even) td {
+	background: rgba(30, 30, 35, 0.6);
+}
+
+.content tr:hover td {
+	background: rgba(40, 40, 45, 0.7);
+}
+
+/* Callouts and notice boxes */
+.callout {
+	border-radius: var(--border-radius);
+	padding: 1.25rem 1.5rem;
+	margin: 1.5rem 0;
+	display: flex;
+	align-items: flex-start;
+	gap: 1rem;
+	position: relative;
+	overflow: hidden;
+}
+
+.callout::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 4px;
+	height: 100%;
+}
+
+.callout-icon {
+	flex-shrink: 0;
+	width: 24px;
+	height: 24px;
+}
+
+.callout-content {
+	flex-grow: 1;
+}
+
+.callout-content > :last-child {
+	margin-bottom: 0;
+}
+
+.callout-title {
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+	font-size: 1.1rem;
+}
+
+/* Callout types */
+.callout.tip {
+	background: rgba(72, 187, 120, 0.1);
+}
+.callout.tip::before {
+	background: rgb(72, 187, 120);
+}
+
+.callout.info {
+	background: rgba(49, 130, 206, 0.1);
+}
+.callout.info::before {
+	background: rgb(49, 130, 206);
+}
+
+.callout.warning {
+	background: rgba(236, 201, 75, 0.1);
+}
+.callout.warning::before {
+	background: rgb(236, 201, 75);
+}
+
+.callout.danger {
+	background: rgba(245, 101, 101, 0.1);
+}
+.callout.danger::before {
+	background: rgb(245, 101, 101);
+}
+
+.callout.rust {
+	background: rgba(206, 66, 43, 0.1);
+}
+.callout.rust::before {
+	background: var(--rust-color);
+}
+
+.callout.js {
+	background: rgba(240, 219, 79, 0.1);
+}
+.callout.js::before {
+	background: var(--js-color);
+}
+
+/* More targeted Starlight sidebar styles - with more subtle colors */
+.sl-sidebar {
+  background-color: rgba(25, 25, 28, 0.6) !important; /* Lighter, more subtle background */
+  border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(8px);
+}
+
+.sl-sidebar-nav {
+  padding: 1rem 0.5rem !important;
+}
+
+.sl-sidebar h2 {
+  font-size: 0.85rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: rgba(255, 255, 255, 0.6) !important; /* Slightly brighter */
+  margin: 1.5rem 0 0.75rem 0 !important;
+  padding-left: 1rem !important;
+}
+
+.sl-sidebar .sl-nav-item a {
+  display: block !important;
+  border-radius: var(--border-radius) !important;
+  padding: 0.5rem 1rem !important;
+  margin: 0.2rem 0 !important;
+  color: rgba(255, 255, 255, 0.7) !important; /* Maintain better readability */
+  transition: all 0.2s ease !important;
+  text-decoration: none !important;
+}
+
+.sl-sidebar .sl-nav-item a:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: white !important;
+}
+
+.sl-sidebar .sl-nav-item [aria-current="page"] {
+  background: linear-gradient(90deg, rgba(206, 66, 43, 0.1), transparent) !important; /* More subtle gradient */
+  border-left: 2px solid var(--rust-color) !important; /* Thinner border */
+  font-weight: 600 !important;
+  padding-left: calc(1rem - 2px) !important;
+  color: white !important;
+}
+
+.sl-sidebar .sl-nav-group {
+  margin-left: 0.75rem !important;
+}
+
+/* Right sidebar (TOC) improvements - less intrusive */
+.sl-container[data-has-toc] .right-sidebar {
+  background-color: rgba(25, 25, 28, 0.6) !important; /* Match sidebar bg */
+  border-left: 1px solid rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(8px);
+}
+
+.right-sidebar-panel h2 {
+  font-size: 0.85rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  margin-bottom: 1rem !important;
+}
+
+.right-sidebar-panel .sl-markdown-toc a {
+  display: block !important;
+  border-radius: var(--border-radius) !important;
+  padding: 0.3rem 0.75rem !important;
+  margin-bottom: 0.3rem !important;
+  transition: all 0.2s ease !important;
+  font-size: 0.9rem !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-decoration: none !important;
+}
+
+.right-sidebar-panel .sl-markdown-toc a:hover {
+  color: white !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.right-sidebar-panel .sl-markdown-toc a[aria-current="true"] {
+  color: var(--rust-color) !important;
+  font-weight: 500 !important; /* Less bold */
+  background: rgba(206, 66, 43, 0.05) !important; /* More subtle highlight */
+}
+
+/* Main content enhancement - more subtle background */
+.sl-container {
+  background: transparent !important; /* Let the site background show through */
+}
+
+.sl-markdown-content {
+  padding: 1.5rem !important;
+  border-radius: var(--border-radius) !important;
+  background: rgba(28, 28, 35, 0.3) !important; /* Much more subtle background */
+  backdrop-filter: blur(5px) !important; 
+  border: 1px solid rgba(255, 255, 255, 0.03) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Enhanced page header - preserve hierarchy */
+.sl-markdown-content > h1:first-child {
+  font-size: 2.25rem !important; /* Slightly smaller for better hierarchy */
+  font-weight: 800 !important;
+  margin-bottom: 1.5rem !important;
+  padding-bottom: 0.75rem !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  /* Preserve normal text color rather than gradient */
+  color: white !important;
+}
+
+/* Pagination styling - more subtle */
+.sl-pagination {
+  margin-top: 3rem !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding-top: 1.5rem !important;
+}
+
+.sl-pagination-item a {
+  background: rgba(30, 30, 35, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: var(--border-radius) !important;
+  padding: 0.75rem 1.25rem !important;
+  transition: all 0.3s ease !important;
+}
+
+.sl-pagination-item a:hover {
+  background: rgba(40, 40, 45, 0.5) !important;
+  transform: translateY(-2px) !important; /* Smaller transform */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important; /* More subtle shadow */
+}
+
+.sl-pagination-item [data-direction="next"] {
+  background: linear-gradient(90deg, rgba(206, 66, 43, 0.1), rgba(30, 30, 35, 0.4)) !important; /* More subtle */
+}
+
+.sl-pagination-item [data-direction="prev"] {
+  background: rgba(30, 30, 35, 0.4) !important;
+}
+
+/* Header adjustments - more subtle */
+.header {
+  background-color: rgba(25, 25, 28, 0.7) !important;
+  backdrop-filter: blur(8px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Search component styling - more consistent */
+.search-container {
+  background-color: rgba(30, 30, 35, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+  border-radius: var(--border-radius) !important;
+}
+
+.search-input {
+  background-color: rgba(20, 20, 25, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: var(--border-radius) !important;
+}
+
+/* Hover card effect for links to other docs - more subtle */
+.sl-markdown-content a[href^="/"]:not(.pagination-title):not(.hero-button):not(.cta-button) {
+  position: relative;
+  display: inline-block;
+  color: var(--rust-color) !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(206, 66, 43, 0.2) !important;
+  transition: all 0.2s ease !important;
+}
+
+.sl-markdown-content a[href^="/"]:not(.pagination-title):not(.hero-button):not(.cta-button):hover {
+  color: var(--js-color) !important;
+  border-bottom-color: var(--js-color) !important;
+}
+
+.sl-markdown-content a[href^="/"]:not(.pagination-title):not(.hero-button):not(.cta-button)::after {
+  content: "→";
+  display: inline-block;
+  margin-left: 0.25rem;
+  opacity: 0;
+  transform: translateX(-3px);
+  transition: all 0.2s ease;
+}
+
+.sl-markdown-content a[href^="/"]:not(.pagination-title):not(.hero-button):not(.cta-button):hover::after {
+  opacity: 0.7; /* More subtle */
+  transform: translateX(0);
 }

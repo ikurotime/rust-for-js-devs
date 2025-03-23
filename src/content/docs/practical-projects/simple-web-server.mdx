@@ -94,6 +94,7 @@ once_cell = "1.17.0"
 Now, let's implement our server in `src/main.rs`:
 
 ```rust
+//main.rs
 use actix_web::{web, App, HttpResponse, HttpServer, Responder, get, post};
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
