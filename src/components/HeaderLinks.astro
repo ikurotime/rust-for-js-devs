@@ -1,0 +1,25 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+
+---
+<a class="links" href={getRelativeLocaleUrl(Astro.currentLocale ?? 'en', 'blog')}>Blog</a>
+<a class="links" href={getRelativeLocaleUrl(Astro.currentLocale ?? 'en', 'home')}>Docs</a>
+<a class="links sm" href={getRelativeLocaleUrl(Astro.currentLocale ?? 'en', 'examples')}>Examples</a>
+
+<style>
+  a.links {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: var(--sl-text-sm);
+    color: var(--color-text);
+    line-height: normal;
+  }
+  a.links:hover {
+    color: var(--sl-color-text-accent);
+  }
+  @media (max-width: 30rem) {
+    a.links.sm {
+      display: none;
+    }
+  }
+</style>

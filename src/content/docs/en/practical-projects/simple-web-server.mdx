@@ -1,0 +1,303 @@
+---
+title: Building a Simple Web Server in Rust
+description: Create a basic HTTP server in Rust and compare it to a Node.js implementation
+---
+
+# Building a Simple Web Server in Rust
+
+As a JavaScript developer, you're likely familiar with creating web servers using Node.js and Express. In this tutorial, we'll build a simple HTTP server in Rust using the popular [Actix Web](https://actix.rs/) framework, and compare it to a Node.js implementation.
+
+## Node.js Implementation
+
+First, let's look at how you'd build a simple server with Express:
+
+```javascript
+// server.js
+const express = require('express');
+const app = express();
+const port = 3000;
+
+// JSON middleware
+app.use(express.json());
+
+// In-memory "database"
+let todos = [
+  { id: 1, title: 'Learn Express', completed: true },
+  { id: 2, title: 'Learn Rust', completed: false }
+];
+
+// Routes
+app.get('/todos', (req, res) => {
+  res.json(todos);
+});
+
+app.get('/todos/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const todo = todos.find(todo => todo.id === id);
+  
+  if (!todo) {
+    return res.status(404).json({ error: 'Todo not found' });
+  }
+  
+  res.json(todo);
+});
+
+app.post('/todos', (req, res) => {
+  const { title } = req.body;
+  
+  if (!title) {
+    return res.status(400).json({ error: 'Title is required' });
+  }
+  
+  const newId = todos.length > 0 ? Math.max(...todos.map(t => t.id)) + 1 : 1;
+  const newTodo = { id: newId, title, completed: false };
+  
+  todos.push(newTodo);
+  res.status(201).json(newTodo);
+});
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
+```
+
+## Rust Implementation
+
+Now, let's build the same server in Rust using Actix Web.
+
+### Step 1: Create a New Rust Project
+
+```bash
+cargo new todo_server
+cd todo_server
+```
+
+### Step 2: Add Dependencies to Cargo.toml
+
+Edit your `Cargo.toml` file to include the necessary dependencies:
+
+```toml
+[package]
+name = "todo_server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-web = "4.3.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+once_cell = "1.17.0"
+```
+
+### Step 3: Implement the Server
+
+Now, let's implement our server in `src/main.rs`:
+
+```rust
+//main.rs
+use actix_web::{web, App, HttpResponse, HttpServer, Responder, get, post};
+use once_cell::sync::Lazy;
+use serde::{Deserialize, Serialize};
+use std::sync::Mutex;
+
+// Todo struct
+#[derive(Debug, Serialize, Deserialize, Clone)]
+struct Todo {
+    id: u32,
+    title: String,
+    completed: bool,
+}
+
+// Create request struct
+#[derive(Debug, Deserialize)]
+struct CreateTodoRequest {
+    title: String,
+}
+
+// In-memory "database" using a global variable with Mutex for safe concurrent access
+static TODOS: Lazy<Mutex<Vec<Todo>>> = Lazy::new(|| {
+    Mutex::new(vec![
+        Todo { id: 1, title: "Learn Actix".to_string(), completed: true },
+        Todo { id: 2, title: "Learn Rust".to_string(), completed: false },
+    ])
+});
+
+// Get all todos
+#[get("/todos")]
+async fn get_todos() -> impl Responder {
+    let todos = TODOS.lock().unwrap().clone();
+    HttpResponse::Ok().json(todos)
+}
+
+// Get a specific todo by ID
+#[get("/todos/{id}")]
+async fn get_todo(path: web::Path<u32>) -> impl Responder {
+    let id = path.into_inner();
+    let todos = TODOS.lock().unwrap();
+    
+    match todos.iter().find(|t| t.id == id) {
+        Some(todo) => HttpResponse::Ok().json(todo),
+        None => HttpResponse::NotFound().json(("error", "Todo not found")),
+    }
+}
+
+// Create a new todo
+#[post("/todos")]
+async fn create_todo(req: web::Json<CreateTodoRequest>) -> impl Responder {
+    let mut todos = TODOS.lock().unwrap();
+    
+    // Validate request
+    if req.title.is_empty() {
+        return HttpResponse::BadRequest().json(("error", "Title is required"));
+    }
+    
+    // Generate new ID
+    let new_id = todos.iter().map(|t| t.id).max().unwrap_or(0) + 1;
+    
+    // Create new todo
+    let new_todo = Todo {
+        id: new_id,
+        title: req.title.clone(),
+        completed: false,
+    };
+    
+    // Add to collection
+    todos.push(new_todo.clone());
+    
+    HttpResponse::Created().json(new_todo)
+}
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    println!("Server running at http://localhost:3000");
+    
+    HttpServer::new(|| {
+        App::new()
+            .service(get_todos)
+            .service(get_todo)
+            .service(create_todo)
+    })
+    .bind("127.0.0.1:3000")?
+    .run()
+    .await
+}
+```
+
+### Step 4: Run the Server
+
+```bash
+cargo run
+```
+
+Your server should now be running at http://localhost:3000.
+
+## Key Differences Between Node.js and Rust Implementations
+
+### Type Safety
+
+- **JavaScript**: Dynamic typing means you might encounter runtime type errors.
+- **Rust**: Static typing means the compiler catches type errors before your code runs.
+
+```rust
+// In Rust, you define the exact structure of your data:
+#[derive(Debug, Serialize, Deserialize, Clone)]
+struct Todo {
+    id: u32,
+    title: String,
+    completed: bool,
+}
+```
+
+### Concurrency
+
+- **JavaScript**: Single-threaded event loop with asynchronous callbacks.
+- **Rust**: Multi-threaded by default with the async/await pattern.
+
+```rust
+// Rust's HTTP server runs multiple threads by default
+HttpServer::new(|| {...})
+    .bind("127.0.0.1:3000")?
+    .run()
+    .await
+```
+
+### Data Handling
+
+- **JavaScript**: Mutable objects without explicit thread safety.
+- **Rust**: Uses `Mutex` to ensure thread-safe access to shared data.
+
+```rust
+// Thread-safe global state in Rust
+static TODOS: Lazy<Mutex<Vec<Todo>>> = Lazy::new(|| {
+    Mutex::new(vec![...])
+});
+```
+
+### Error Handling
+
+- **JavaScript**: Uses exceptions and try/catch.
+- **Rust**: Uses the Result type and pattern matching.
+
+```rust
+// Rust's ? operator for error handling
+.bind("127.0.0.1:3000")?
+```
+
+### Performance
+
+The Rust version will generally:
+- Have lower memory usage
+- Have faster response times, especially under load
+- Handle more concurrent connections
+
+## Testing the API
+
+### With curl
+
+```bash
+# Get all todos
+curl http://localhost:3000/todos
+
+# Get a specific todo
+curl http://localhost:3000/todos/1
+
+# Create a new todo
+curl -X POST http://localhost:3000/todos \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Learn Actix Web"}'
+```
+
+## Taking It Further
+
+Here are some improvements you could make to this server:
+
+1. Add PUT and DELETE routes for updating and deleting todos
+2. Implement persistence with a database like PostgreSQL using diesel or sqlx
+3. Add authentication and user management
+4. Implement middleware for logging, CORS, etc.
+5. Add error handling middleware
+
+## Key Takeaways
+
+1. **Rust is more verbose**: You need to define data structures explicitly.
+2. **Rust is more type-safe**: The compiler catches errors that would only be found at runtime in JavaScript.
+3. **Rust has better concurrency**: Multi-threading comes out of the box.
+4. **Rust is faster**: Both in execution time and resource usage.
+
+## Comparison with JavaScript Ecosystem
+
+| Feature | JavaScript/Node.js | Rust |
+|---------|-------------------|------|
+| Web frameworks | Express, Koa, Fastify | Actix Web, Rocket, Warp |
+| Request routing | Simple function-based | Macro-based or builder pattern |
+| Middleware | Function-based middleware | Trait-based or function middleware |
+| Performance | Good for I/O bound tasks | Excellent for CPU and I/O bound tasks |
+| Learning curve | Gentle | Steep |
+
+## Next Steps
+
+Now that you've built a basic web server in Rust, you might want to:
+
+1. [Add a database connection](/practical-projects/database-access/)
+2. [Deploy your Rust application](/practical-projects/deployment/)
+3. [Create a full-stack application](/practical-projects/full-stack/) with Rust backend and JavaScript frontend 

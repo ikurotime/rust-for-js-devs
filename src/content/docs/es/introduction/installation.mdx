@@ -1,0 +1,122 @@
+---
+title: Instalando Rust
+description: Cómo instalar Rust y configurar tu entorno de desarrollo
+---
+
+# Instalando Rust
+
+Los desarrolladores de JavaScript están familiarizados con Node.js y npm para construir aplicaciones JavaScript. De manera similar, Rust tiene su propia cadena de herramientas que instalaremos en esta guía.
+
+## Rustup: El Instalador de la Cadena de Herramientas de Rust
+
+La forma recomendada de instalar Rust es a través de `rustup`, que es similar en concepto a `nvm` para Node.js. Te permite:
+
+- Instalar y administrar múltiples versiones de Rust
+- Mantener tu instalación de Rust actualizada
+- Instalar componentes adicionales como documentación
+
+## Pasos de Instalación
+
+### Para macOS, Linux y otros sistemas tipo Unix:
+
+Abre tu terminal y ejecuta:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+Esto es similar a cómo podrías instalar herramientas de desarrollo en sistemas Unix (como `brew` o `nvm`).
+
+Sigue las instrucciones en pantalla. Normalmente, querrás la opción de instalación predeterminada.
+
+### Para Windows:
+
+1. Descarga el instalador desde [rustup.rs](https://rustup.rs/)
+2. Ejecuta el instalador y sigue las instrucciones en pantalla
+
+### Verificando Tu Instalación
+
+Después de la instalación, necesitarás reiniciar tu terminal o ejecutar:
+
+```bash
+source $HOME/.cargo/env
+```
+
+Luego verifica tu instalación:
+
+```bash
+rustc --version
+cargo --version
+```
+
+Deberías ver información de versión para ambos comandos.
+
+## Entendiendo la Cadena de Herramientas de Rust
+
+Cuando instalas Rust a través de `rustup`, obtienes varias herramientas importantes:
+
+1. **rustc**: El compilador de Rust (similar al motor V8 de Node.js)
+2. **cargo**: El gestor de paquetes y sistema de construcción de Rust (similar a npm/yarn)
+3. **rustup**: El instalador y gestor de la cadena de herramientas
+
+## Equivalentes en JavaScript
+
+| Ecosistema JavaScript | Ecosistema Rust |
+|----------------------|----------------|
+| `node` | `rustc` |
+| `npm` / `yarn` | `cargo` |
+| `nvm` | `rustup` |
+| `package.json` | `Cargo.toml` |
+| `node_modules/` | `target/` |
+| `npx` | `cargo run` |
+
+## Entorno de Desarrollo Integrado (IDE)
+
+La mayoría de los desarrolladores de JavaScript están acostumbrados a un excelente soporte de editor. Para Rust, la mejor experiencia actualmente es con:
+
+### Visual Studio Code
+
+Si ya estás usando VS Code para JavaScript, puedes añadir soporte para Rust:
+
+1. Instala la extensión [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+2. Opcionalmente instala [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) para depuración
+
+### Otros Editores
+
+- **IDEs de JetBrains**: Usa el plugin de Rust o el dedicado [RustRover](https://www.jetbrains.com/rust/)
+- **Vim/Neovim**: Usa rust-analyzer con CoC o LSP integrado
+- **Emacs**: Usa rust-analyzer con Eglot o LSP-mode
+
+## Configurando Tu Primer Proyecto
+
+Ahora que tienes Rust instalado, ¡puedes [crear tu primer proyecto de Rust](/es/introduction/hello-cargo/) usando Cargo!
+
+## Actualizando Rust
+
+Para actualizar tu instalación de Rust (similar a `npm update -g`):
+
+```bash
+rustup update
+```
+
+## Solución de Problemas
+
+### Herramientas de Compilador Faltantes en Windows
+
+Si estás en Windows y encuentras errores sobre herramientas faltantes, es posible que necesites instalar las [Herramientas de Compilación de Microsoft C++](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+
+### Problemas de Ruta
+
+Si obtienes errores de "comando no encontrado", asegúrate de que `~/.cargo/bin` esté en tu PATH.
+
+### Obteniendo Ayuda
+
+Si encuentras algún problema, la comunidad de Rust es muy servicial:
+
+- [Foros de Usuarios de Rust](https://users.rust-lang.org/)
+- [Discord de Rust](https://discord.gg/rust-lang)
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/rust) 
+
+## Próximos Pasos
+
+Ahora que has instalado Rust y configurado tu entorno de desarrollo, ¡vamos a escribir tu primer programa en Rust! Continúa a [Hola Mundo](/es/introduction/hello-world/) para ver cómo crear y ejecutar un programa simple de Rust. 

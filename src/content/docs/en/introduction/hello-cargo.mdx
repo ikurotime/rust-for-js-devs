@@ -1,0 +1,221 @@
+---
+title: Hello, Cargo!
+description: Learn how to use Cargo, Rust's package manager and build system
+---
+
+# Hello, Cargo!
+
+Cargo is Rust's package manager and build system. It's similar to npm or yarn in the JavaScript ecosystem, but with additional features for building and testing your code.
+
+## Why Use Cargo?
+
+If you're coming from JavaScript, you're probably familiar with package managers like npm or yarn. Cargo serves a similar purpose, but it's even more central to the Rust ecosystem:
+
+- **Dependency Management**: Like npm, Cargo downloads and manages your project's dependencies
+- **Build System**: Cargo compiles your code, similar to webpack or other build tools
+- **Task Runner**: Cargo can run tests, generate documentation, and publish packages
+
+## Creating a New Project with Cargo
+
+Instead of manually creating files like we did in the previous section, let's use Cargo to create a new project:
+
+```bash
+cargo new hello_cargo
+cd hello_cargo
+```
+
+This is similar to `npm init` or `yarn init` in JavaScript, but it actually creates more initial files.
+
+## Project Structure
+
+Let's look at what Cargo created:
+
+```
+hello_cargo/
+├── Cargo.toml
+└── src/
+    └── main.rs
+```
+
+This is similar to a JavaScript project structure:
+
+| Rust | JavaScript | Purpose |
+|------|------------|---------|
+| `Cargo.toml` | `package.json` | Project configuration and dependencies |
+| `src/` | `src/` | Source code directory |
+| `target/` (created later) | `node_modules/` | Build artifacts and dependencies |
+
+## Understanding Cargo.toml
+
+Open `Cargo.toml` and you'll see something like:
+
+```toml
+[package]
+name = "hello_cargo"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+```
+
+This is similar to a `package.json` file in JavaScript:
+
+- `[package]` contains metadata about your project
+- `[dependencies]` is where you'll list external libraries (called "crates" in Rust)
+
+## Looking at the Source Code
+
+Now, look at `src/main.rs`:
+
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+```
+
+Cargo created a "Hello, world!" program for us automatically.
+
+## Building and Running with Cargo
+
+Cargo provides commands for building and running your project:
+
+### Building the Project
+
+```bash
+cargo build
+```
+
+This creates an executable in `target/debug/hello_cargo` (or `target\debug\hello_cargo.exe` on Windows).
+
+This is similar to using a build script in a JavaScript project, but more standardized.
+
+### Running the Project
+
+You can run the built executable directly, or use:
+
+```bash
+cargo run
+```
+
+This will build (if necessary) and then run your program in one step. It's similar to `npm start` or `yarn start` in JavaScript projects.
+
+### Checking Your Code Without Building
+
+If you want to check your code compiles without producing an executable:
+
+```bash
+cargo check
+```
+
+This is faster than `cargo build` and useful during development, similar to using a linter in JavaScript.
+
+## Building for Release
+
+When you're ready to release your program, use:
+
+```bash
+cargo build --release
+```
+
+This creates an optimized executable in `target/release/` instead of `target/debug/`.
+
+This is similar to the difference between development and production builds in JavaScript bundlers like webpack.
+
+## Cargo Commands vs. npm/yarn Commands
+
+| Cargo Command | npm/yarn Equivalent | Purpose |
+|---------------|---------------------|---------|
+| `cargo new` | `npm init`/`yarn init` | Create a new project |
+| `cargo build` | `npm run build` | Build the project |
+| `cargo run` | `npm start` | Build and run the project |
+| `cargo test` | `npm test` | Run tests |
+| `cargo add` | `npm install`/`yarn add` | Add a dependency |
+| `cargo doc` | N/A (JSDoc) | Generate documentation |
+| `cargo publish` | `npm publish` | Publish to registry |
+
+## Adding Dependencies
+
+To add dependencies to your project, you can either:
+
+1. Manually edit `Cargo.toml`:
+```toml
+[dependencies]
+ferris-says = "0.2"
+```
+
+2. Or use the `cargo add` command (similar to `npm install`/`yarn add`):
+```bash
+cargo add ferris-says
+```
+
+After adding a dependency, run `cargo build` to download and compile it.
+
+## Updating Dependencies
+
+To update your dependencies:
+
+```bash
+cargo update
+```
+
+This is similar to `npm update` or `yarn upgrade`.
+
+## Using External Crates
+
+Let's modify our program to use an external crate. Edit `src/main.rs`:
+
+```rust
+use ferris_says::say;
+use std::io::{stdout, BufWriter};
+
+fn main() {
+    let stdout = stdout();
+    let message = String::from("Hello fellow Rustaceans!");
+    let width = message.chars().count();
+    
+    let mut writer = BufWriter::new(stdout.lock());
+    say(message.as_str(), width, &mut writer).unwrap();
+}
+
+```
+
+Now run the program:
+
+```bash
+cargo run
+```
+
+You should see a message from Ferris, the unofficial Rust mascot:
+
+```
+----------------------------
+< Hello fellow Rustaceans! >
+----------------------------
+              \
+               \
+                 _~^~^~_
+             \) /  o o  \ (/
+               '_   -   _'
+               / '-----' \
+```
+
+## Cargo Lock File
+
+After building your project, you'll notice a new file called `Cargo.lock`. This is similar to `package-lock.json` or `yarn.lock` in JavaScript projects. It records the exact versions of dependencies that were used so your builds are reproducible.
+
+## Summary
+
+Cargo is a powerful tool that combines:
+- Package management (like npm/yarn)
+- Build system (like webpack)
+- Test runner (like Jest)
+- Documentation generator
+- Publishing tool
+
+In the JavaScript ecosystem, these functions are often split across multiple tools, but Cargo brings them all together in one cohesive package.
+
+## Next Steps
+
+Now that you understand the basics of Cargo, let's move on to [building a more substantial program](/guessing-game/) that will give you a better feel for Rust's syntax and features. 

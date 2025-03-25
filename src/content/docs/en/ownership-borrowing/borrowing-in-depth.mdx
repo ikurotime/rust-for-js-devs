@@ -1,0 +1,281 @@
+---
+title: Borrowing in Depth
+description: A deeper dive into Rust's borrowing system for JavaScript developers
+---
+
+# Borrowing in Depth
+
+In the previous section, we introduced Rust's ownership system and the concept of borrowing. Now, let's dive deeper into borrowing and explore its nuances.
+
+## Quick Recap: What is Borrowing?
+
+Borrowing in Rust is the ability to reference a value without taking ownership of it. It's similar to how in JavaScript you can pass an object to a function which can read or modify it without affecting whether the caller still has access to that object.
+
+```rust
+fn main() {
+    let s = String::from("hello");
+    
+    // Immutable borrow - s is passed by reference
+    let len = calculate_length(&s);
+    
+    println!("The length of '{}' is {}.", s, len);
+}
+
+fn calculate_length(s: &String) -> usize {
+    s.len()
+}
+```
+
+## Types of References
+
+Rust has two types of references:
+
+1. **Immutable references** (`&T`) - Allow reading but not modifying
+2. **Mutable references** (`&mut T`) - Allow both reading and modifying
+
+Let's explore each in detail.
+
+### Immutable References
+
+Immutable references allow you to read data but not modify it:
+
+```rust
+fn main() {
+    let s = String::from("hello");
+    
+    let r1 = &s; // First immutable reference
+    let r2 = &s; // Second immutable reference
+    
+    println!("{} and {}", r1, r2);
+}
+```
+
+You can have multiple immutable references to the same data at the same time. This is similar to multiple variables in JavaScript referencing the same object.
+
+### Mutable References
+
+Mutable references allow you to modify the borrowed data:
+
+```rust
+fn main() {
+    let mut s = String::from("hello");
+    
+    let r1 = &mut s; // Mutable reference
+    r1.push_str(", world");
+    
+    println!("{}", r1);
+}
+```
+
+## The Borrowing Rules
+
+Rust enforces the following rules for borrowing:
+
+1. At any given time, you can have **either**:
+   - One mutable reference, OR
+   - Any number of immutable references
+
+2. References must always be valid (no dangling references)
+
+These rules prevent **data races** at compile time. A data race occurs when:
+- Two or more pointers access the same data simultaneously
+- At least one of the pointers is being used to write to the data
+- There's no mechanism to synchronize the access
+
+### Example: Preventing Data Races
+
+This code will not compile because it violates rule #1:
+
+```rust
+fn main() {
+    let mut s = String::from("hello");
+    
+    let r1 = &s;      // Immutable borrow
+    let r2 = &s;      // Another immutable borrow - this is fine
+    let r3 = &mut s;  // ❌ Error: cannot borrow `s` as mutable because it is also borrowed as immutable
+    
+    println!("{}, {}, and {}", r1, r2, r3);
+}
+```
+
+### Non-Lexical Lifetimes (NLL)
+
+Rust's borrow checker is smart enough to understand when a reference is no longer needed:
+
+```rust
+fn main() {
+    let mut s = String::from("hello");
+    
+    let r1 = &s;
+    let r2 = &s;
+    println!("{} and {}", r1, r2);
+    // r1 and r2 are no longer used after this point
+    
+    let r3 = &mut s;  // ✅ This is fine now
+    println!("{}", r3);
+}
+```
+
+This is called Non-Lexical Lifetimes (NLL) - the compiler understands that the immutable borrows are no longer used after the first `println!`, so it allows the mutable borrow.
+
+## Borrowing and Functions
+
+When you pass a reference to a function, the function borrows the value:
+
+```rust
+fn main() {
+    let mut s = String::from("hello");
+    
+    add_world(&mut s);  // Pass mutable reference
+    println!("{}", s);  // Prints "hello, world"
+}
+
+fn add_world(s: &mut String) {
+    s.push_str(", world");
+}
+```
+
+The function `add_world` borrows `s` mutably, modifies it, and then the borrow ends when the function returns.
+
+## Comparing to JavaScript
+
+In JavaScript, all objects are passed by reference implicitly:
+
+```javascript
+function addWorld(s) {
+  s.value += ", world";
+}
+
+const myString = { value: "hello" };
+addWorld(myString);
+console.log(myString.value); // "hello, world"
+```
+
+But there's a crucial difference: JavaScript doesn't prevent data races at compile time. This code will run without errors but could cause bugs:
+
+```javascript
+// JavaScript doesn't prevent this potential race condition
+const data = { value: 10 };
+
+// These could run concurrently in a web app
+function increment() {
+  data.value += 1;
+}
+
+function double() {
+  data.value *= 2;
+}
+```
+
+## The Ref Pattern in JavaScript
+
+Some JavaScript libraries use a pattern that's conceptually similar to Rust's references:
+
+```javascript
+// React's useRef hook creates a mutable reference
+function Counter() {
+  const countRef = useRef(0);
+  
+  function handleClick() {
+    countRef.current += 1;
+    console.log(`You clicked ${countRef.current} times`);
+  }
+  
+  return <button onClick={handleClick}>Click me</button>;
+}
+```
+
+## Borrowing and Iterators
+
+When working with collections, borrowing becomes especially important:
+
+```rust
+fn main() {
+    let mut v = vec![1, 2, 3, 4, 5];
+    
+    // Immutable borrow for iteration
+    for i in &v {
+        println!("{}", i);
+    }
+    
+    // Mutable borrow for modifying during iteration
+    for i in &mut v {
+        *i += 50; // Dereference to modify the value
+    }
+    
+    println!("{:?}", v); // [51, 52, 53, 54, 55]
+}
+```
+
+## The Borrow Checker
+
+Rust's borrow checker is the compiler component that enforces these rules. It analyzes the scope of all borrows and ensures they don't violate any rules.
+
+If the borrow checker can prove that your code follows all the borrowing rules, it compiles successfully. Otherwise, it rejects your code with an error message.
+
+## Interior Mutability
+
+Sometimes you need to modify a value even when you only have an immutable reference. Rust provides **interior mutability** patterns for these cases:
+
+```rust
+use std::cell::RefCell;
+
+fn main() {
+    let data = RefCell::new(5);
+    
+    // We can modify the value through an immutable reference
+    let borrowed = &data;
+    *borrowed.borrow_mut() += 1;
+    
+    println!("Value: {}", *borrowed.borrow()); // Value: 6
+}
+```
+
+Interior mutability is a relatively advanced topic, but it's similar to how in JavaScript you can have a `const` object but still modify its properties:
+
+```javascript
+const user = {
+  name: "Alice",
+  score: 0
+};
+
+// The binding is const, but we can modify properties
+user.score += 10;
+```
+
+## Common Borrowing Patterns
+
+### Splitting Borrows
+
+You can borrow different parts of a data structure simultaneously:
+
+```rust
+fn main() {
+    let mut s = String::from("hello world");
+    
+    // Split the string into two parts
+    let hello = &s[0..5];  // Immutable borrow of first 5 chars
+    let world = &mut s[6..11];  // Mutable borrow of remaining chars
+    
+    // This is allowed because the borrows don't overlap
+    world.make_ascii_uppercase();
+    
+    println!("{} {}", hello, world); // "hello WORLD"
+}
+```
+
+### Self-Referential Structs
+
+Creating structures that contain references to themselves is challenging in Rust. This is where you might need more advanced patterns like `Rc` and `RefCell` or create a different data structure.
+
+## Conclusion
+
+Borrowing is a core concept in Rust that enables:
+
+1. Memory safety without a garbage collector
+2. Concurrency without data races
+3. Efficient passing of data without unnecessary copying
+
+While borrowing rules might seem restrictive coming from JavaScript, they prevent entire classes of bugs that would only appear at runtime in JavaScript.
+
+In the next section, we'll explore [Lifetimes](/ownership-borrowing/lifetimes/), which are Rust's way of ensuring that references are always valid. 

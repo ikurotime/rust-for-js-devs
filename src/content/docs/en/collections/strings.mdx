@@ -1,0 +1,552 @@
+---
+title: 'Strings in Rust'
+description: 'Learn how to work with Strings in Rust compared to JavaScript strings'
+---
+
+# Strings in Rust
+
+Working with strings in Rust is quite different from JavaScript. While JavaScript has a single string type with built-in Unicode support, Rust has multiple string types with explicit UTF-8 encoding. This guide will help you understand the differences and effectively work with strings in Rust.
+
+## String Types in Rust
+
+Rust has two main string types:
+
+1. `String`: A growable, heap-allocated UTF-8 encoded string (similar to JavaScript's `String`)
+2. `&str`: A string slice, which is a reference to a UTF-8 encoded string (often stored elsewhere)
+
+Think of `String` as owning its data (like a `vec![u8]` with UTF-8 constraints), and `&str` as borrowing string data.
+
+## Creating Strings
+
+Let's compare how we create strings in JavaScript versus Rust:
+
+```javascript
+// JavaScript string creation
+let greeting = "Hello, world!";
+let name = 'Alice';
+let message = `Hello, ${name}!`;
+
+// Creating from other values
+let numAsString = String(42);
+let boolAsString = String(true);
+```
+
+In Rust:
+
+```rust
+// String literals (these are &str)
+let greeting = "Hello, world!";
+
+// Creating a String
+let owned_greeting = String::from("Hello, world!");
+let also_owned = "Hello, world!".to_string();
+let empty = String::new();
+
+// String interpolation equivalent
+let name = "Alice";
+let message = format!("Hello, {}!", name);
+
+// Creating from other types
+let num_as_string = 42.to_string();
+let bool_as_string = true.to_string();
+```
+
+Key differences:
+- Rust distinguishes between string literals (`&str`) and owned strings (`String`)
+- No template literal syntax in Rust; use `format!` macro instead
+- Single quotes in Rust are for `char` types, not strings
+- To convert values to strings, use the `.to_string()` method or `format!` macro
+
+## String vs &str: When to Use Each
+
+Here's a simple rule of thumb:
+- Use `&str` for function parameters when you only need to read the string
+- Use `String` when you need to own or modify the string
+
+```rust
+// Takes a string slice - function doesn't need ownership
+fn print_info(info: &str) {
+    println!("Info: {}", info);
+}
+
+// Returns an owned String - function creates a new string
+fn generate_greeting(name: &str) -> String {
+    format!("Hello, {}!", name)
+}
+
+fn main() {
+    let name = "Alice";
+    
+    // Both String and &str can be passed where &str is needed
+    print_info(name);
+    
+    let owned_name = String::from("Bob");
+    print_info(&owned_name); // &String coerces to &str
+    
+    // Generate and own a new String
+    let greeting = generate_greeting(name);
+    println!("{}", greeting);
+}
+```
+
+## String Concatenation and Building
+
+JavaScript makes string concatenation easy:
+
+```javascript
+// JavaScript concatenation
+let greeting = "Hello, ";
+let name = "world";
+let message = greeting + name + "!";
+
+// Or with +=
+let fullMessage = "Hello";
+fullMessage += ", ";
+fullMessage += "world!";
+```
+
+Rust offers several approaches:
+
+```rust
+// Using + operator (consumes the first string)
+let greeting = String::from("Hello, ");
+let name = "world";
+let message = greeting + name + "!";
+// Note: greeting is moved/consumed here and can't be used again
+
+// Using format! macro (doesn't consume any strings)
+let greeting = String::from("Hello, ");
+let name = "world";
+let message = format!("{}{}{}", greeting, name, "!");
+// greeting and name are still valid here
+
+// Using += via push_str() (modifies the original)
+let mut full_message = String::from("Hello");
+full_message.push_str(", ");
+full_message.push_str("world!");
+
+// Adding a single character with push()
+let mut hi = String::from("Hi");
+hi.push('!');
+```
+
+Key differences:
+- The `+` operator in Rust consumes the first string
+- The second argument for `+` must be a string slice (`&str`), not an owned `String`
+- For multiple concatenations, `format!` is often clearer and more efficient
+- To mutate a string, you need to declare it as `mut`
+
+## String Length and Size
+
+JavaScript's `length` property gives the number of UTF-16 code units:
+
+```javascript
+let text = "Hello";
+console.log(text.length); // 5
+
+let emoji = "👋";
+console.log(emoji.length); // 2 (because emoji uses multiple UTF-16 code units)
+```
+
+Rust provides different methods for different concepts of "length":
+
+```rust
+let text = "Hello";
+println!("{}", text.len()); // 5 bytes
+
+let emoji = "👋";
+println!("{}", emoji.len()); // 4 bytes
+println!("{}", emoji.chars().count()); // 1 Unicode scalar value
+```
+
+Key differences:
+- Rust's `.len()` gives the size in bytes, not characters
+- Use `.chars().count()` to count Unicode scalar values
+- Rust strings are always UTF-8 encoded
+
+## Accessing Characters
+
+JavaScript allows indexing strings to get characters:
+
+```javascript
+let greeting = "Hello";
+let firstChar = greeting[0]; // "H"
+
+// Caution with Unicode!
+let emoji = "👋";
+console.log(emoji[0]); // Gives a surrogate half, not the actual character
+
+// Better for Unicode:
+let firstEmoji = Array.from(emoji)[0]; // "👋"
+```
+
+Rust doesn't allow direct indexing of strings, for good reason:
+
+```rust
+let greeting = "Hello";
+// let first_char = greeting[0]; // This doesn't compile in Rust!
+
+// Instead, use one of these approaches:
+let first_byte = greeting.as_bytes()[0]; // 72 (ASCII for 'H')
+
+// For the first character:
+if let Some(first_char) = greeting.chars().next() {
+    println!("First char: {}", first_char); // "H"
+}
+
+// To get a character at a specific position (inefficient for large indices):
+let third_char = greeting.chars().nth(2).unwrap(); // 'l'
+```
+
+Key differences:
+- Rust doesn't allow direct string indexing because UTF-8 characters can span multiple bytes
+- Access individual bytes with `.as_bytes()[i]`
+- Access Unicode characters with `.chars()` iterator
+
+## Slicing Strings
+
+JavaScript uses the `slice` method:
+
+```javascript
+let greeting = "Hello, world!";
+let hello = greeting.slice(0, 5); // "Hello"
+```
+
+Rust uses range syntax for slices, but requires care with UTF-8:
+
+```rust
+let greeting = "Hello, world!";
+let hello = &greeting[0..5]; // "Hello"
+
+// Be careful! This must be at valid UTF-8 character boundaries
+// let will_panic = &"👋 hello"[0..2]; // PANICS: index 2 is not a character boundary
+```
+
+Key differences:
+- Rust slices must be at valid UTF-8 character boundaries
+- Indexing a non-boundary results in a runtime panic, not a silent error
+- For safety with Unicode, consider using character-based methods
+
+## String Iteration
+
+JavaScript iteration methods:
+
+```javascript
+let greeting = "Hello";
+
+// By code units (caution with Unicode!)
+for (let i = 0; i < greeting.length; i++) {
+  console.log(greeting[i]);
+}
+
+// By Unicode code points (better for international text)
+for (const char of greeting) {
+  console.log(char);
+}
+```
+
+Rust iteration methods:
+
+```rust
+let greeting = "Hello";
+
+// By bytes
+for b in greeting.bytes() {
+    println!("{}", b); // Prints byte values (72, 101, 108, 108, 111)
+}
+
+// By Unicode scalar values (chars)
+for c in greeting.chars() {
+    println!("{}", c); // Prints characters (H, e, l, l, o)
+}
+
+// With indices (byte positions, not character positions)
+for (i, c) in greeting.char_indices() {
+    println!("Character '{}' at byte position {}", c, i);
+}
+```
+
+## String Conversion and Casting
+
+JavaScript automatic conversions:
+
+```javascript
+let num = 42;
+let boolVal = true;
+let str1 = "Value: " + num; // Converts num to string
+let str2 = "Is true: " + boolVal; // Converts bool to string
+```
+
+Rust explicit conversions:
+
+```rust
+let num = 42;
+let bool_val = true;
+
+// Convert to String (owned)
+let str1 = format!("Value: {}", num);
+let str2 = format!("Is true: {}", bool_val);
+
+// Convert from String to other types
+let num_str = "42";
+let parsed_num: i32 = num_str.parse().expect("Not a number!");
+
+// More robust error handling
+match "42a".parse::<i32>() {
+    Ok(n) => println!("Successfully parsed: {}", n),
+    Err(e) => println!("Failed to parse: {}", e),
+}
+```
+
+## UTF-8 and Unicode Handling
+
+JavaScript treats strings as sequences of UTF-16 code units:
+
+```javascript
+let face = "😊";
+console.log(face.length); // 2 (UTF-16 surrogate pair)
+```
+
+Rust treats strings as UTF-8 encoded bytes:
+
+```rust
+let face = "😊";
+println!("Bytes: {}", face.len()); // 4 bytes
+println!("Characters: {}", face.chars().count()); // 1 character
+
+// Common operations with Unicode
+let text = "héllo";
+println!("Uppercase: {}", text.to_uppercase());
+println!("Lowercase: {}", text.to_lowercase());
+
+// Normalizing Unicode (requires the unicode-normalization crate)
+// use unicode_normalization::UnicodeNormalization;
+// let normalized = text.nfc().collect::<String>();
+```
+
+## String Searching and Replacement
+
+JavaScript offers various search methods:
+
+```javascript
+let sentence = "The quick brown fox";
+console.log(sentence.includes("quick")); // true
+console.log(sentence.startsWith("The")); // true
+console.log(sentence.endsWith("fox")); // true
+console.log(sentence.indexOf("brown")); // 10
+
+// Replacement
+let replaced = sentence.replace("quick", "swift");
+```
+
+Rust has similar methods:
+
+```rust
+let sentence = "The quick brown fox";
+println!("{}", sentence.contains("quick")); // true
+println!("{}", sentence.starts_with("The")); // true
+println!("{}", sentence.ends_with("fox")); // true
+println!("{}", sentence.find("brown").unwrap_or(0)); // 10
+
+// Replacement (creates a new string)
+let replaced = sentence.replace("quick", "swift");
+```
+
+## Splitting and Joining Strings
+
+JavaScript:
+
+```javascript
+// Split
+let comma_str = "apple,banana,orange";
+let fruits = comma_str.split(","); // ["apple", "banana", "orange"]
+
+// Join
+let joined = fruits.join("-"); // "apple-banana-orange"
+```
+
+Rust:
+
+```rust
+// Split
+let comma_str = "apple,banana,orange";
+let fruits: Vec<&str> = comma_str.split(',').collect();
+println!("{:?}", fruits); // ["apple", "banana", "orange"]
+
+// Join
+let joined = fruits.join("-"); // "apple-banana-orange"
+```
+
+## String Ownership and Manipulation
+
+JavaScript strings are immutable, but this is handled behind the scenes:
+
+```javascript
+let greeting = "Hello";
+greeting = greeting + ", world!"; // Creates a new string behind the scenes
+```
+
+Rust makes ownership explicit:
+
+```rust
+let greeting = String::from("Hello");
+// This consumes greeting and creates a new String
+let new_greeting = greeting + ", world!";
+// greeting is no longer valid here!
+
+// To keep the original, we could clone it:
+let greeting = String::from("Hello");
+let new_greeting = greeting.clone() + ", world!";
+// Both greeting and new_greeting are valid
+```
+
+## Strings and Functions
+
+JavaScript string methods create new strings:
+
+```javascript
+let original = "Hello, world!";
+let upper = original.toUpperCase();
+let trimmed = original.trim();
+// original is unchanged
+```
+
+Rust string methods also create new strings:
+
+```rust
+let original = "Hello, world!";
+let upper = original.to_uppercase();
+let trimmed = original.trim();
+// original is unchanged
+```
+
+However, Rust's ownership system makes function interactions different:
+
+```rust
+fn process(s: String) {
+    // Takes ownership of the string
+    println!("Processing: {}", s);
+} // s is dropped here
+
+fn borrow_process(s: &str) {
+    // Borrows the string
+    println!("Processing: {}", s);
+} // just the reference is dropped, not the string
+
+fn main() {
+    let owned = String::from("hello");
+    
+    // process(owned); // This would consume owned
+    // println!("{}", owned); // Error! owned was moved
+    
+    // Instead, use references:
+    borrow_process(&owned); // Borrow, don't take ownership
+    println!("{}", owned); // Still valid
+}
+```
+
+## String Performance Considerations
+
+For performance-critical code, be aware of these considerations:
+
+```rust
+// Pre-allocate capacity for efficiency
+let mut s = String::with_capacity(100);
+for i in 0..100 {
+    s.push_str(&i.to_string());
+}
+
+// Avoid excessive cloning
+let base = String::from("Hello");
+// Bad: clones on every iteration
+for i in 0..1000 {
+    let message = base.clone() + &i.to_string();
+    // Use message
+}
+
+// Better: reuse a single String
+let base = "Hello";
+let mut message = String::with_capacity(100);
+for i in 0..1000 {
+    message.clear();
+    message.push_str(base);
+    message.push_str(&i.to_string());
+    // Use message
+}
+```
+
+## Advanced String Patterns
+
+### String Interning
+
+JavaScript strings are automatically interned by the engine:
+
+```javascript
+let a = "hello";
+let b = "hello";
+console.log(a === b); // true, they reference the same memory
+```
+
+In Rust, string literals are interned, but `String` instances are not:
+
+```rust
+let a = "hello"; // &str
+let b = "hello"; // &str
+println!("{}", std::ptr::eq(a, b)); // true, they reference the same memory
+
+let owned_a = String::from("hello");
+let owned_b = String::from("hello");
+println!("{}", std::ptr::eq(&owned_a, &owned_b)); // false, different allocations
+```
+
+For applications needing string interning, consider crates like `string-cache`.
+
+### Raw Strings
+
+JavaScript:
+```javascript
+let regex = "\\d+"; // Need to escape backslashes
+let path = "C:\\Program Files\\App"; // Need to escape backslashes
+```
+
+Rust:
+```rust
+let regex = r"\d+"; // No need to escape backslashes
+let path = r"C:\Program Files\App"; // No need to escape backslashes
+
+// For strings with quotes:
+let json = r#"{"name": "John", "age": 30}"#;
+
+// For strings that contain #"
+let complex = r##"A string with #"quotes"# inside"##;
+```
+
+## Common String Operations Cheat Sheet
+
+| Operation | JavaScript | Rust |
+|-----------|------------|------|
+| Create string | `let s = "hello"` | `let s = "hello"` (for `&str`) <br/> `let s = String::from("hello")` (for `String`) |
+| Concatenate | `s1 + s2` | `s1 + &s2` (consumes s1) <br/> `format!("{}{}", s1, s2)` |
+| Get length | `s.length` | `s.len()` (bytes) <br/> `s.chars().count()` (characters) |
+| Uppercase/Lowercase | `s.toUpperCase()` | `s.to_uppercase()` |
+| Trim whitespace | `s.trim()` | `s.trim()` |
+| Contains substring | `s.includes("sub")` | `s.contains("sub")` |
+| Replace | `s.replace("old", "new")` | `s.replace("old", "new")` |
+| Split | `s.split(",")` | `s.split(",")` |
+| Join | `array.join(",")` | `vec.join(",")` |
+
+## Summary
+
+Strings in Rust are more complex than in JavaScript, but this complexity provides greater control and safety:
+
+1. Rust distinguishes between `String` (owned) and `&str` (borrowed) types
+2. Rust strings are always valid UTF-8, with explicit handling for Unicode
+3. Indexing and slicing have safety checks to prevent invalid UTF-8
+4. The ownership system affects how you pass strings to functions
+5. Explicit conversion methods replace JavaScript's implicit conversions
+
+These differences require some adjustment for JavaScript developers, but they prevent entire classes of string-related bugs and make international text handling more reliable. 
+
+## Next Steps
+
+Now that you've learned about Rust's string types, let's continue our exploration of Rust collections with [Hash Maps](/collections/hash-maps/). Hash maps in Rust are similar to JavaScript objects and Map collections, and we'll explore their unique features in the next section. 
