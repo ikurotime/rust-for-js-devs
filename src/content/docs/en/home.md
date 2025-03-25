@@ -1,9 +1,7 @@
 ---
-title: Home 
+title: Rust for JavaScript Developers
 description: Learn Rust from a JavaScript developer's perspective
 ---
-
-# Rust for JavaScript Developers
 
 Welcome to the Rust for JavaScript Developers documentation! This guide is designed to help JavaScript developers learn Rust by building on concepts they already know.
 
@@ -28,4 +26,5 @@ Each section includes:
 
 ## Ready to Begin?
 
-Start with the [Introduction to Rust](/introduction/) to learn about Rust's key features and benefits.
+Check [Getting Started with Rust](/en/getting-started/) to set up your Rust environment and start learning the basics.
+If you're ready, start with the [Introduction to Rust](/en/introduction/) to learn about Rust's key features and benefits.

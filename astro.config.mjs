@@ -35,7 +35,8 @@ export default defineConfig({
       customCss: ['./src/styles/custom.css'],
       components: {
         Header: './src/components/Header.astro',
-        Footer: './src/components/Footer.astro'
+        Footer: './src/components/Footer.astro',
+        Pagination: './src/components/Pagination.astro'
       },
       sidebar: [
         { label: 'Home', link: '/home' },
