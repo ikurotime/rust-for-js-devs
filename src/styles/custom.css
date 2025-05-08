@@ -8,7 +8,7 @@
 	--js-yellow: #f7df1e;
 	--js-yellow-rgb: 247, 223, 30;
 	--rust-color: #CE422B;
-	--js-color: #F0DB4F;
+	--js-color: #d44e1d;
 	--rust-glow: rgba(206, 66, 43, 0.5);
 	--js-glow: rgba(240, 219, 79, 0.5);
 	
@@ -670,8 +670,6 @@ astro-code, pre {
   padding: 1.5rem !important;
   border-radius: var(--border-radius) !important;
   backdrop-filter: blur(5px) !important; 
-  border: 1px solid rgba(255, 255, 255, 0.03) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
 }
 
 .sl-markdown-content > h1:first-child {
