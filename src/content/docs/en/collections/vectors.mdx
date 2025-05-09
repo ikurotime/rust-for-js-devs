@@ -5,7 +5,7 @@ description: 'Learn how to use Vectors in Rust compared to Arrays in JavaScript'
 
 In Rust, a vector (`Vec<T>`) is a growable, heap-allocated array. If you're coming from JavaScript, vectors are similar to JavaScript arrays but with strong typing and additional memory safety guarantees.
 
-## Creating Vectors
+### Creating Vectors
 
 Let's compare how we create arrays in JavaScript versus vectors in Rust:
 
@@ -39,7 +39,7 @@ Key differences:
 - The `vec!` macro is a convenient way to create vectors with initial values
 - Rust offers `with_capacity` for performance optimization
 
-## Adding Elements to Vectors
+### Adding Elements to Vectors
 
 JavaScript:
 
@@ -65,7 +65,7 @@ Key differences:
 - No direct `unshift` equivalent, but `insert` can be used with index 0
 - Rust requires the same type for all elements added to the vector
 
-## Accessing Vector Elements
+### Accessing Vector Elements
 
 JavaScript:
 
@@ -103,7 +103,7 @@ Key differences:
 - Rust's `get` method returns an `Option<&T>`, forcing you to handle the possibility of an out-of-bounds access
 - This approach prevents the common "undefined is not a function" errors in JavaScript
 
-## Removing Elements
+### Removing Elements
 
 JavaScript:
 
@@ -131,7 +131,7 @@ Key differences:
 - Rust has no direct `shift` equivalent, but `remove(0)` achieves the same result
 - Rust's `remove` is similar to JavaScript's `splice` when removing a single element
 
-## Iterating Over Vectors
+### Iterating Over Vectors
 
 JavaScript:
 
@@ -186,7 +186,7 @@ Key differences:
 - Rust requires you to specify if you want references (`&`) or mutable references (`&mut`)
 - Dereferencing with `*` is needed to modify elements through mutable references
 
-## Using `for` Loop with Indices
+### Using `for` Loop with Indices
 
 JavaScript:
 

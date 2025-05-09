@@ -1,11 +1,11 @@
 ---
-title: Hello, World!
-description: Write your first Rust program and compare it with JavaScript
+title: 'Hello, World!'
+description: 'Write your first Rust program and compare it with JavaScript'
 ---
 
 Let's write our first Rust program! This is a tradition when learning a new programming language, and it's a great way to verify that your Rust installation is working correctly.
 
-## Creating a Project Directory
+#### Creating a Project Directory
 
 First, let's create a directory for our project:
 
@@ -14,7 +14,7 @@ mkdir hello_world
 cd hello_world
 ```
 
-## Creating a Rust Source File
+#### Creating a Rust Source File
 
 In Rust, source files have a `.rs` extension. Let's create a file called `main.rs`:
 
@@ -32,7 +32,7 @@ fn main() {
 }
 ```
 
-## Comparing with JavaScript
+#### Comparing with JavaScript
 
 Here's how a similar program would look in JavaScript:
 
@@ -47,11 +47,11 @@ Let's compare these two programs:
 | `fn main() { ... }` | Not needed | Rust programs start execution from the `main` function |
 | `println!("Hello, World!");` | `console.log("Hello, World!");` | Rust uses macros (with `!`) for printing |
 
-## Compiling and Running the Program
+#### Compiling and Running the Program
 
 Unlike JavaScript, which is interpreted, Rust is a compiled language. This means we need to compile our code before running it.
 
-### Compiling
+##### Compiling
 
 ```bash
 rustc main.rs
@@ -59,7 +59,7 @@ rustc main.rs
 
 This will create an executable file in the same directory.
 
-### Running
+##### Running
 
 On macOS/Linux:
 ```bash
@@ -76,7 +76,7 @@ You should see:
 Hello, World!
 ```
 
-## Understanding Rust's Compilation Model
+#### Understanding Rust's Compilation Model
 
 This compilation step is a key difference from JavaScript:
 
@@ -88,7 +88,7 @@ This compilation model offers several advantages:
 - Produces highly optimized, fast executables
 - No need for a runtime environment (like Node.js)
 
-## Function Structure
+#### Function Structure
 
 Let's take another look at our Rust function:
 
@@ -103,7 +103,7 @@ fn main() {
 - Empty parentheses `()` means this function takes no parameters
 - Code inside the function is enclosed in curly braces `{}`
 
-## Macros vs. Functions
+#### Macros vs. Functions
 
 In our example, `println!` is a macro, not a function. You can identify macros in Rust by the exclamation mark (`!`).
 
@@ -112,11 +112,11 @@ Macros are more powerful than functions because they can:
 - Take a variable number of arguments
 - Implement features that would be difficult with normal functions
 
-## The Semi-Colon in Rust
+#### The Semi-Colon in Rust
 
 Just like in JavaScript, statements in Rust end with a semicolon (`;`). But in Rust, semicolons also indicate that an expression should not return a value, which we'll explore more when we discuss functions in detail.
 
-## Rust Formatting Style
+#### Rust Formatting Style
 
 Rust has a standard formatting style, similar to how JavaScript has tools like Prettier:
 
@@ -129,6 +129,6 @@ You can automatically format your Rust code with:
 rustfmt main.rs
 ```
 
-## Next Steps
+#### Next Steps
 
 While you can write all your programs like this and compile them with `rustc`, most Rust developers use Cargo, Rust's build system and package manager. Let's move on to [Hello, Cargo!](/en/introduction/hello-cargo/) to learn how to use it. 

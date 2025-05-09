@@ -5,9 +5,9 @@ description: Learn about the different types of comments in Rust compared to Jav
 
 Good code is well-documented, and comments are an essential part of that documentation. In this section, we'll explore how comments work in Rust and compare them to JavaScript.
 
-## Regular Comments
+### Regular Comments
 
-### Single-Line Comments
+#### Single-Line Comments
 
 Both Rust and JavaScript use `//` for single-line comments:
 
@@ -21,7 +21,7 @@ let x = 5; // This is an end-of-line comment
 let x = 5; // This is an end-of-line comment
 ```
 
-### Multi-Line Comments
+#### Multi-Line Comments
 
 Both languages also support multi-line comments, though with slightly different syntax:
 
@@ -41,11 +41,11 @@ Both languages also support multi-line comments, though with slightly different 
 
 The key difference is that Rust allows nesting multi-line comments, while JavaScript doesn't.
 
-## Documentation Comments
+### Documentation Comments
 
 This is where Rust really shines compared to JavaScript. Rust has built-in documentation comments that can be processed by `rustdoc` to generate HTML documentation.
 
-### Rust Documentation Comments
+#### Rust Documentation Comments
 
 Rust has two types of documentation comments:
 
@@ -81,7 +81,7 @@ pub fn add(a: i32, b: i32) -> i32 {
 }
 ```
 
-### JavaScript Documentation Comments
+#### JavaScript Documentation Comments
 
 JavaScript doesn't have built-in documentation comments, but it does have JSDoc, a documentation standard:
 
@@ -102,7 +102,7 @@ function add(a, b) {
 }
 ```
 
-## Markdown Support
+### Markdown Support
 
 Rust's documentation comments support Markdown, which allows for rich formatting:
 
@@ -154,9 +154,9 @@ function add(a, b) {
 }
 ```
 
-## Generating Documentation
+### Generating Documentation
 
-### Rust Documentation Generation
+#### Rust Documentation Generation
 
 Rust's documentation can be generated and viewed locally using Cargo:
 
@@ -167,7 +167,7 @@ cargo doc --open
 
 This generates HTML documentation and opens it in your browser.
 
-### JavaScript Documentation Generation
+#### JavaScript Documentation Generation
 
 JavaScript requires external tools like JSDoc, TypeDoc, or ESDoc:
 
@@ -177,7 +177,7 @@ npm install --save-dev jsdoc
 npx jsdoc yourfile.js -d docs
 ```
 
-## Doc Tests
+### Doc Tests
 
 One of the coolest features of Rust's documentation system is that code examples in documentation are actually run as tests:
 
@@ -199,9 +199,9 @@ When you run `cargo test`, the example in the comment is compiled and run as a t
 
 JavaScript doesn't have this feature built-in, though some tools can extract and run examples from JSDoc comments.
 
-## Common Documentation Conventions
+### Common Documentation Conventions
 
-### Rust Documentation Sections
+#### Rust Documentation Sections
 
 Rust has some conventional section headers used in documentation comments:
 
@@ -211,7 +211,7 @@ Rust has some conventional section headers used in documentation comments:
 - `# Safety` - Safety considerations for unsafe functions
 - `# Implementation Details` - Notes about the implementation
 
-### JavaScript Documentation Tags
+#### JavaScript Documentation Tags
 
 JSDoc uses tags for similar purposes:
 
@@ -221,7 +221,7 @@ JSDoc uses tags for similar purposes:
 - `@returns` - Return value description
 - `@see` - Related functions or resources
 
-## Comments as a Last Resort
+### Comments as a Last Resort
 
 Both Rust and JavaScript communities encourage writing self-documenting code:
 
@@ -229,7 +229,7 @@ Both Rust and JavaScript communities encourage writing self-documenting code:
 
 Comments should explain "why" something is done a certain way, not "what" is being done (the code should make that clear).
 
-## Comment Best Practices
+### Comment Best Practices
 
 1. **Write self-documenting code first** - Use descriptive variable and function names
 2. **Explain why, not what** - The code shows what it's doing; comments should explain why
@@ -237,6 +237,6 @@ Comments should explain "why" something is done a certain way, not "what" is bei
 4. **Use documentation comments for public APIs** - Help users understand how to use your code
 5. **Comment complex algorithms** - Even if the code is clear, the underlying algorithm might not be
 
-## Next Steps
+### Next Steps
 
 Now that you understand how to comment your Rust code, let's move on to [Control Flow](/en/common-concepts/control-flow/) to learn how to use conditionals and loops in Rust. 

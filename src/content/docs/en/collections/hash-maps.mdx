@@ -5,7 +5,7 @@ description: 'Learn how to use HashMaps in Rust compared to Objects and Maps in 
 
 Hash maps in Rust (`HashMap<K, V>`) are similar to JavaScript objects and Map collections, allowing you to store key-value pairs. However, Rust's approach to hash maps includes strong typing, explicit handling of missing values, and ownership considerations.
 
-## JavaScript Object vs Map vs Rust HashMap
+### JavaScript Object vs Map vs Rust HashMap
 
 Before diving in, let's compare the three main ways to handle key-value data:
 
@@ -19,7 +19,7 @@ Before diving in, let's compare the three main ways to handle key-value data:
 | Iteration | Various options | `for...of` | Various iterators |
 | Default values | Returns `undefined` | Returns `undefined` | Returns `None` |
 
-## Creating Hash Maps
+### Creating Hash Maps
 
 Let's compare how we create these data structures:
 
@@ -80,7 +80,7 @@ Key differences:
 - Rust's `collect()` method can create hash maps from iterator pairs
 - Rust hash maps are not ordered by default (unlike JavaScript Map)
 
-## Accessing Values
+### Accessing Values
 
 JavaScript:
 
@@ -127,7 +127,7 @@ Key differences:
 - Rust allows direct indexing with `[]` but it will panic if the key doesn't exist
 - Rust's Entry API provides a powerful way to handle "get or insert" scenarios
 
-## Updating Values
+### Updating Values
 
 JavaScript:
 
@@ -166,7 +166,7 @@ Key differences:
 - Rust's entry API allows powerful conditional updates
 - Updating a value in place with `get_mut` requires dereferencing with `*`
 
-## Removing Entries
+### Removing Entries
 
 JavaScript:
 
@@ -194,7 +194,7 @@ Key differences:
 - Rust's `remove` returns the removed value wrapped in an `Option`
 - JavaScript's `delete` returns a boolean indicating success, but Map's `delete` returns true/false
 
-## Checking If a Key Exists
+### Checking If a Key Exists
 
 JavaScript:
 

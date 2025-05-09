@@ -1,55 +1,60 @@
 ---
-title: Installing Rust
-description: How to install Rust and set up your development environment
+title: 'Installation'
+description: 'Learn how to install Rust and set up your development environment'
 ---
 
 JavaScript developers are familiar with Node.js and npm for building JavaScript applications. Similarly, Rust has its own toolchain that we'll install in this guide.
 
-## Rustup: The Rust Toolchain Installer
+#### Installing Rust
 
-The recommended way to install Rust is through `rustup`, which is similar in concept to `nvm` for Node.js. It allows you to:
+The recommended way to install Rust is through `rustup`:
 
-- Install and manage multiple Rust versions
-- Keep your Rust installation up to date
-- Install additional components like documentation
-
-## Installation Steps
-
-### For macOS, Linux, and other Unix-like systems:
-
-Open your terminal and run:
+##### On macOS and Linux
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-This is similar to how you might install developer tools on Unix systems (like `brew` or `nvm`).
+##### On Windows
 
-Follow the on-screen instructions. Typically, you'll want the default installation option.
+Download and run the installer from [rustup.rs](https://rustup.rs).
 
-### For Windows:
+#### Verifying Installation
 
-1. Download the installer from [rustup.rs](https://rustup.rs/)
-2. Run the installer and follow the on-screen instructions
-
-### Verifying Your Installation
-
-After installation, you'll need to either restart your terminal or run:
-
-```bash
-source $HOME/.cargo/env
-```
-
-Then verify your installation:
+After installation, verify that Rust is installed correctly:
 
 ```bash
 rustc --version
 cargo --version
 ```
 
-You should see version information for both commands.
+#### Updating Rust
 
-## Understanding the Rust Toolchain
+To update Rust to the latest version:
+
+```bash
+rustup update
+```
+
+#### Uninstalling Rust
+
+To uninstall Rust:
+
+```bash
+rustup self uninstall
+```
+
+#### IDE Setup
+
+##### VS Code
+
+Install the "rust-analyzer" extension for the best Rust development experience.
+
+##### IntelliJ IDEA
+
+Install the "Rust" plugin for IntelliJ IDEA.
+
+#### Understanding the Rust Toolchain
 
 When you install Rust through `rustup`, you get several important tools:
 
@@ -57,7 +62,7 @@ When you install Rust through `rustup`, you get several important tools:
 2. **cargo**: Rust's package manager and build system (similar to npm/yarn)
 3. **rustup**: The toolchain installer and manager itself
 
-## JavaScript Equivalents
+#### JavaScript Equivalents
 
 | JavaScript Ecosystem | Rust Ecosystem |
 |----------------------|----------------|
@@ -68,46 +73,38 @@ When you install Rust through `rustup`, you get several important tools:
 | `node_modules/` | `target/` |
 | `npx` | `cargo run` |
 
-## Integrated Development Environment (IDE)
+#### Integrated Development Environment (IDE)
 
 Most JavaScript developers are used to excellent editor support. For Rust, the best experience is currently with:
 
-### Visual Studio Code
+##### Visual Studio Code
 
 If you're already using VS Code for JavaScript, you can add Rust support:
 
 1. Install the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension
 2. Optionally install [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) for debugging
 
-### Other Editors
+##### Other Editors
 
 - **JetBrains IDEs**: Use the Rust plugin or the dedicated [RustRover](https://www.jetbrains.com/rust/)
 - **Vim/Neovim**: Use rust-analyzer with CoC or built-in LSP
 - **Emacs**: Use rust-analyzer with Eglot or LSP-mode
 
-## Setting Up Your First Project
+#### Setting Up Your First Project
 
 Now that you have Rust installed, you can [create your first Rust project](/en/introduction/hello-cargo/) using Cargo!
 
-## Updating Rust
+#### Troubleshooting
 
-To update your Rust installation (similar to `npm update -g`):
-
-```bash
-rustup update
-```
-
-## Troubleshooting
-
-### Missing Compiler Tools on Windows
+##### Missing Compiler Tools on Windows
 
 If you're on Windows and encounter errors about missing tools, you might need to install the [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
 
-### Path Issues
+##### Path Issues
 
 If you get "command not found" errors, ensure that `~/.cargo/bin` is in your PATH.
 
-### Getting Help
+##### Getting Help
 
 If you encounter any issues, the Rust community is very helpful:
 
@@ -115,6 +112,6 @@ If you encounter any issues, the Rust community is very helpful:
 - [Rust Discord](https://discord.gg/rust-lang)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/rust) 
 
-## Next Steps
+#### Conclusion
 
-Now that you've installed Rust and set up your development environment, let's write your first Rust program! Continue to [Hello World](/en/introduction/hello-world/) to see how to create and run a simple Rust program. 
+You're now ready to start developing in Rust! 

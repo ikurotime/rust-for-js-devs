@@ -5,9 +5,9 @@ description: Learn about conditional statements and loops in Rust compared to Ja
 
 Control flow determines the order in which code executes. In this section, we'll explore Rust's control flow structures and compare them to JavaScript's.
 
-## Conditional Statements
+#### Conditional Statements
 
-### if Expressions
+##### if Expressions
 
 In JavaScript, `if` statements work like this:
 
@@ -44,7 +44,7 @@ Key differences:
 2. Condition must be a boolean expression (no truthy/falsy values)
 3. Braces `{}` are required, even for single-line blocks
 
-### if as an Expression
+##### if as an Expression
 
 Since `if` is an expression in Rust, you can assign its result to a variable:
 
@@ -70,7 +70,7 @@ const sign = number > 0 ? "positive" : number < 0 ? "negative" : "zero";
 console.log(`The number is ${sign}`);
 ```
 
-### Truthiness vs. Boolean Conditions
+##### Truthiness vs. Boolean Conditions
 
 JavaScript has the concept of truthy and falsy values:
 
@@ -108,9 +108,9 @@ if 1 > 0 {
 }
 ```
 
-## Loops
+#### Loops
 
-### while Loops
+##### while Loops
 
 While loops in Rust and JavaScript are very similar:
 
@@ -136,7 +136,7 @@ The main differences:
 1. No parentheses around the condition in Rust (though they're optional)
 2. Braces are required in Rust
 
-### for Loops
+##### for Loops
 
 For loops are quite different between the two languages:
 
@@ -185,7 +185,7 @@ for num in &numbers {
 }
 ```
 
-### Iterating with indices
+##### Iterating with indices
 
 If you need indices along with values:
 
@@ -388,7 +388,7 @@ switch (number) {
 }
 ```
 
-### Matching with Option&lt;T&gt;
+#### Matching with Option&lt;T&gt;
 
 `match` is often used with `Option<T>` to handle the presence or absence of a value:
 
@@ -458,7 +458,6 @@ if (someValue?.value === 3) {
   console.log("Three!");
 }
 ```
-
 ## Key Differences from JavaScript
 
 1. **Expression-based**: Rust's `if` and `match` are expressions that return values
@@ -471,4 +470,6 @@ if (someValue?.value === 3) {
 ## Next Steps
 
 Now that you've learned about control flow in Rust, let's explore [Ownership](/en/ownership-borrowing/what-is-ownership/), one of Rust's most distinctive features that doesn't exist in JavaScript. 
+
+
 

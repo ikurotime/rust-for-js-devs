@@ -1,11 +1,11 @@
 ---
-title: Variables and Mutability
-description: Learn how variables and mutability work in Rust compared to JavaScript
+title: 'Variables and Mutability'
+description: 'Learn how variables and mutability work in Rust compared to JavaScript'
 ---
 
 One of the most noticeable differences between Rust and JavaScript is how variables and mutability work. Let's explore these differences to help you transition between the two languages.
 
-## Variables in JavaScript
+#### Variables in JavaScript
 
 In JavaScript, you can declare variables with `var`, `let`, or `const`:
 
@@ -24,7 +24,7 @@ const person = { name: "Alice" };
 person.name = "Bob";  // ✅ Works! Only the binding is immutable
 ```
 
-## Variables in Rust
+#### Variables in Rust
 
 Rust takes a different approach, making variables **immutable by default**:
 
@@ -38,18 +38,18 @@ let mut mutable = "I can be changed";  // Use 'mut' to make mutable
 mutable = "New value";      // ✅ Works
 ```
 
-## Key Differences
+#### Key Differences
 
 - In JavaScript, variables declared with `let` are mutable by default
 - In Rust, variables are immutable by default and require `mut` for mutability
 - JavaScript's `const` prevents reassignment but not modification of object properties
 - In Rust, immutability is more comprehensive (we'll see more when we get to references)
 
-## Constants
+#### Constants
 
 Both languages have constants, but they work differently:
 
-### JavaScript Constants
+##### JavaScript Constants
 
 ```javascript
 const PI = 3.14159;
@@ -60,7 +60,7 @@ const user = { name: "Alice" };
 user.name = "Bob";  // ✅ Works - only the binding is constant, not the content
 ```
 
-### Rust Constants
+##### Rust Constants
 
 ```rust
 const PI: f64 = 3.14159;
@@ -76,7 +76,7 @@ Rust constants:
 - Can be declared in any scope, including the global scope
 - Are inlined at compile time
 
-## Shadowing in Rust
+#### Shadowing in Rust
 
 Rust allows "shadowing" of variables, which is declaring a new variable with the same name as a previous variable:
 
@@ -100,7 +100,7 @@ let mut spaces = "   ";
 // spaces = spaces.len();  // ❌ Error: mismatched types
 ```
 
-### JavaScript Variable Shadowing
+##### JavaScript Variable Shadowing
 
 JavaScript has similar behavior with block-scoped variables:
 
@@ -120,11 +120,11 @@ let x = 10;
 let x = 20;  // ❌ SyntaxError: Identifier 'x' has already been declared
 ```
 
-## Variable Scope
+#### Variable Scope
 
 Both languages use curly braces to define scopes:
 
-### JavaScript
+##### JavaScript
 
 ```javascript
 {
@@ -134,7 +134,7 @@ Both languages use curly braces to define scopes:
 // console.log(x);  // ❌ ReferenceError: x is not defined
 ```
 
-### Rust
+##### Rust
 
 ```rust
 {
@@ -144,32 +144,32 @@ Both languages use curly braces to define scopes:
 // println!("x: {}", x);  // ❌ Error: cannot find value `x` in this scope
 ```
 
-## Naming Conventions
+#### Naming Conventions
 
-### JavaScript
+##### JavaScript
 
 - `camelCase` for variables and functions
 - `PascalCase` for classes and constructor functions
 - `SCREAMING_SNAKE_CASE` for constants
 
-### Rust
+##### Rust
 
 - `snake_case` for variables and functions
 - `PascalCase` for types and traits
 - `SCREAMING_SNAKE_CASE` for constants and static variables
 
-## Type Inference
+#### Type Inference
 
 Both Rust and JavaScript can infer types, but in very different ways:
 
-### JavaScript (Dynamic Typing)
+##### JavaScript (Dynamic Typing)
 
 ```javascript
 let x = 5;        // Number
 x = "hello";      // Now it's a String - no problem!
 ```
 
-### Rust (Static Typing with Inference)
+##### Rust (Static Typing with Inference)
 
 ```rust
 let x = 5;        // Inferred as i32
@@ -180,11 +180,11 @@ let x = 5;        // i32
 let x: &str = "hello"; // Shadowing with a new type
 ```
 
-## Destructuring
+#### Destructuring
 
 Both languages support destructuring:
 
-### JavaScript
+##### JavaScript
 
 ```javascript
 const point = { x: 10, y: 20 };
@@ -196,33 +196,39 @@ const [first, second] = numbers;
 console.log(first, second);  // 1 2
 ```
 
-### Rust
+##### Rust
 
 ```rust
-struct Point { x: i32, y: i32 }
+struct Point {
+    x: i32,
+    y: i32,
+}
+
 let point = Point { x: 10, y: 20 };
 let Point { x, y } = point;
-println!("{} {}", x, y);  // 10 20
+println!("x: {}, y: {}", x, y);  // x: 10, y: 20
 
 let numbers = [1, 2, 3];
-let [first, second, ..] = numbers;
-println!("{} {}", first, second);  // 1 2
+let [first, second, _] = numbers;
+println!("first: {}, second: {}", first, second);  // first: 1, second: 2
 ```
 
-## Best Practices
+### Best Practices
 
-### JavaScript
+#### JavaScript
 
-- Use `const` by default and `let` only when reassignment is needed
-- Avoid `var` in modern code
-- Consider using TypeScript for static typing
+- Use `const` by default, `let` when you need to reassign
+- Avoid `var` in modern JavaScript
+- Use meaningful variable names
+- Keep variables close to where they're used
 
-### Rust
+#### Rust
 
-- Embrace immutability - use `let` without `mut` by default
-- Use `mut` only when necessary
-- Take advantage of shadowing for transformations
-- Let the compiler infer types when obvious
+- Use immutable variables by default
+- Only use `mut` when you need to change a value
+- Use shadowing for type changes or when you want to reuse a name
+- Follow Rust naming conventions
+- Keep variables in the smallest scope possible
 
 ## Memory Considerations
 

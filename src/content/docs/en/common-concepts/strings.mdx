@@ -1,0 +1,110 @@
+---
+title: 'Strings'
+description: 'Learn about strings in Rust and how they compare to JavaScript strings'
+---
+
+#### String Types in Rust
+
+Rust has two string types:
+
+##### String
+
+- Growable, heap-allocated
+- UTF-8 encoded
+- Owned type
+
+##### &str
+
+- Fixed-size string slice
+- UTF-8 encoded
+- Reference type
+
+#### Creating Strings
+
+```rust
+// String
+let s1 = String::from("hello");
+let s2 = "hello".to_string();
+
+// &str
+let s3 = "hello";
+```
+
+#### String Operations
+
+##### Concatenation
+
+```rust
+let s1 = String::from("Hello, ");
+let s2 = String::from("world!");
+let s3 = s1 + &s2;  // s1 has been moved and can no longer be used
+```
+
+##### Appending
+
+```rust
+let mut s = String::from("hello");
+s.push_str(", world!");
+s.push('!');
+```
+
+#### String Slices
+
+```rust
+let s = String::from("hello world");
+let hello = &s[0..5];
+let world = &s[6..11];
+```
+
+#### UTF-8 Encoding
+
+```rust
+let s = String::from("नमस्ते");
+for c in s.chars() {
+    println!("{}", c);
+}
+```
+
+#### Comparing to JavaScript
+
+JavaScript has a single string type:
+
+```javascript
+let s1 = "hello";
+let s2 = new String("hello");
+```
+
+#### String Methods
+
+##### Length
+
+```rust
+let s = String::from("hello");
+let len = s.len();  // 5
+```
+
+##### Contains
+
+```rust
+let s = String::from("hello world");
+let contains = s.contains("world");  // true
+```
+
+##### Replace
+
+```rust
+let s = String::from("hello world");
+let s2 = s.replace("world", "rust");
+```
+
+#### String Formatting
+
+```rust
+let name = "Alice";
+let age = 30;
+let s = format!("{} is {} years old", name, age);
+```
+
+#### Conclusion
+
+Rust's string system provides safety and performance through its two string types. 

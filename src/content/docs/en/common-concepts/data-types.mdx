@@ -5,7 +5,7 @@ description: Learn about Rust's data types and how they compare to JavaScript
 
 Rust's type system is one of the major differences from JavaScript. Let's explore the various data types in Rust and how they compare to JavaScript.
 
-## Type Systems: Static vs Dynamic
+#### Type Systems: Static vs Dynamic
 
 JavaScript is **dynamically typed**, meaning variables can change types at runtime:
 
@@ -31,9 +31,9 @@ let name: String = String::from("Alice");
 let is_active: bool = true;
 ```
 
-## Scalar Types
+#### Scalar Types
 
-### Integers
+##### Integers
 
 JavaScript has a single numeric type (`Number`) for integers and floating-point values, plus `BigInt` for large integers.
 
@@ -75,7 +75,7 @@ const f = 0b11110000;   // Binary value (240)
 const g = 9007199254740992n; // BigInt for numbers > 2^53
 ```
 
-### Floating-Point Numbers
+##### Floating-Point Numbers
 
 Rust has two floating-point types:
 
@@ -95,7 +95,7 @@ In JavaScript:
 const x = 2.0;         // Number (always double precision)
 ```
 
-### Booleans
+##### Booleans
 
 Both languages have boolean types:
 
@@ -109,7 +109,7 @@ const t = true;
 const f = false;
 ```
 
-### Characters
+##### Characters
 
 JavaScript doesn't have a dedicated character type; single characters are just strings of length 1.
 
@@ -129,9 +129,9 @@ const z = 'ℤ';        // String of length 1 (but 2 bytes in UTF-16)
 const heart = '❤';    // String of length 1 (but 2 bytes in UTF-16)
 ```
 
-## Compound Types
+#### Compound Types
 
-### Tuples
+##### Tuples
 
 Rust has tuples, which are fixed-length collections of values of different types:
 
@@ -160,7 +160,7 @@ console.log(y);  // 6.4
 const fiveHundred = tup[0];  // 500
 ```
 
-### Arrays
+##### Arrays
 
 Rust arrays have a fixed length and contain elements of the same type:
 
@@ -191,11 +191,11 @@ const first = a[0];  // 1
 
 For dynamic arrays in Rust, you'd use a `Vec` (vector), which we'll cover in the Collections section.
 
-## Strings
+#### Strings
 
 Strings are a complex topic in Rust, especially coming from JavaScript.
 
-### JavaScript Strings
+##### JavaScript Strings
 
 In JavaScript, strings are simple:
 
@@ -209,7 +209,7 @@ const upperName = name.toUpperCase();
 const sub = greeting.substring(0, 5);  // "Hello"
 ```
 
-### Rust Strings
+##### Rust Strings
 
 Rust has two string types: `String` and `&str`:
 

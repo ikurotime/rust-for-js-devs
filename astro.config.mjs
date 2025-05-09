@@ -40,11 +40,14 @@ export default defineConfig({
       },
       sidebar: [
         { label: 'Home', link: '/home' },
+        {
+          label: 'What Can I Do with Rust?',
+          link: '/what-can-i-do-with-rust/'
+        },
         { label: 'Getting Started', link: '/getting-started/' },
         {
           label: '1. Introduction',
           items: [
-            { label: 'Why Rust for JS Devs?', link: '/introduction/' },
             { label: 'Installation', link: '/introduction/installation/' },
             { label: 'Hello World', link: '/introduction/hello-world/' },
             { label: 'Hello Cargo', link: '/introduction/hello-cargo/' }

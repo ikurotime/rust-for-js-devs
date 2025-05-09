@@ -5,7 +5,7 @@ description: Learn how to use Cargo, Rust's package manager and build system
 
 Cargo is Rust's package manager and build system. It's similar to npm or yarn in the JavaScript ecosystem, but with additional features for building and testing your code.
 
-## Why Use Cargo?
+### Why Use Cargo?
 
 If you're coming from JavaScript, you're probably familiar with package managers like npm or yarn. Cargo serves a similar purpose, but it's even more central to the Rust ecosystem:
 
@@ -13,7 +13,7 @@ If you're coming from JavaScript, you're probably familiar with package managers
 - **Build System**: Cargo compiles your code, similar to webpack or other build tools
 - **Task Runner**: Cargo can run tests, generate documentation, and publish packages
 
-## Creating a New Project with Cargo
+### Creating a New Project with Cargo
 
 Instead of manually creating files like we did in the previous section, let's use Cargo to create a new project:
 
@@ -24,7 +24,7 @@ cd hello_cargo
 
 This is similar to `npm init` or `yarn init` in JavaScript, but it actually creates more initial files.
 
-## Project Structure
+### Project Structure
 
 Let's look at what Cargo created:
 
@@ -43,7 +43,7 @@ This is similar to a JavaScript project structure:
 | `src/` | `src/` | Source code directory |
 | `target/` (created later) | `node_modules/` | Build artifacts and dependencies |
 
-## Understanding Cargo.toml
+### Understanding Cargo.toml
 
 Open `Cargo.toml` and you'll see something like:
 
@@ -63,7 +63,7 @@ This is similar to a `package.json` file in JavaScript:
 - `[package]` contains metadata about your project
 - `[dependencies]` is where you'll list external libraries (called "crates" in Rust)
 
-## Looking at the Source Code
+### Looking at the Source Code
 
 Now, look at `src/main.rs`:
 
@@ -75,11 +75,11 @@ fn main() {
 
 Cargo created a "Hello, world!" program for us automatically.
 
-## Building and Running with Cargo
+### Building and Running with Cargo
 
 Cargo provides commands for building and running your project:
 
-### Building the Project
+#### Building the Project
 
 ```bash
 cargo build
@@ -89,7 +89,7 @@ This creates an executable in `target/debug/hello_cargo` (or `target\debug\hello
 
 This is similar to using a build script in a JavaScript project, but more standardized.
 
-### Running the Project
+#### Running the Project
 
 You can run the built executable directly, or use:
 
@@ -99,7 +99,7 @@ cargo run
 
 This will build (if necessary) and then run your program in one step. It's similar to `npm start` or `yarn start` in JavaScript projects.
 
-### Checking Your Code Without Building
+#### Checking Your Code Without Building
 
 If you want to check your code compiles without producing an executable:
 
@@ -109,7 +109,7 @@ cargo check
 
 This is faster than `cargo build` and useful during development, similar to using a linter in JavaScript.
 
-## Building for Release
+### Building for Release
 
 When you're ready to release your program, use:
 
@@ -121,7 +121,7 @@ This creates an optimized executable in `target/release/` instead of `target/deb
 
 This is similar to the difference between development and production builds in JavaScript bundlers like webpack.
 
-## Cargo Commands vs. npm/yarn Commands
+### Cargo Commands vs. npm/yarn Commands
 
 | Cargo Command | npm/yarn Equivalent | Purpose |
 |---------------|---------------------|---------|
@@ -133,7 +133,7 @@ This is similar to the difference between development and production builds in J
 | `cargo doc` | N/A (JSDoc) | Generate documentation |
 | `cargo publish` | `npm publish` | Publish to registry |
 
-## Adding Dependencies
+### Adding Dependencies
 
 To add dependencies to your project, you can either:
 
@@ -150,7 +150,7 @@ cargo add ferris-says
 
 After adding a dependency, run `cargo build` to download and compile it.
 
-## Updating Dependencies
+### Updating Dependencies
 
 To update your dependencies:
 
@@ -160,7 +160,7 @@ cargo update
 
 This is similar to `npm update` or `yarn upgrade`.
 
-## Using External Crates
+### Using External Crates
 
 Let's modify our program to use an external crate. Edit `src/main.rs`:
 
@@ -176,7 +176,6 @@ fn main() {
     let mut writer = BufWriter::new(stdout.lock());
     say(message.as_str(), width, &mut writer).unwrap();
 }
-
 ```
 
 Now run the program:

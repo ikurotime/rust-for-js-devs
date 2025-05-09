@@ -1,25 +1,25 @@
 ---
-title: Getting Started with Rust
-description: Install Rust and write your first program
+title: 'Getting Started with Rust'
+description: 'Install Rust and write your first program'
 ---
 
 Just like you need Node.js for JavaScript development, you'll need the Rust toolchain to start developing with Rust. Let's get everything set up!
 
-## Installing Rust
+### Installing Rust
 
 Rust is installed via a tool called `rustup`, which is both a version manager and installer for Rust.
 
-### For macOS, Linux, and other Unix-like systems:
+#### For macOS, Linux, and other Unix-like systems:
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-### For Windows:
+#### For Windows:
 
 Download and run [rustup-init.exe](https://win.rustup.rs/) and follow the on-screen instructions.
 
-### Verifying Your Installation
+#### Verifying Your Installation
 
 After installation, you should be able to run:
 
@@ -30,7 +30,7 @@ cargo --version
 
 You should see version information for both tools.
 
-## Understanding the Rust Toolchain
+### Understanding the Rust Toolchain
 
 When you install Rust, you get several tools:
 
@@ -38,11 +38,11 @@ When you install Rust, you get several tools:
 - **cargo**: Rust's package manager and build system (think npm + webpack for Rust)
 - **rustup**: The Rust toolchain manager (used for updating Rust)
 
-## Your First Rust Program
+### Your First Rust Program
 
 Let's create a simple "Hello, World!" program to test our installation.
 
-### JavaScript Version
+#### JavaScript Version
 
 First, let's see what this would look like in JavaScript:
 
@@ -57,7 +57,7 @@ You would run this with:
 node hello.js
 ```
 
-### Rust Version
+#### Rust Version
 
 Now, let's write the same in Rust:
 
@@ -86,11 +86,11 @@ rustc main.rs
 
 You should see "Hello, world!" printed to the console.
 
-## Creating a Project with Cargo
+### Creating a Project with Cargo
 
 While you can compile Rust files directly with `rustc`, most Rust development is done with Cargo, Rust's package manager and build tool.
 
-### Creating a New Project
+#### Creating a New Project
 
 ```bash
 cargo new hello_cargo
@@ -101,14 +101,14 @@ This creates a new directory with:
 - `Cargo.toml`: Similar to package.json in npm, defines your project and dependencies
 - `src/main.rs`: Your main source file
 
-### Building and Running
+#### Building and Running
 
 ```bash
 cargo build  # Compiles your project
 cargo run    # Compiles and runs your project
 ```
 
-## Key Differences from JavaScript
+### Key Differences from JavaScript
 
 Here are some immediate differences you'll notice:
 
@@ -117,6 +117,6 @@ Here are some immediate differences you'll notice:
 3. **Memory Management**: Rust manages memory through ownership, without garbage collection.
 4. **Syntax**: Rust uses `fn` for functions instead of `function`, and has a mandatory `main()` function as the entry point.
 
-## Next Steps
+### Next Steps
 
 Now that you have Rust installed and have run your first program, let's dive deeper into [Rust's syntax and basic concepts](/en/language-fundamentals/). 

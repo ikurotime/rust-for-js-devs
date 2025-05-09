@@ -1,13 +1,13 @@
 ---
-title: Functions
-description: Learn about functions in Rust and how they compare to JavaScript functions
+title: 'Functions'
+description: 'Learn about functions in Rust and how they compare to JavaScript functions'
 ---
 
 Functions are fundamental building blocks in any programming language. Let's explore how functions work in Rust and how they compare to JavaScript.
 
-## Defining Functions
+#### Defining Functions
 
-### JavaScript Functions
+##### JavaScript Functions
 
 In JavaScript, you can define functions in several ways:
 
@@ -26,7 +26,7 @@ const multiply = function(a, b) {
 const subtract = (a, b) => a - b;
 ```
 
-### Rust Functions
+##### Rust Functions
 
 In Rust, functions are defined with the `fn` keyword:
 
@@ -42,9 +42,9 @@ Key differences:
 3. The final expression without a semicolon is implicitly returned
 4. No function expressions or arrow functions in Rust
 
-## Function Body and Return Values
+#### Function Body and Return Values
 
-### JavaScript Return Values
+##### JavaScript Return Values
 
 In JavaScript, the `return` keyword is used to return a value:
 
@@ -60,7 +60,7 @@ function greet(name) {
 }
 ```
 
-### Rust Return Values
+##### Rust Return Values
 
 In Rust, the final expression is returned without the `return` keyword:
 
@@ -86,9 +86,9 @@ fn greet(name: &str) {
 
 The key concept here is that in Rust, statements end with a semicolon and don't return values, while expressions don't have a semicolon and do return values.
 
-## Function Parameters
+#### Function Parameters
 
-### JavaScript Parameters
+##### JavaScript Parameters
 
 JavaScript is flexible with parameters:
 
@@ -109,7 +109,7 @@ function printPerson({ name, age }) {
 }
 ```
 
-### Rust Parameters
+##### Rust Parameters
 
 Rust parameters are more strictly typed:
 
@@ -136,7 +136,7 @@ let greeting = greet_option(Some("Alice"));  // "Hello, Alice!"
 let default_greeting = greet_option(None);   // "Hello, World!"
 ```
 
-## Function Overloading
+#### Function Overloading
 
 JavaScript doesn't have true function overloading, though you can simulate it:
 
@@ -166,7 +166,7 @@ fn uppercase_string(s: &str) -> String {
 }
 ```
 
-## Main Function
+#### Main Function
 
 JavaScript doesn't have a special main function - script execution starts at the top level.
 
@@ -178,9 +178,9 @@ fn main() {
 }
 ```
 
-## Passing Functions as Arguments
+#### Passing Functions as Arguments
 
-### JavaScript Higher-Order Functions
+##### JavaScript Higher-Order Functions
 
 In JavaScript, functions are first-class citizens:
 
@@ -193,7 +193,7 @@ function applyFunction(x, operation) {
 const result = applyFunction(5, x => x * x);  // 25
 ```
 
-### Rust Function Pointers
+##### Rust Function Pointers
 
 Rust also supports passing functions:
 
