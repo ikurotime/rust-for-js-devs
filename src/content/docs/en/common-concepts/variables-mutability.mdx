@@ -1,0 +1,256 @@
+---
+title: 'Variables and Mutability'
+description: 'Learn how variables and mutability work in Rust compared to JavaScript'
+lastUpdated: 2025-07-11
+---
+
+One of the most noticeable differences between Rust and JavaScript is how variables and mutability work. Let's explore these differences to help you transition between the two languages.
+
+#### Variables in JavaScript
+
+In JavaScript, you can declare variables with `var`, `let`, or `const`:
+
+```javascript
+// Variable declarations in JavaScript
+var oldSchool = "I'm hoisted";
+let mutable = "I can be changed";
+const immutable = "I cannot be reassigned";
+
+// Reassignment
+mutable = "New value";  // ✅ Works
+// immutable = "New value";  // ❌ TypeError: Assignment to constant variable
+
+// But objects declared with const CAN be modified
+const person = { name: "Alice" };
+person.name = "Bob";  // ✅ Works! Only the binding is immutable
+```
+
+#### Variables in Rust
+
+Rust takes a different approach, making variables **immutable by default**:
+
+```rust
+// Variable declarations in Rust
+let immutable = "I cannot be changed"; // Immutable by default
+let mut mutable = "I can be changed";  // Use 'mut' to make mutable
+
+// Reassignment
+// immutable = "New value";  // ❌ Error: cannot assign twice to immutable variable
+mutable = "New value";      // ✅ Works
+```
+
+#### Key Differences
+
+- In JavaScript, variables declared with `let` are mutable by default
+- In Rust, variables are immutable by default and require `mut` for mutability
+- JavaScript's `const` prevents reassignment but not modification of object properties
+- In Rust, immutability is more comprehensive (we'll see more when we get to references)
+
+#### Constants
+
+Both languages have constants, but they work differently:
+
+##### JavaScript Constants
+
+```javascript
+const PI = 3.14159;
+// PI = 3.0;  // ❌ Error: Assignment to constant variable
+
+// But objects can be modified
+const user = { name: "Alice" };
+user.name = "Bob";  // ✅ Works - only the binding is constant, not the content
+```
+
+##### Rust Constants
+
+```rust
+const PI: f64 = 3.14159;
+// PI = 3.0;  // ❌ Error: cannot assign to this expression
+
+// Constants require type annotations and use SCREAMING_SNAKE_CASE by convention
+const MAX_POINTS: u32 = 100_000;
+```
+
+Rust constants:
+- Must have explicit type annotations
+- Can only be set to a constant expression (evaluated at compile time)
+- Can be declared in any scope, including the global scope
+- Are inlined at compile time
+
+#### Shadowing in Rust
+
+Rust allows "shadowing" of variables, which is declaring a new variable with the same name as a previous variable:
+
+```rust
+let x = 5;
+let x = x + 1;  // Shadows the previous 'x'
+let x = x * 2;  // Shadows again
+
+println!("The value of x is: {}", x);  // 12
+```
+
+This is different from mutation:
+
+```rust
+// With shadowing
+let spaces = "   ";
+let spaces = spaces.len();  // ✅ Works, type can change with shadowing
+
+// With mutation
+let mut spaces = "   ";
+// spaces = spaces.len();  // ❌ Error: mismatched types
+```
+
+##### JavaScript Variable Shadowing
+
+JavaScript has similar behavior with block-scoped variables:
+
+```javascript
+let x = 5;
+{
+  let x = x + 1;  // Shadows the outer 'x'
+  console.log(x);  // 6
+}
+console.log(x);  // 5
+```
+
+However, you can't redeclare the same variable in the same scope in JavaScript:
+
+```javascript
+let x = 10;
+let x = 20;  // ❌ SyntaxError: Identifier 'x' has already been declared
+```
+
+#### Variable Scope
+
+Both languages use curly braces to define scopes:
+
+##### JavaScript
+
+```javascript
+{
+  let x = 10;
+  console.log(x);  // 10
+}
+// console.log(x);  // ❌ ReferenceError: x is not defined
+```
+
+##### Rust
+
+```rust
+{
+    let x = 10;
+    println!("x: {}", x);  // 10
+}
+// println!("x: {}", x);  // ❌ Error: cannot find value `x` in this scope
+```
+
+#### Naming Conventions
+
+##### JavaScript
+
+- `camelCase` for variables and functions
+- `PascalCase` for classes and constructor functions
+- `SCREAMING_SNAKE_CASE` for constants
+
+##### Rust
+
+- `snake_case` for variables and functions
+- `PascalCase` for types and traits
+- `SCREAMING_SNAKE_CASE` for constants and static variables
+
+#### Type Inference
+
+Both Rust and JavaScript can infer types, but in very different ways:
+
+##### JavaScript (Dynamic Typing)
+
+```javascript
+let x = 5;        // Number
+x = "hello";      // Now it's a String - no problem!
+```
+
+##### Rust (Static Typing with Inference)
+
+```rust
+let x = 5;        // Inferred as i32
+// x = "hello";   // ❌ Error: mismatched types
+
+// Need explicit type annotation for type changes
+let x = 5;        // i32
+let x: &str = "hello"; // Shadowing with a new type
+```
+
+#### Destructuring
+
+Both languages support destructuring:
+
+##### JavaScript
+
+```javascript
+const point = { x: 10, y: 20 };
+const { x, y } = point;
+console.log(x, y);  // 10 20
+
+const numbers = [1, 2, 3];
+const [first, second] = numbers;
+console.log(first, second);  // 1 2
+```
+
+##### Rust
+
+```rust
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+let point = Point { x: 10, y: 20 };
+let Point { x, y } = point;
+println!("x: {}, y: {}", x, y);  // x: 10, y: 20
+
+let numbers = [1, 2, 3];
+let [first, second, _] = numbers;
+println!("first: {}, second: {}", first, second);  // first: 1, second: 2
+```
+
+### Best Practices
+
+#### JavaScript
+
+- Use `const` by default, `let` when you need to reassign
+- Avoid `var` in modern JavaScript
+- Use meaningful variable names
+- Keep variables close to where they're used
+
+#### Rust
+
+- Use immutable variables by default
+- Only use `mut` when you need to change a value
+- Use shadowing for type changes or when you want to reuse a name
+- Follow Rust naming conventions
+- Keep variables in the smallest scope possible
+
+## Memory Considerations
+
+An important difference that isn't immediately visible is how these variables are stored in memory:
+
+### JavaScript
+
+JavaScript handles memory allocation and garbage collection automatically. You generally don't need to worry about where values live.
+
+### Rust
+
+In Rust, values can be allocated on the stack or heap, and the ownership system (which we'll cover later) determines how memory is managed.
+
+```rust
+// Stack allocated
+let x = 5;  
+
+// Heap allocated, but Rust abstracts memory management
+let s = String::from("hello");
+```
+
+## Next Steps
+
+Now that you understand variables and mutability in Rust, let's move on to [Data Types](/en/common-concepts/data-types/) to learn about Rust's rich type system. 

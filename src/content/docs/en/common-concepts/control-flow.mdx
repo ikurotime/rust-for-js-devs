@@ -1,0 +1,476 @@
+---
+title: Control Flow
+description: Learn about conditional statements and loops in Rust compared to JavaScript
+lastUpdated: 2025-07-11
+---
+
+Control flow determines the order in which code executes. In this section, we'll explore Rust's control flow structures and compare them to JavaScript's.
+
+#### Conditional Statements
+
+##### if Expressions
+
+In JavaScript, `if` statements work like this:
+
+```javascript
+// JavaScript if statement
+let number = 5;
+
+if (number > 0) {
+  console.log("Positive");
+} else if (number < 0) {
+  console.log("Negative");
+} else {
+  console.log("Zero");
+}
+```
+
+In Rust, `if` is an expression (returns a value), not just a statement:
+
+```rust
+// Rust if expression
+let number = 5;
+
+if number > 0 {
+    println!("Positive");
+} else if number < 0 {
+    println!("Negative");
+} else {
+    println!("Zero");
+}
+```
+
+Key differences:
+1. No parentheses `()` around conditions (though they're optional)
+2. Condition must be a boolean expression (no truthy/falsy values)
+3. Braces `{}` are required, even for single-line blocks
+
+##### if as an Expression
+
+Since `if` is an expression in Rust, you can assign its result to a variable:
+
+```rust
+let number = 5;
+let sign = if number > 0 {
+    "positive"
+} else if number < 0 {
+    "negative"
+} else {
+    "zero"
+};
+
+println!("The number is {}", sign);
+```
+
+This is similar to the ternary operator in JavaScript:
+
+```javascript
+const number = 5;
+const sign = number > 0 ? "positive" : number < 0 ? "negative" : "zero";
+
+console.log(`The number is ${sign}`);
+```
+
+##### Truthiness vs. Boolean Conditions
+
+JavaScript has the concept of truthy and falsy values:
+
+```javascript
+if (1) {
+  console.log("1 is truthy");
+}
+
+if (0) {
+  // This won't execute
+} else {
+  console.log("0 is falsy");
+}
+
+if ("hello") {
+  console.log("Non-empty strings are truthy");
+}
+```
+
+Rust only accepts boolean conditions:
+
+```rust
+if true {
+    println!("This will execute");
+}
+
+// This won't compile
+// if 1 {
+//     println!("Rust doesn't have truthy values");
+// }
+
+// You must use an explicit comparison
+if 1 > 0 {
+    println!("This will execute");
+}
+```
+
+#### Loops
+
+##### while Loops
+
+While loops in Rust and JavaScript are very similar:
+
+```rust
+// Rust while loop
+let mut count = 0;
+while count < 5 {
+    println!("Count: {}", count);
+    count += 1;
+}
+```
+
+```javascript
+// JavaScript while loop
+let count = 0;
+while (count < 5) {
+  console.log(`Count: ${count}`);
+  count += 1;
+}
+```
+
+The main differences:
+1. No parentheses around the condition in Rust (though they're optional)
+2. Braces are required in Rust
+
+##### for Loops
+
+For loops are quite different between the two languages:
+
+**JavaScript's C-style for loop:**
+
+```javascript
+for (let i = 0; i < 5; i++) {
+  console.log(`i: ${i}`);
+}
+```
+
+**Rust's for-in loop:**
+
+```rust
+for i in 0..5 {
+    println!("i: {}", i);
+}
+```
+
+The `0..5` is a range that includes 0, 1, 2, 3, and 4 (but not 5).
+
+**JavaScript for-of loop:**
+
+```javascript
+const numbers = [10, 20, 30, 40, 50];
+for (const num of numbers) {
+  console.log(`Number: ${num}`);
+}
+```
+
+**Rust for-in loop with an array:**
+
+```rust
+let numbers = [10, 20, 30, 40, 50];
+for num in numbers.iter() {
+    println!("Number: {}", num);
+}
+```
+
+Or with references:
+
+```rust
+let numbers = [10, 20, 30, 40, 50];
+for num in &numbers {
+    println!("Number: {}", num);
+}
+```
+
+##### Iterating with indices
+
+If you need indices along with values:
+
+**JavaScript:**
+
+```javascript
+const letters = ["a", "b", "c"];
+for (let i = 0; i < letters.length; i++) {
+  console.log(`Index ${i}: ${letters[i]}`);
+}
+
+// Or using forEach with index
+letters.forEach((letter, index) => {
+  console.log(`Index ${index}: ${letter}`);
+});
+```
+
+**Rust:**
+
+```rust
+let letters = ["a", "b", "c"];
+for (i, &letter) in letters.iter().enumerate() {
+    println!("Index {}: {}", i, letter);
+}
+```
+
+### loop: Rust's Infinite Loop
+
+Rust has a `loop` keyword for infinite loops:
+
+```rust
+// Rust infinite loop
+let mut counter = 0;
+loop {
+    counter += 1;
+    println!("Count: {}", counter);
+    
+    if counter >= 10 {
+        break;
+    }
+}
+```
+
+In JavaScript, you'd use `while (true)`:
+
+```javascript
+// JavaScript infinite loop
+let counter = 0;
+while (true) {
+  counter += 1;
+  console.log(`Count: ${counter}`);
+  
+  if (counter >= 10) {
+    break;
+  }
+}
+```
+
+### Returning Values from Loops
+
+In Rust, you can return a value from a `loop`:
+
+```rust
+let mut counter = 0;
+let result = loop {
+    counter += 1;
+    if counter == 10 {
+        break counter * 2;
+    }
+};
+println!("Result: {}", result);  // 20
+```
+
+In JavaScript, you'd need to assign the value outside the loop:
+
+```javascript
+let counter = 0;
+let result;
+while (true) {
+  counter += 1;
+  if (counter == 10) {
+    result = counter * 2;
+    break;
+  }
+}
+console.log(`Result: ${result}`);  // 20
+```
+
+### Loop Labels
+
+Rust supports loop labels to break or continue outer loops:
+
+```rust
+'outer: for x in 0..5 {
+    for y in 0..5 {
+        if x * y > 10 {
+            println!("Breaking at x={}, y={}", x, y);
+            break 'outer;
+        }
+    }
+}
+```
+
+JavaScript also supports labeled statements, though they're less commonly used:
+
+```javascript
+outer: for (let x = 0; x < 5; x++) {
+  for (let y = 0; y < 5; y++) {
+    if (x * y > 10) {
+      console.log(`Breaking at x=${x}, y=${y}`);
+      break outer;
+    }
+  }
+}
+```
+
+## Pattern Matching with match
+
+One of Rust's most powerful features is the `match` expression:
+
+```rust
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter,
+}
+
+fn value_in_cents(coin: Coin) -> u8 {
+    match coin {
+        Coin::Penny => 1,
+        Coin::Nickel => 5,
+        Coin::Dime => 10,
+        Coin::Quarter => 25,
+    }
+}
+```
+
+It's similar to JavaScript's `switch`, but more powerful:
+
+```javascript
+function valueInCents(coin) {
+  switch (coin) {
+    case "penny":
+      return 1;
+    case "nickel":
+      return 5;
+    case "dime":
+      return 10;
+    case "quarter":
+      return 25;
+    default:
+      throw new Error("Unknown coin");
+  }
+}
+```
+
+Key differences:
+1. `match` is an expression that returns a value
+2. `match` ensures exhaustiveness (all possibilities must be covered)
+3. `match` supports complex pattern matching
+
+### Pattern Matching with Ranges
+
+```rust
+let number = 7;
+
+match number {
+    1 => println!("One"),
+    2 | 3 => println!("Two or three"),
+    4..=10 => println!("Between four and ten, inclusive"),
+    _ => println!("Something else"),
+}
+```
+
+In JavaScript, you'd need multiple case statements:
+
+```javascript
+const number = 7;
+
+switch (number) {
+  case 1:
+    console.log("One");
+    break;
+  case 2:
+  case 3:
+    console.log("Two or three");
+    break;
+  case 4:
+  case 5:
+  case 6:
+  case 7:
+  case 8:
+  case 9:
+  case 10:
+    console.log("Between four and ten, inclusive");
+    break;
+  default:
+    console.log("Something else");
+}
+```
+
+#### Matching with Option&lt;T&gt;
+
+`match` is often used with `Option<T>` to handle the presence or absence of a value:
+
+```rust
+fn find_even(numbers: &[i32]) -> Option<i32> {
+    for &num in numbers {
+        if num % 2 == 0 {
+            return Some(num);
+        }
+    }
+    None
+}
+
+let numbers = [1, 3, 5, 7, 9];
+match find_even(&numbers) {
+    Some(n) => println!("Found an even number: {}", n),
+    None => println!("No even numbers found"),
+}
+```
+
+In JavaScript, you'd check for `null` or `undefined`:
+
+```javascript
+function findEven(numbers) {
+  for (const num of numbers) {
+    if (num % 2 === 0) {
+      return num;
+    }
+  }
+  return null;
+}
+
+const numbers = [1, 3, 5, 7, 9];
+const result = findEven(numbers);
+if (result !== null) {
+  console.log(`Found an even number: ${result}`);
+} else {
+  console.log("No even numbers found");
+}
+```
+## if let Syntax
+
+For simpler pattern matching, Rust offers `if let` syntax:
+
+```rust
+let some_value = Some(3);
+
+// Using match
+match some_value {
+    Some(3) => println!("Three!"),
+    _ => (),
+}
+
+// Using if let (more concise)
+if let Some(3) = some_value {
+    println!("Three!");
+}
+```
+
+In JavaScript, you might use destructuring assignment:
+
+```javascript
+const someValue = { value: 3 };
+
+// Similar to if let
+if (someValue?.value === 3) {
+  console.log("Three!");
+}
+```
+## Key Differences from JavaScript
+
+1. **Expression-based**: Rust's `if` and `match` are expressions that return values
+2. **No truthy/falsy values**: Rust requires explicit boolean conditions
+3. **Pattern matching**: Rust's `match` is more powerful than JavaScript's `switch`
+4. **Loop syntax**: Rust's `for` loops are more like JavaScript's `for...of` loops
+5. **Loop labels**: Both languages support loop labels, but they're more common in Rust
+6. **Exhaustiveness checking**: Rust ensures you handle all possibilities in a `match`
+
+## Next Steps
+
+Now that you've learned about control flow in Rust, let's explore [Ownership](/en/ownership-borrowing/what-is-ownership/), one of Rust's most distinctive features that doesn't exist in JavaScript. 
+
+
+

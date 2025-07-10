@@ -1,0 +1,468 @@
+---
+title: 'Example Program Using Structs'
+description: 'A practical example of using structs in Rust compared to JavaScript'
+lastUpdated: 2025-07-11
+---
+
+Let's build a simple program that calculates the area of rectangles to see how structs work in practice. We'll compare Rust and JavaScript implementations.
+
+## Starting with Simple Values
+
+Let's begin with a simple function to calculate the area of a rectangle.
+
+In JavaScript, we might write:
+
+```javascript
+function calculateArea(width, height) {
+  return width * height;
+}
+
+const rectWidth = 30;
+const rectHeight = 50;
+const area = calculateArea(rectWidth, rectHeight);
+console.log(`The area of the rectangle is ${area} square pixels.`);
+```
+
+In Rust, the equivalent would be:
+
+```rust
+fn calculate_area(width: u32, height: u32) -> u32 {
+    width * height
+}
+
+fn main() {
+    let rect_width = 30;
+    let rect_height = 50;
+    let area = calculate_area(rect_width, rect_height);
+    println!("The area of the rectangle is {} square pixels.", area);
+}
+```
+
+Both examples work fine, but they have limitations. The width and height are separate variables that aren't clearly connected. Let's refactor to group them.
+
+## Using Tuples
+
+We can use tuples to group the width and height together:
+
+In JavaScript:
+
+```javascript
+function calculateArea([width, height]) {
+  return width * height;
+}
+
+const rect = [30, 50];
+const area = calculateArea(rect);
+console.log(`The area of the rectangle is ${area} square pixels.`);
+```
+
+In Rust:
+
+```rust
+fn calculate_area(dimensions: (u32, u32)) -> u32 {
+    dimensions.0 * dimensions.1
+}
+
+fn main() {
+    let rect = (30, 50);
+    let area = calculate_area(rect);
+    println!("The area of the rectangle is {} square pixels.", area);
+}
+```
+
+This approach groups our data together, but it lacks clarity. When we access `dimensions.0` and `dimensions.1`, it's not immediately clear which is width and which is height.
+
+## Using Objects/Structs for Better Semantics
+
+In JavaScript, we can use objects to make our code more clear:
+
+```javascript
+function calculateArea({ width, height }) {
+  return width * height;
+}
+
+const rect = {
+  width: 30,
+  height: 50
+};
+
+const area = calculateArea(rect);
+console.log(`The area of the rectangle is ${area} square pixels.`);
+```
+
+In Rust, we'll use a struct:
+
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn calculate_area(rectangle: &Rectangle) -> u32 {
+    rectangle.width * rectangle.height
+}
+
+fn main() {
+    let rect = Rectangle {
+        width: 30,
+        height: 50,
+    };
+    
+    let area = calculate_area(&rect);
+    println!("The area of the rectangle is {} square pixels.", area);
+}
+```
+
+Notice these key differences:
+1. In Rust, we define the `Rectangle` struct with explicit types
+2. We pass a reference (`&Rectangle`) to avoid transferring ownership
+3. The syntax for accessing properties is the same in both languages (`rectangle.width`)
+
+## Adding Debug Output
+
+If we want to print our rectangle for debugging:
+
+In JavaScript, this is straightforward:
+
+```javascript
+console.log("Rectangle:", rect);  // Rectangle: { width: 30, height: 50 }
+```
+
+In Rust, we need to opt-in to the Debug trait:
+
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn main() {
+    let rect = Rectangle {
+        width: 30,
+        height: 50,
+    };
+    
+    println!("Rectangle: {:?}", rect);  // Rectangle: Rectangle { width: 30, height: 50 }
+    
+    // Pretty print
+    println!("Rectangle:\n{:#?}", rect);
+    // Rectangle:
+    // Rectangle {
+    //     width: 30,
+    //     height: 50,
+    // }
+}
+```
+
+The `#[derive(Debug)]` is an attribute that automatically implements the `Debug` trait for our struct, which allows it to be formatted with `{:?}` and `{:#?}` (pretty print).
+
+## Adding Methods to Your Types
+
+In JavaScript, we might make a Rectangle class with methods:
+
+```javascript
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+  
+  area() {
+    return this.width * this.height;
+  }
+  
+  isSquare() {
+    return this.width === this.height;
+  }
+}
+
+const rect = new Rectangle(30, 50);
+console.log(`Area: ${rect.area()}`);
+console.log(`Is square: ${rect.isSquare()}`);
+```
+
+In Rust, we'd use an `impl` block to add methods to our struct:
+
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+    
+    fn is_square(&self) -> bool {
+        self.width == self.height
+    }
+}
+
+fn main() {
+    let rect = Rectangle {
+        width: 30,
+        height: 50,
+    };
+    
+    println!("Area: {}", rect.area());
+    println!("Is square: {}", rect.is_square());
+}
+```
+
+The methods are called in the same way in both languages, but there are important differences in how they're defined:
+
+1. In Rust, methods are defined separately from the struct in an `impl` block
+2. The first parameter in Rust methods is typically `&self`, which is similar to JavaScript's implicit `this`
+3. Rust requires type annotations for return values
+
+## Adding Associated Functions (Static Methods)
+
+In JavaScript, we might add static methods to a class:
+
+```javascript
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+  
+  // Instance method
+  area() {
+    return this.width * this.height;
+  }
+  
+  // Static method
+  static square(size) {
+    return new Rectangle(size, size);
+  }
+}
+
+const square = Rectangle.square(20);
+console.log(`Area of square: ${square.area()}`);
+```
+
+In Rust, we can add associated functions (similar to static methods):
+
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    // Regular method (takes &self)
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+    
+    // Associated function (no self parameter)
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            width: size,
+            height: size,
+        }
+    }
+}
+
+fn main() {
+    // Call the associated function with ::
+    let square = Rectangle::square(20);
+    println!("Area of square: {}", square.area());
+}
+```
+
+Key differences:
+1. In Rust, associated functions don't take `self` as a parameter
+2. Rust uses the `::` syntax to call associated functions (similar to static methods in JavaScript)
+
+## Multiple `impl` Blocks
+
+In Rust, you can have multiple `impl` blocks for the same struct, which is a way to organize your code:
+
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+// First impl block with basic methods
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+    
+    fn perimeter(&self) -> u32 {
+        2 * (self.width + self.height)
+    }
+}
+
+// Second impl block with factory methods
+impl Rectangle {
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            width: size,
+            height: size,
+        }
+    }
+    
+    fn new(width: u32, height: u32) -> Rectangle {
+        Rectangle { width, height }
+    }
+}
+```
+
+This is useful for organizing code, especially when implementing traits (coming up in a later section).
+
+## A Complete Rectangle Program
+
+Here's a more complete example in Rust showcasing various features:
+
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    // Constructor
+    fn new(width: u32, height: u32) -> Rectangle {
+        Rectangle { width, height }
+    }
+    
+    // Factory method for squares
+    fn square(size: u32) -> Rectangle {
+        Rectangle::new(size, size)
+    }
+    
+    // Regular methods
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+    
+    fn perimeter(&self) -> u32 {
+        2 * (self.width + self.height)
+    }
+    
+    fn is_square(&self) -> bool {
+        self.width == self.height
+    }
+    
+    // Method that modifies the rectangle
+    fn scale(&mut self, factor: u32) {
+        self.width *= factor;
+        self.height *= factor;
+    }
+    
+    // Method that checks if this rectangle can contain another
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+}
+
+fn main() {
+    // Create rectangles
+    let mut rect1 = Rectangle::new(30, 50);
+    let rect2 = Rectangle::square(20);
+    
+    // Use methods
+    println!("Rectangle 1: {:?}", rect1);
+    println!("Area: {}", rect1.area());
+    println!("Perimeter: {}", rect1.perimeter());
+    println!("Is square: {}", rect1.is_square());
+    
+    println!("\nRectangle 2: {:?}", rect2);
+    println!("Area: {}", rect2.area());
+    println!("Is square: {}", rect2.is_square());
+    
+    // Check containment
+    println!("\nCan rect1 hold rect2? {}", rect1.can_hold(&rect2));
+    
+    // Modify rect1
+    rect1.scale(2);
+    println!("\nAfter scaling rect1: {:?}", rect1);
+    println!("New area: {}", rect1.area());
+}
+```
+
+The equivalent in JavaScript:
+
+```javascript
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+  
+  // Static factory method for squares
+  static square(size) {
+    return new Rectangle(size, size);
+  }
+  
+  // Regular methods
+  area() {
+    return this.width * this.height;
+  }
+  
+  perimeter() {
+    return 2 * (this.width + this.height);
+  }
+  
+  isSquare() {
+    return this.width === this.height;
+  }
+  
+  // Method that modifies the rectangle
+  scale(factor) {
+    this.width *= factor;
+    this.height *= factor;
+    return this;  // for method chaining
+  }
+  
+  // Method that checks if this rectangle can contain another
+  canHold(other) {
+    return this.width > other.width && this.height > other.height;
+  }
+}
+
+// Create rectangles
+const rect1 = new Rectangle(30, 50);
+const rect2 = Rectangle.square(20);
+
+// Use methods
+console.log("Rectangle 1:", rect1);
+console.log("Area:", rect1.area());
+console.log("Perimeter:", rect1.perimeter());
+console.log("Is square:", rect1.isSquare());
+
+console.log("\nRectangle 2:", rect2);
+console.log("Area:", rect2.area());
+console.log("Is square:", rect2.isSquare());
+
+// Check containment
+console.log("\nCan rect1 hold rect2?", rect1.canHold(rect2));
+
+// Modify rect1
+rect1.scale(2);
+console.log("\nAfter scaling rect1:", rect1);
+console.log("New area:", rect1.area());
+```
+
+## Summary
+
+Through this example, we've seen how to:
+
+1. Define a struct to group related data
+2. Add methods to a struct using `impl` blocks
+3. Create constructor and factory methods (associated functions)
+4. Create methods that borrow the instance immutably (`&self`) or mutably (`&mut self`)
+5. Add debug printing capabilities with `#[derive(Debug)]`
+
+Structs in Rust provide a powerful way to create custom types that bundle data with behavior in a way that will feel familiar to JavaScript developers who use classes, but with Rust's added benefits of memory safety and performance.
+
+In the next section, we'll dive deeper into method syntax and explore how to implement even more functionality on our structs. 

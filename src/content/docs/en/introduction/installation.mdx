@@ -1,0 +1,119 @@
+---
+title: 'Installation'
+description: 'Learn how to install Rust and set up your development environment'
+lastUpdated: 2025-07-11
+---
+
+JavaScript developers are familiar with Node.js and npm for building JavaScript applications. Similarly, Rust has its own toolchain that we'll install in this guide.
+
+#### Installing Rust
+
+The recommended way to install Rust is through `rustup`:
+
+##### On macOS and Linux
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+
+##### On Windows
+
+Download and run the installer from [rustup.rs](https://rustup.rs).
+
+#### Verifying Installation
+
+After installation, verify that Rust is installed correctly:
+
+```bash
+rustc --version
+cargo --version
+```
+
+#### Updating Rust
+
+To update Rust to the latest version:
+
+```bash
+rustup update
+```
+
+#### Uninstalling Rust
+
+To uninstall Rust:
+
+```bash
+rustup self uninstall
+```
+
+#### IDE Setup
+
+##### VS Code
+
+Install the "rust-analyzer" extension for the best Rust development experience.
+
+##### IntelliJ IDEA
+
+Install the "Rust" plugin for IntelliJ IDEA.
+
+#### Understanding the Rust Toolchain
+
+When you install Rust through `rustup`, you get several important tools:
+
+1. **rustc**: The Rust compiler (similar to Node.js's V8 engine)
+2. **cargo**: Rust's package manager and build system (similar to npm/yarn)
+3. **rustup**: The toolchain installer and manager itself
+
+#### JavaScript Equivalents
+
+| JavaScript Ecosystem | Rust Ecosystem |
+|----------------------|----------------|
+| `node` | `rustc` |
+| `npm` / `yarn` | `cargo` |
+| `nvm` | `rustup` |
+| `package.json` | `Cargo.toml` |
+| `node_modules/` | `target/` |
+| `npx` | `cargo run` |
+
+#### Integrated Development Environment (IDE)
+
+Most JavaScript developers are used to excellent editor support. For Rust, the best experience is currently with:
+
+##### Visual Studio Code
+
+If you're already using VS Code for JavaScript, you can add Rust support:
+
+1. Install the [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer) extension
+2. Optionally install [CodeLLDB](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) for debugging
+
+##### Other Editors
+
+- **JetBrains IDEs**: Use the Rust plugin or the dedicated [RustRover](https://www.jetbrains.com/rust/)
+- **Vim/Neovim**: Use rust-analyzer with CoC or built-in LSP
+- **Emacs**: Use rust-analyzer with Eglot or LSP-mode
+
+#### Setting Up Your First Project
+
+Now that you have Rust installed, you can [create your first Rust project](/en/introduction/hello-cargo/) using Cargo!
+
+#### Troubleshooting
+
+##### Missing Compiler Tools on Windows
+
+If you're on Windows and encounter errors about missing tools, you might need to install the [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+
+##### Path Issues
+
+If you get "command not found" errors, ensure that `~/.cargo/bin` is in your PATH.
+
+##### Getting Help
+
+If you encounter any issues, the Rust community is very helpful:
+
+- [Rust User Forums](https://users.rust-lang.org/)
+- [Rust Discord](https://discord.gg/rust-lang)
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/rust) 
+
+#### Conclusion
+
+You're now ready to start developing in Rust! 
+Let's move on to [Hello, World!](/en/introduction/hello-world/)

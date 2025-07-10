@@ -1,0 +1,243 @@
+---
+title: Comments in Rust
+description: Learn about the different types of comments in Rust compared to JavaScript
+lastUpdated: 2025-07-11
+---
+
+Good code is well-documented, and comments are an essential part of that documentation. In this section, we'll explore how comments work in Rust and compare them to JavaScript.
+
+### Regular Comments
+
+#### Single-Line Comments
+
+Both Rust and JavaScript use `//` for single-line comments:
+
+```rust
+// This is a single-line comment in Rust
+let x = 5; // This is an end-of-line comment
+```
+
+```javascript
+// This is a single-line comment in JavaScript
+let x = 5; // This is an end-of-line comment
+```
+
+#### Multi-Line Comments
+
+Both languages also support multi-line comments, though with slightly different syntax:
+
+**Rust:**
+```rust
+/* This is a multi-line comment in Rust.
+   It can span multiple lines.
+   Rust allows nested /* multi-line */ comments. */
+```
+
+**JavaScript:**
+```javascript
+/* This is a multi-line comment in JavaScript.
+   It can span multiple lines.
+   JavaScript doesn't allow nested /* multi-line */ comments. */
+```
+
+The key difference is that Rust allows nesting multi-line comments, while JavaScript doesn't.
+
+### Documentation Comments
+
+This is where Rust really shines compared to JavaScript. Rust has built-in documentation comments that can be processed by `rustdoc` to generate HTML documentation.
+
+#### Rust Documentation Comments
+
+Rust has two types of documentation comments:
+
+1. `///` - Used to document the item that follows
+2. `//!` - Used to document the containing item (like a module)
+
+**Example of `///` documentation comments:**
+
+```rust
+/// Calculates the sum of two numbers.
+///
+/// # Examples
+///
+/// ```
+/// let result = add(2, 3);
+/// assert_eq!(result, 5);
+/// ```
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+```
+
+**Example of `//!` documentation comments:**
+
+```rust
+//! # My Math Library
+//!
+//! A collection of mathematical functions.
+
+/// Calculates the sum of two numbers.
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+```
+
+#### JavaScript Documentation Comments
+
+JavaScript doesn't have built-in documentation comments, but it does have JSDoc, a documentation standard:
+
+```javascript
+/**
+ * Calculates the sum of two numbers.
+ * 
+ * @param {number} a - The first number
+ * @param {number} b - The second number
+ * @returns {number} The sum of a and b
+ * 
+ * @example
+ * // returns 5
+ * add(2, 3);
+ */
+function add(a, b) {
+  return a + b;
+}
+```
+
+### Markdown Support
+
+Rust's documentation comments support Markdown, which allows for rich formatting:
+
+```rust
+/// # Add Function
+///
+/// Calculates the sum of two numbers.
+///
+/// ## Examples
+///
+/// ```
+/// let result = add(2, 3);
+/// assert_eq!(result, 5);
+/// ```
+///
+/// ## Panics
+///
+/// This function does not panic.
+///
+/// ## Safety
+///
+/// This function is safe to use.
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+```
+
+JSDoc also supports HTML formatting and some Markdown-like syntax:
+
+```javascript
+/**
+ * # Add Function
+ * 
+ * Calculates the sum of two numbers.
+ * 
+ * ## Examples
+ * 
+ * ```js
+ * // returns 5
+ * add(2, 3);
+ * ```
+ * 
+ * @param {number} a - The first number
+ * @param {number} b - The second number
+ * @returns {number} The sum of a and b
+ */
+function add(a, b) {
+  return a + b;
+}
+```
+
+### Generating Documentation
+
+#### Rust Documentation Generation
+
+Rust's documentation can be generated and viewed locally using Cargo:
+
+```bash
+# Generate documentation for your project and its dependencies
+cargo doc --open
+```
+
+This generates HTML documentation and opens it in your browser.
+
+#### JavaScript Documentation Generation
+
+JavaScript requires external tools like JSDoc, TypeDoc, or ESDoc:
+
+```bash
+# Example with JSDoc
+npm install --save-dev jsdoc
+npx jsdoc yourfile.js -d docs
+```
+
+### Doc Tests
+
+One of the coolest features of Rust's documentation system is that code examples in documentation are actually run as tests:
+
+```rust
+/// Returns the square of a number.
+///
+/// # Examples
+///
+/// ```
+/// let result = square(4);
+/// assert_eq!(result, 16);
+/// ```
+fn square(x: i32) -> i32 {
+    x * x
+}
+```
+
+When you run `cargo test`, the example in the comment is compiled and run as a test. This ensures that your documentation examples stay up-to-date with your code.
+
+JavaScript doesn't have this feature built-in, though some tools can extract and run examples from JSDoc comments.
+
+### Common Documentation Conventions
+
+#### Rust Documentation Sections
+
+Rust has some conventional section headers used in documentation comments:
+
+- `# Examples` - Code examples
+- `# Panics` - Situations where the function might panic
+- `# Errors` - Error types that might be returned
+- `# Safety` - Safety considerations for unsafe functions
+- `# Implementation Details` - Notes about the implementation
+
+#### JavaScript Documentation Tags
+
+JSDoc uses tags for similar purposes:
+
+- `@example` - Code examples
+- `@throws` - Exceptions that might be thrown
+- `@param` - Parameter descriptions
+- `@returns` - Return value description
+- `@see` - Related functions or resources
+
+### Comments as a Last Resort
+
+Both Rust and JavaScript communities encourage writing self-documenting code:
+
+> "Good code is its own best documentation." — Steve McConnell
+
+Comments should explain "why" something is done a certain way, not "what" is being done (the code should make that clear).
+
+### Comment Best Practices
+
+1. **Write self-documenting code first** - Use descriptive variable and function names
+2. **Explain why, not what** - The code shows what it's doing; comments should explain why
+3. **Keep comments updated** - Outdated comments are worse than no comments
+4. **Use documentation comments for public APIs** - Help users understand how to use your code
+5. **Comment complex algorithms** - Even if the code is clear, the underlying algorithm might not be
+
+### Next Steps
+
+Now that you understand how to comment your Rust code, let's move on to [Control Flow](/en/common-concepts/control-flow/) to learn how to use conditionals and loops in Rust. 

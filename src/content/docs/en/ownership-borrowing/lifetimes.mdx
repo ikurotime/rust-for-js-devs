@@ -1,0 +1,337 @@
+---
+title: 'Lifetimes'
+description: 'Learn about lifetimes in Rust and how they ensure memory safety'
+lastUpdated: 2025-07-11
+---
+
+#### What are Lifetimes?
+
+Lifetimes are Rust's way of ensuring that all references are valid for as long as they are used. They're a way to tell the compiler how long references should live.
+
+#### Why Do We Need Lifetimes?
+
+In JavaScript, you don't need to think about lifetimes because the garbage collector handles memory management. In Rust, we need to be explicit about how long references should live.
+
+#### Basic Lifetime Syntax
+
+```rust
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+```
+
+#### Lifetime Annotations
+
+Lifetime annotations tell the compiler how long references should live:
+
+```rust
+struct Excerpt<'a> {
+    part: &'a str,
+}
+```
+
+#### Multiple Lifetimes
+
+You can have multiple lifetime parameters:
+
+```rust
+fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &'a str {
+    x
+}
+```
+
+#### Lifetime Elision
+
+Rust can often infer lifetimes:
+
+```rust
+fn first_word(s: &str) -> &str {
+    s.split_whitespace().next().unwrap_or("")
+}
+```
+
+#### Static Lifetimes
+
+The `'static` lifetime means the reference is valid for the entire program:
+
+```rust
+let s: &'static str = "Hello, world!";
+```
+
+#### Lifetime Bounds
+
+You can specify that one lifetime must outlive another:
+
+```rust
+fn longest<'a, 'b: 'a>(x: &'a str, y: &'b str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+```
+
+#### Lifetimes in Structs
+
+Structs that hold references need lifetime annotations:
+
+```rust
+struct ImportantExcerpt<'a> {
+    part: &'a str,
+}
+```
+
+#### Lifetimes in Methods
+
+Methods can have lifetime parameters:
+
+```rust
+impl<'a> ImportantExcerpt<'a> {
+    fn level(&self) -> i32 {
+        3
+    }
+}
+```
+
+#### Lifetimes in Traits
+
+Traits can have lifetime parameters:
+
+```rust
+trait Print<'a> {
+    fn print(&self, s: &'a str);
+}
+```
+
+#### Common Lifetime Patterns
+
+##### The 'a Lifetime
+
+The most common lifetime parameter is `'a`:
+
+```rust
+fn first_word<'a>(s: &'a str) -> &'a str {
+    s.split_whitespace().next().unwrap_or("")
+}
+```
+
+##### Lifetime Bounds in Generic Types
+
+You can combine lifetimes with generic types:
+
+```rust
+struct Container<'a, T> {
+    value: &'a T,
+}
+```
+
+#### Conclusion
+
+Lifetimes are a powerful feature that helps Rust ensure memory safety at compile time.
+
+### Why JavaScript Doesn't Need Explicit Lifetimes
+
+In JavaScript, you don't need to think about lifetimes because:
+
+1. JavaScript uses garbage collection
+2. References can exist as long as they're accessible (reachable)
+3. Memory is automatically reclaimed when no references remain
+
+```javascript
+function createAndUseObjects() {
+  let obj = { value: 42 };
+  let ref = obj;             // Both reference the same object
+  
+  return ref;                // JavaScript allows returning references to local data
+}                            // obj goes out of scope, but the object lives on
+
+const reference = createAndUseObjects();
+console.log(reference.value); // Works fine, prints 42
+```
+
+In JavaScript, the object created in `createAndUseObjects` continues to exist after the function returns because a reference to it is still accessible.
+
+### Lifetimes in Function Signatures
+
+In Rust, lifetime annotations are most commonly seen in function signatures where:
+
+1. The function returns a reference
+2. The function takes multiple references as parameters
+
+The annotations tell the compiler how the lifetimes of these references relate to each other.
+
+#### Lifetime Syntax
+
+Lifetime parameters are declared with an apostrophe (`'`) followed by a name:
+
+```rust
+fn longest<'a>(s1: &'a str, s2: &'a str) -> &'a str {
+    if s1.len() > s2.len() {
+        s1
+    } else {
+        s2
+    }
+}
+```
+
+Here, `'a` means "both input parameters and the return value share the same lifetime."
+
+#### Why the above function needs lifetimes
+
+Let's examine why this function needs lifetime annotations:
+
+```rust
+fn main() {
+    let string1 = String::from("long string is long");
+    
+    {
+        let string2 = String::from("xyz");
+        let result = longest(string1.as_str(), string2.as_str());
+        println!("The longest string is {}", result);
+    } // string2 goes out of scope here
+    
+    // If the function returned a reference to string2, this would be a dangling reference:
+    // println!("The longest string is {}", result);
+}
+```
+
+Since the function returns a reference that could be to either `s1` or `s2`, Rust needs to know that the reference it returns will be valid as long as both input references are valid.
+
+## Lifetimes and JavaScript Comparison
+
+If JavaScript had Rust-like lifetimes (it doesn't), this is roughly how it might look:
+
+```javascript
+// THIS IS HYPOTHETICAL - JavaScript doesn't have lifetimes
+function longest<'a>(s1: &'a string, s2: &'a string): &'a string {
+  if (s1.length > s2.length) {
+    return s1;
+  } else {
+    return s2;
+  }
+}
+
+// Usage:
+function main() {
+  const string1 = "long string is long";
+  
+  {
+    const string2 = "xyz";
+    const result = longest(string1, string2);
+    console.log(`The longest string is ${result}`);
+  } // string2 would go out of scope here
+  
+  // Error: string2's lifetime ended, and result might reference it
+  // console.log(`The longest string is ${result}`);
+}
+```
+
+## Lifetime Elision Rules
+
+Rust has several "lifetime elision rules" - patterns the compiler recognizes that don't require explicit lifetime annotations:
+
+1. Each parameter that is a reference gets its own lifetime parameter
+2. If there is exactly one input lifetime parameter, that lifetime is assigned to all output lifetime parameters
+3. If there are multiple input lifetime parameters but one of them is `&self` or `&mut self`, the lifetime of `self` is assigned to all output lifetime parameters
+
+Thanks to these rules, many simple functions don't need explicit lifetime annotations:
+
+```rust
+// This works without explicit lifetime annotations
+fn first_word(s: &str) -> &str {
+    let bytes = s.as_bytes();
+    
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+    
+    &s[..]
+}
+```
+
+## Lifetimes in Structs
+
+You need lifetime annotations when a struct holds references:
+
+```rust
+struct Excerpt<'a> {
+    part: &'a str,
+}
+
+fn main() {
+    let novel = String::from("Call me Ishmael. Some years ago...");
+    let first_sentence = novel.split('.').next().expect("Could not find a '.'");
+    let excerpt = Excerpt {
+        part: first_sentence,
+    };
+    
+    println!("Excerpt: {}", excerpt.part);
+}
+```
+
+The `'a` annotation means the `Excerpt` struct can't outlive the reference it holds in the `part` field.
+
+## The Static Lifetime
+
+Rust has a special lifetime called `'static`, which means a reference can live for the entire duration of the program:
+
+```rust
+// String literals have 'static lifetime
+let s: &'static str = "I have a static lifetime.";
+```
+
+In JavaScript, string literals are also effectively "static" but it's handled implicitly.
+
+## Common Lifetime Patterns
+
+### Returning a reference to one of multiple parameters
+
+```rust
+fn first_or_default<'a>(first: &'a str, default: &'a str) -> &'a str {
+    if !first.is_empty() {
+        first
+    } else {
+        default
+    }
+}
+```
+
+### Returning a reference to inner data
+
+```rust
+struct Data {
+    value: String,
+}
+
+impl Data {
+    // No lifetime needed - elision rule 3 applies
+    fn get_value(&self) -> &str {
+        &self.value
+    }
+}
+```
+
+### Self-referential structs
+
+These are challenging in Rust and often require special crates like `ouroboros` or redesigning your data structure:
+
+```rust
+// This WON'T compile without special handling
+struct SelfRef {
+    value: String,
+    pointer: &str, // Wants to point to part of value
+}
+```
+
+## When Lifetimes Get Complex
+
+When lifetimes get complex, it's often a sign that you should change your approach:
+
+1. Consider using owned types (`String`

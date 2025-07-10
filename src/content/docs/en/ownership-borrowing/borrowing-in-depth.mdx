@@ -1,0 +1,140 @@
+---
+title: 'Borrowing in Depth'
+description: 'Learn about borrowing in Rust and how it compares to JavaScript references'
+lastUpdated: 2025-07-11
+---
+
+#### Quick Recap: What is Borrowing?
+
+Borrowing is Rust's way of letting you have references to data without taking ownership of it. It's similar to how JavaScript handles object references, but with strict rules enforced at compile time.
+
+#### Types of References
+
+In Rust, there are two types of references:
+
+##### Immutable References
+
+```rust
+let x = 5;
+let y = &x;  // y is an immutable reference to x
+println!("{}", *y);  // Dereference y to get the value
+```
+
+##### Mutable References
+
+```rust
+let mut x = 5;
+let y = &mut x;  // y is a mutable reference to x
+*y += 1;  // Modify x through y
+```
+
+#### The Borrowing Rules
+
+Rust enforces three main rules for borrowing:
+
+1. You can have either one mutable reference or any number of immutable references
+2. References must always be valid
+3. No data races allowed
+
+##### Example: Preventing Data Races
+
+```rust
+let mut data = vec![1, 2, 3];
+
+// This would cause a data race in JavaScript
+let first = &data[0];
+data.push(4);  // Error: cannot borrow `data` as mutable because it is also borrowed as immutable
+```
+
+##### Non-Lexical Lifetimes (NLL)
+
+Rust's borrow checker is smart enough to know when a reference is no longer used:
+
+```rust
+let mut x = 5;
+let y = &x;  // First borrow
+println!("{}", y);  // Last use of y
+let z = &mut x;  // This is fine because y is no longer used
+```
+
+#### Borrowing and Functions
+
+Functions can take references as parameters:
+
+```rust
+fn calculate_length(s: &String) -> usize {
+    s.len()
+}
+
+let s = String::from("hello");
+let len = calculate_length(&s);
+```
+
+#### Comparing to JavaScript
+
+JavaScript's approach to references is more relaxed:
+
+```javascript
+const obj = { value: 5 };
+const ref1 = obj;  // Both variables reference the same object
+const ref2 = obj;  // Can have multiple references
+
+ref1.value = 10;  // Modifies the shared object
+console.log(ref2.value);  // 10
+```
+
+#### The Ref Pattern in JavaScript
+
+JavaScript developers often use the ref pattern in React:
+
+```javascript
+function Component() {
+  const inputRef = useRef(null);
+  return <input ref={inputRef} />;
+}
+```
+
+#### Borrowing and Iterators
+
+Rust's iterators often use borrowing:
+
+```rust
+let v = vec![1, 2, 3];
+for i in &v {  // Borrow v
+    println!("{}", i);
+}
+```
+
+#### The Borrow Checker
+
+The borrow checker is Rust's compile-time mechanism that ensures memory safety.
+
+#### Interior Mutability
+
+Sometimes you need to mutate data through an immutable reference:
+
+```rust
+use std::cell::RefCell;
+
+let data = RefCell::new(5);
+*data.borrow_mut() += 1;  // Mutate through an immutable reference
+```
+
+#### Common Borrowing Patterns
+
+##### Splitting Borrows
+
+You can split a borrow into multiple parts:
+
+```rust
+let mut v = vec![1, 2, 3];
+let (first, rest) = v.split_at_mut(1);
+```
+
+##### Self-Referential Structs
+
+Sometimes you need a struct that contains a reference to itself.
+
+#### Conclusion
+
+Borrowing is a powerful feature that allows Rust to provide memory safety without garbage collection. 

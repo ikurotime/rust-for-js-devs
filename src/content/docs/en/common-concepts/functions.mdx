@@ -1,0 +1,397 @@
+---
+title: 'Functions'
+description: 'Learn about functions in Rust and how they compare to JavaScript functions'
+lastUpdated: 2025-07-11
+---
+
+Functions are fundamental building blocks in any programming language. Let's explore how functions work in Rust and how they compare to JavaScript.
+
+#### Defining Functions
+
+##### JavaScript Functions
+
+In JavaScript, you can define functions in several ways:
+
+```javascript
+// Function declaration
+function add(a, b) {
+  return a + b;
+}
+
+// Function expression
+const multiply = function(a, b) {
+  return a * b;
+};
+
+// Arrow function
+const subtract = (a, b) => a - b;
+```
+
+##### Rust Functions
+
+In Rust, functions are defined with the `fn` keyword:
+
+```rust
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+```
+
+Key differences:
+1. Rust requires type annotations for parameters
+2. Return type is specified with `->` after the parameter list
+3. The final expression without a semicolon is implicitly returned
+4. No function expressions or arrow functions in Rust
+
+#### Function Body and Return Values
+
+##### JavaScript Return Values
+
+In JavaScript, the `return` keyword is used to return a value:
+
+```javascript
+function square(x) {
+  return x * x;
+}
+
+// Functions without return statements return undefined
+function greet(name) {
+  console.log(`Hello, ${name}!`);
+  // implicitly returns undefined
+}
+```
+
+##### Rust Return Values
+
+In Rust, the final expression is returned without the `return` keyword:
+
+```rust
+fn square(x: i32) -> i32 {
+    x * x  // No semicolon - this is an expression that returns a value
+}
+
+// Explicit return
+fn early_return(x: i32) -> i32 {
+    if x < 0 {
+        return 0;  // Early return requires the return keyword
+    }
+    x * x
+}
+
+// Functions can return nothing (the unit type)
+fn greet(name: &str) {
+    println!("Hello, {}!", name);
+    // Implicitly returns the unit type ()
+}
+```
+
+The key concept here is that in Rust, statements end with a semicolon and don't return values, while expressions don't have a semicolon and do return values.
+
+#### Function Parameters
+
+##### JavaScript Parameters
+
+JavaScript is flexible with parameters:
+
+```javascript
+// Optional parameters with default values
+function greet(name = "World") {
+  return `Hello, ${name}!`;
+}
+
+// Rest parameters
+function sum(...numbers) {
+  return numbers.reduce((total, num) => total + num, 0);
+}
+
+// Destructuring parameters
+function printPerson({ name, age }) {
+  console.log(`${name} is ${age} years old`);
+}
+```
+
+##### Rust Parameters
+
+Rust parameters are more strictly typed:
+
+```rust
+// All parameters require type annotations
+fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
+}
+
+// Multiple parameters
+fn calculate_rectangle_area(width: f64, height: f64) -> f64 {
+    width * height
+}
+
+// Default parameters don't exist in the same way as JavaScript
+// You can use Option<T> or implement multiple functions
+fn greet_option(name: Option<&str>) -> String {
+    let name = name.unwrap_or("World");
+    format!("Hello, {}!", name)
+}
+
+// Call it with Some or None
+let greeting = greet_option(Some("Alice"));  // "Hello, Alice!"
+let default_greeting = greet_option(None);   // "Hello, World!"
+```
+
+#### Function Overloading
+
+JavaScript doesn't have true function overloading, though you can simulate it:
+
+```javascript
+function process(arg) {
+  if (typeof arg === 'number') {
+    return arg * 2;
+  } else if (typeof arg === 'string') {
+    return arg.toUpperCase();
+  }
+  return null;
+}
+```
+
+Rust doesn't have function overloading either, but you can:
+1. Use different function names
+2. Use generic types (which we'll cover later)
+3. Use trait objects (which we'll cover later)
+
+```rust
+fn double_number(x: i32) -> i32 {
+    x * 2
+}
+
+fn uppercase_string(s: &str) -> String {
+    s.to_uppercase()
+}
+```
+
+#### Main Function
+
+JavaScript doesn't have a special main function - script execution starts at the top level.
+
+In Rust, the `main` function is the entry point for executables:
+
+```rust
+fn main() {
+    println!("Hello, world!");
+}
+```
+
+#### Passing Functions as Arguments
+
+##### JavaScript Higher-Order Functions
+
+In JavaScript, functions are first-class citizens:
+
+```javascript
+function applyFunction(x, operation) {
+  return operation(x);
+}
+
+// Passing a function as an argument
+const result = applyFunction(5, x => x * x);  // 25
+```
+
+##### Rust Function Pointers
+
+Rust also supports passing functions:
+
+```rust
+fn apply_function(x: i32, operation: fn(i32) -> i32) -> i32 {
+    operation(x)
+}
+
+fn square(x: i32) -> i32 {
+    x * x
+}
+
+// Passing a function as an argument
+let result = apply_function(5, square);  // 25
+
+// Using closures (similar to lambda expressions)
+let result = apply_function(5, |x| x * x);  // 25
+```
+
+## Closures (Lambda Functions)
+
+### JavaScript Closures
+
+JavaScript's closure syntax is lightweight:
+
+```javascript
+const add = (a, b) => a + b;
+
+// Capturing variables from the environment
+function makeCounter() {
+  let count = 0;
+  return function() {
+    count += 1;
+    return count;
+  };
+}
+
+const counter = makeCounter();
+console.log(counter());  // 1
+console.log(counter());  // 2
+```
+
+### Rust Closures
+
+Rust closures use pipes (`|`) for parameters:
+
+```rust
+let add = |a: i32, b: i32| a + b;
+
+// Type inference works with closures
+let add_inferred = |a, b| a + b;
+let sum = add_inferred(5, 10);  // 15
+
+// Capturing variables from the environment
+let x = 5;
+let add_x = |y| x + y;  // Captures x from the environment
+let result = add_x(10);  // 15
+
+// Mutable closures
+let mut counter = 0;
+let mut increment = || {
+    counter += 1;
+    counter
+};
+
+println!("{}", increment());  // 1
+println!("{}", increment());  // 2
+```
+
+Rust closures have three traits:
+- `Fn`: Captures by reference (similar to JS closures)
+- `FnMut`: Captures by mutable reference
+- `FnOnce`: Captures by value and can only be called once
+
+This is related to Rust's ownership system, which we'll cover later.
+
+## Methods
+
+### JavaScript Methods
+
+In JavaScript, methods are functions attached to objects:
+
+```javascript
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+  
+  area() {
+    return this.width * this.height;
+  }
+}
+
+const rect = new Rectangle(10, 20);
+console.log(rect.area());  // 200
+```
+
+### Rust Methods
+
+In Rust, methods are defined within `impl` blocks:
+
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    // Static method (no self parameter)
+    fn new(width: u32, height: u32) -> Rectangle {
+        Rectangle { width, height }
+    }
+    
+    // Instance method (uses &self - "self" is like "this" in JavaScript)
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+    
+    // Mutable method (uses &mut self)
+    fn resize(&mut self, width: u32, height: u32) {
+        self.width = width;
+        self.height = height;
+    }
+}
+
+// Usage
+let mut rect = Rectangle::new(10, 20);
+println!("Area: {}", rect.area());  // 200
+rect.resize(30, 40);
+println!("New area: {}", rect.area());  // 1200
+```
+
+## Associated Functions
+
+These are similar to static methods in JavaScript:
+
+```rust
+impl Rectangle {
+    // This is an associated function (no self parameter)
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            width: size,
+            height: size,
+        }
+    }
+}
+
+// Called with :: syntax, like JavaScript static methods
+let square = Rectangle::square(10);
+```
+
+## Function Documentation
+
+### JavaScript Documentation
+
+JavaScript uses JSDoc comments:
+
+```javascript
+/**
+ * Calculates the sum of two numbers
+ * @param {number} a - The first number
+ * @param {number} b - The second number
+ * @returns {number} The sum of a and b
+ */
+function add(a, b) {
+  return a + b;
+}
+```
+
+### Rust Documentation
+
+Rust uses doc comments:
+
+```rust
+/// Calculates the sum of two numbers
+///
+/// # Examples
+///
+/// ```
+/// let sum = add(5, 10);
+/// assert_eq!(sum, 15);
+/// ```
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+```
+
+## Key Differences
+
+1. **Type Annotations**: Rust requires explicit parameter and return types
+2. **Expressions vs. Statements**: Rust's final expression is returned without a `return` keyword
+3. **Default Parameters**: Rust doesn't have default parameters like JavaScript
+4. **Function Overloading**: Neither language has true function overloading
+5. **Closures**: Both languages support closures, but Rust's have more nuanced capture behavior
+6. **Methods**: Rust methods are defined in `impl` blocks and have explicit `self` parameters
+
+## Next Steps
+
+Now that you understand functions in Rust, let's explore [Comments](/en/common-concepts/comments/) to see how to document your code effectively. 

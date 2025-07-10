@@ -1,0 +1,648 @@
+---
+title: 'Method Syntax in Rust'
+description: 'Understanding how to define and use methods in Rust compared to JavaScript methods'
+lastUpdated: 2025-07-11
+---
+
+Methods add behavior to your data types, similar to how JavaScript classes combine data and functions. However, Rust's approach is distinct and requires understanding some key concepts.
+
+## Methods vs Functions
+
+In JavaScript, methods are simply functions that are properties of objects:
+
+```javascript
+// Function
+function greet(person) {
+  return `Hello, ${person}!`;
+}
+
+// Method (function attached to an object)
+const user = {
+  name: "Alice",
+  greet() {
+    return `Hello, I'm ${this.name}!`;
+  }
+};
+
+console.log(greet("Bob"));     // "Hello, Bob!"
+console.log(user.greet());     // "Hello, I'm Alice!"
+```
+
+In Rust, methods are functions associated with a particular type:
+
+```rust
+struct User {
+    name: String,
+}
+
+// Regular function
+fn greet(person: &str) -> String {
+    format!("Hello, {}!", person)
+}
+
+// Method defined on User type
+impl User {
+    fn greet(&self) -> String {
+        format!("Hello, I'm {}!", self.name)
+    }
+}
+
+fn main() {
+    let user = User {
+        name: String::from("Alice"),
+    };
+    
+    println!("{}", greet("Bob"));     // "Hello, Bob!"
+    println!("{}", user.greet());     // "Hello, I'm Alice!"
+}
+```
+
+The key differences:
+- Rust uses `impl` blocks to associate methods with types
+- Methods in Rust take an explicit `self` parameter
+- JavaScript methods implicitly have access to `this`
+
+## Defining Methods with `impl`
+
+The `impl` (implementation) block is where we define methods for a type:
+
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    // Methods go here
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+    
+    fn perimeter(&self) -> u32 {
+        2 * (self.width + self.height)
+    }
+}
+```
+
+This is different from JavaScript, where methods are typically defined directly within the class definition:
+
+```javascript
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+  
+  area() {
+    return this.width * this.height;
+  }
+  
+  perimeter() {
+    return 2 * (this.width + this.height);
+  }
+}
+```
+
+## Self Parameter: The First Method Parameter
+
+In JavaScript, methods implicitly have access to `this`, which refers to the object the method was called on:
+
+```javascript
+const user = {
+  name: "Alice",
+  greet() {
+    // 'this' is implicitly available
+    return `Hello, I'm ${this.name}!`;
+  }
+};
+```
+
+In Rust, methods explicitly take a parameter that represents the instance:
+
+```rust
+impl User {
+    fn greet(&self) -> String {
+        // 'self' is explicitly received as a parameter
+        format!("Hello, I'm {}!", self.name)
+    }
+}
+```
+
+There are three main ways to use `self` in Rust methods:
+
+1. `&self`: Borrow the instance immutably (read-only)
+2. `&mut self`: Borrow the instance mutably (can modify)
+3. `self`: Take ownership of the instance (rare)
+
+Let's see all three in action:
+
+```rust
+struct Counter {
+    count: u32,
+}
+
+impl Counter {
+    // Immutable borrow - just reads the data
+    fn get_count(&self) -> u32 {
+        self.count
+    }
+    
+    // Mutable borrow - modifies the data
+    fn increment(&mut self) {
+        self.count += 1;
+    }
+    
+    // Takes ownership - consumes the instance
+    fn reset(self) -> Counter {
+        Counter { count: 0 }
+    }
+}
+```
+
+The JavaScript equivalent would be:
+
+```javascript
+class Counter {
+  constructor(count) {
+    this.count = count;
+  }
+  
+  getCount() {
+    return this.count;
+  }
+  
+  increment() {
+    this.count += 1;
+  }
+  
+  reset() {
+    // In JavaScript, we can't truly consume an object
+    // So we just modify it
+    this.count = 0;
+    return this;
+  }
+}
+```
+
+### Understanding `&self` vs `&mut self` vs `self`
+
+This is a critical difference from JavaScript:
+
+1. `&self` is like `const this` - you can read but not modify
+2. `&mut self` is like a normal `this` - you can both read and modify
+3. `self` has no JavaScript equivalent - it takes ownership and consumes the object
+
+Most methods use `&self` or `&mut self`, depending on whether they need to modify the instance.
+
+## Method Parameters
+
+Just like JavaScript, Rust methods can take additional parameters after `self`:
+
+```javascript
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+  
+  scale(factor) {
+    this.width *= factor;
+    this.height *= factor;
+  }
+  
+  canContain(other) {
+    return this.width > other.width && this.height > other.height;
+  }
+}
+```
+
+Rust equivalent:
+
+```rust
+impl Rectangle {
+    fn scale(&mut self, factor: u32) {
+        self.width *= factor;
+        self.height *= factor;
+    }
+    
+    fn can_contain(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+}
+```
+
+Notice that in Rust we have to:
+1. Specify the types of all parameters
+2. Use reference types (`&Rectangle`) for parameters that we don't want to take ownership of
+
+## Method Chaining
+
+JavaScript allows method chaining by returning `this`:
+
+```javascript
+class StringBuilder {
+  constructor() {
+    this.content = "";
+  }
+  
+  append(text) {
+    this.content += text;
+    return this;  // Return this for chaining
+  }
+  
+  appendLine(text) {
+    this.content += text + "\n";
+    return this;  // Return this for chaining
+  }
+  
+  toString() {
+    return this.content;
+  }
+}
+
+const message = new StringBuilder()
+  .append("Hello, ")
+  .append("world")
+  .appendLine("!")
+  .append("How are you?")
+  .toString();
+```
+
+Rust allows similar chaining by returning `&mut self` (a mutable reference to self):
+
+```rust
+struct StringBuilder {
+    content: String,
+}
+
+impl StringBuilder {
+    fn new() -> StringBuilder {
+        StringBuilder {
+            content: String::new(),
+        }
+    }
+    
+    fn append(&mut self, text: &str) -> &mut Self {
+        self.content.push_str(text);
+        self  // Return reference to self for chaining
+    }
+    
+    fn append_line(&mut self, text: &str) -> &mut Self {
+        self.content.push_str(text);
+        self.content.push('\n');
+        self  // Return reference to self for chaining
+    }
+    
+    fn to_string(&self) -> &str {
+        &self.content
+    }
+}
+
+fn main() {
+    let mut builder = StringBuilder::new();
+    let message = builder
+        .append("Hello, ")
+        .append("world")
+        .append_line("!")
+        .append("How are you?")
+        .to_string();
+    
+    println!("{}", message);
+}
+```
+
+The key difference is that Rust returns a reference (`&mut Self`), while JavaScript returns the object itself.
+
+## Associated Functions (Static Methods)
+
+JavaScript uses `static` methods that don't require an instance:
+
+```javascript
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
+  }
+  
+  // Instance method
+  area() {
+    return this.width * this.height;
+  }
+  
+  // Static method
+  static square(size) {
+    return new Rectangle(size, size);
+  }
+}
+
+const square = Rectangle.square(10);
+```
+
+Rust calls these "associated functions" and they don't take `self` as a parameter:
+
+```rust
+impl Rectangle {
+    // Regular method (takes &self)
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+    
+    // Associated function (no self parameter)
+    fn square(size: u32) -> Rectangle {
+        Rectangle {
+            width: size,
+            height: size,
+        }
+    }
+}
+
+let square = Rectangle::square(10);
+```
+
+Associated functions are often used for constructors in Rust:
+
+```rust
+impl User {
+    // Constructor pattern
+    fn new(name: String, email: String) -> User {
+        User {
+            name,
+            email,
+            active: true,
+        }
+    }
+}
+
+let user = User::new(String::from("Alice"), String::from("alice@example.com"));
+```
+
+## Multiple `impl` Blocks
+
+Rust allows multiple `impl` blocks for the same type, which has no direct equivalent in JavaScript:
+
+```rust
+struct User {
+    name: String,
+    email: String,
+    active: bool,
+}
+
+// Basic methods
+impl User {
+    fn is_active(&self) -> bool {
+        self.active
+    }
+    
+    fn deactivate(&mut self) {
+        self.active = false;
+    }
+}
+
+// Constructor methods
+impl User {
+    fn new(name: String, email: String) -> User {
+        User {
+            name,
+            email,
+            active: true,
+        }
+    }
+    
+    fn inactive(name: String, email: String) -> User {
+        User {
+            name,
+            email,
+            active: false,
+        }
+    }
+}
+```
+
+This is especially helpful for organizing code and when implementing traits.
+
+## Getters and Setters
+
+JavaScript uses getter and setter methods/properties:
+
+```javascript
+class Person {
+  constructor(firstName, lastName) {
+    this._firstName = firstName;
+    this._lastName = lastName;
+  }
+  
+  // Getter
+  get fullName() {
+    return `${this._firstName} ${this._lastName}`;
+  }
+  
+  // Setter
+  set fullName(value) {
+    const parts = value.split(' ');
+    this._firstName = parts[0];
+    this._lastName = parts[1] || '';
+  }
+}
+
+const person = new Person("John", "Doe");
+console.log(person.fullName);  // "John Doe"
+person.fullName = "Jane Smith";
+console.log(person.fullName);  // "Jane Smith"
+```
+
+Rust typically uses explicit methods:
+
+```rust
+struct Person {
+    first_name: String,
+    last_name: String,
+}
+
+impl Person {
+    // Constructor
+    fn new(first_name: String, last_name: String) -> Person {
+        Person { first_name, last_name }
+    }
+    
+    // Getter
+    fn full_name(&self) -> String {
+        format!("{} {}", self.first_name, self.last_name)
+    }
+    
+    // Setter
+    fn set_full_name(&mut self, full_name: &str) {
+        let parts: Vec<&str> = full_name.split(' ').collect();
+        self.first_name = parts[0].to_string();
+        self.last_name = if parts.len() > 1 { parts[1].to_string() } else { String::new() };
+    }
+}
+
+fn main() {
+    let mut person = Person::new(String::from("John"), String::from("Doe"));
+    println!("{}", person.full_name());  // "John Doe"
+    
+    person.set_full_name("Jane Smith");
+    println!("{}", person.full_name());  // "Jane Smith"
+}
+```
+
+## Private Methods
+
+JavaScript has private methods using the `#` prefix:
+
+```javascript
+class Counter {
+  #count = 0;
+  
+  #validateIncrement(value) {
+    if (value <= 0) {
+      throw new Error("Increment must be positive");
+    }
+  }
+  
+  increment(value = 1) {
+    this.#validateIncrement(value);
+    this.#count += value;
+    return this.#count;
+  }
+  
+  getCount() {
+    return this.#count;
+  }
+}
+```
+
+Rust handles privacy through modules, where methods are private by default but can be made public with `pub`:
+
+```rust
+mod counter_module {
+    pub struct Counter {
+        count: u32,
+    }
+    
+    impl Counter {
+        pub fn new() -> Counter {
+            Counter { count: 0 }
+        }
+        
+        // Private method
+        fn validate_increment(&self, value: u32) -> Result<(), &'static str> {
+            if value == 0 {
+                return Err("Increment must be positive");
+            }
+            Ok(())
+        }
+        
+        pub fn increment(&mut self, value: u32) -> Result<u32, &'static str> {
+            self.validate_increment(value)?;
+            self.count += value;
+            Ok(self.count)
+        }
+        
+        pub fn get_count(&self) -> u32 {
+            self.count
+        }
+    }
+}
+
+use counter_module::Counter;
+
+fn main() {
+    let mut counter = Counter::new();
+    match counter.increment(5) {
+        Ok(new_count) => println!("New count: {}", new_count),
+        Err(e) => println!("Error: {}", e),
+    }
+    
+    println!("Current count: {}", counter.get_count());
+    
+    // This would cause an error if uncommented:
+    // counter.validate_increment(1); // Error: private method
+}
+```
+
+## When to Use Methods vs Functions
+
+Here's a general guide for when to use methods vs plain functions:
+
+Use methods when:
+- The function operates on an instance of a specific type
+- The operation is intrinsically connected to that type
+- The function needs access to the internal state of the type
+
+Use standalone functions when:
+- The operation applies to multiple types
+- The function doesn't need direct access to the internal state
+- The functionality is truly independent of any specific type
+
+## Constructor Patterns
+
+JavaScript has a built-in constructor mechanism:
+
+```javascript
+class User {
+  constructor(name, email) {
+    this.name = name;
+    this.email = email;
+    this.active = true;
+  }
+}
+
+const user = new User("Alice", "alice@example.com");
+```
+
+Rust conventionally uses associated functions named `new`:
+
+```rust
+impl User {
+    fn new(name: String, email: String) -> User {
+        User {
+            name,
+            email,
+            active: true,
+        }
+    }
+}
+
+let user = User::new(String::from("Alice"), String::from("alice@example.com"));
+```
+
+Rust can also have multiple constructor-like functions:
+
+```rust
+impl Rectangle {
+    // General constructor
+    fn new(width: u32, height: u32) -> Rectangle {
+        Rectangle { width, height }
+    }
+    
+    // Specialized constructor for squares
+    fn square(size: u32) -> Rectangle {
+        Rectangle { width: size, height: size }
+    }
+    
+    // Constructor with validation
+    fn try_new(width: u32, height: u32) -> Option<Rectangle> {
+        if width == 0 || height == 0 {
+            None
+        } else {
+            Some(Rectangle { width, height })
+        }
+    }
+}
+```
+
+## Summary
+
+Methods in Rust provide a way to associate behavior with data types. While the syntax is different from JavaScript, the conceptual model is similar:
+
+- Rust uses `impl` blocks to define methods for a type
+- Methods take `&self`, `&mut self`, or `self` as their first parameter
+- "Associated functions" (static methods) don't take `self`
+- Method chaining works by returning `&mut self`
+- Rust separates data (`struct`) from behavior (`impl`), while JavaScript combines them in classes
+- Rust's ownership and borrowing rules apply to methods, providing safety guarantees
+
+Understanding Rust's method syntax is a key step to writing idiomatic Rust code that will feel familiar to JavaScript developers while leveraging Rust's unique features.
+
+Next, we'll explore enums and pattern matching, which provide powerful ways to represent and work with data in Rust. 

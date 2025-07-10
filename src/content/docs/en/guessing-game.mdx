@@ -1,0 +1,315 @@
+---
+title: Building a Guessing Game
+description: Create a simple guessing game in Rust and compare with JavaScript implementation
+lastUpdated: 2025-07-11
+---
+
+
+Now that we've covered the basics, let's build a simple guessing game to get a better feel for Rust. We'll build the same application in both Rust and JavaScript to highlight the differences and similarities.
+
+### Project Home
+
+We'll create a number guessing game where:
+1. The program generates a random number between 1 and 100
+2. The player inputs guesses
+3. The program provides feedback on each guess
+4. The game continues until the player guesses correctly
+
+### Setting Up the Rust Project
+
+Let's start by creating a new Rust project:
+
+```bash
+cargo new guessing_game
+cd guessing_game
+```
+
+### The Initial Rust Program
+
+Open `src/main.rs` and replace its contents with:
+
+```rust
+use std::io;
+
+fn main() {
+    println!("Guess the number!");
+    
+    println!("Please input your guess:");
+    
+    let mut guess = String::new();
+    
+    io::stdin()
+        .read_line(&mut guess)
+        .expect("Failed to read line");
+        
+    println!("You guessed: {}", guess);
+}
+```
+
+### JavaScript Equivalent
+
+For comparison, here's how we'd start in JavaScript:
+
+```javascript
+const readline = require('readline').createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+console.log("Guess the number!");
+
+console.log("Please input your guess:");
+
+readline.question('', (guess) => {
+  console.log(`You guessed: ${guess}`);
+  readline.close();
+});
+```
+
+### Understanding the Rust Code
+
+Let's break down the Rust code:
+
+1. `use std::io;` - Imports the I/O library (similar to `require` in Node.js)
+2. `let mut guess = String::new();` - Creates a mutable variable (note `mut`)
+3. `io::stdin().read_line(&mut guess)` - Gets user input and stores it in `guess`
+4. `.expect("Failed to read line")` - Handles potential errors (we'll explore better error handling later)
+
+Key differences from JavaScript:
+- Variables are immutable by default in Rust; we need `mut` to make them mutable
+- In Rust, we handle errors explicitly with `.expect()` or other error handling methods
+
+### Adding Random Number Generation
+
+Let's update our program to generate a random number. First, we need to add the `rand` crate to our dependencies.
+
+Edit `Cargo.toml`:
+
+```toml
+[dependencies]
+rand = "0.8.5"
+```
+
+Now, update `src/main.rs`:
+
+```rust
+use std::io;
+use std::cmp::Ordering;
+use rand::Rng;
+
+fn main() {
+    println!("Guess the number!");
+    
+    let secret_number = rand::thread_rng().gen_range(1..=100);
+    
+    println!("The secret number is: {}", secret_number); // For debugging
+    
+    println!("Please input your guess:");
+    
+    let mut guess = String::new();
+    
+    io::stdin()
+        .read_line(&mut guess)
+        .expect("Failed to read line");
+        
+    let guess: u32 = guess.trim().parse().expect("Please type a number!");
+        
+    println!("You guessed: {}", guess);
+    
+    match guess.cmp(&secret_number) {
+        Ordering::Less => println!("Too small!"),
+        Ordering::Greater => println!("Too big!"),
+        Ordering::Equal => println!("You win!"),
+    }
+}
+```
+
+### JavaScript Equivalent
+
+```javascript
+const readline = require('readline').createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+console.log("Guess the number!");
+
+const secretNumber = Math.floor(Math.random() * 100) + 1;
+
+console.log(`The secret number is: ${secretNumber}`); // For debugging
+
+console.log("Please input your guess:");
+
+readline.question('', (guessInput) => {
+  const guess = Number(guessInput.trim());
+  
+  console.log(`You guessed: ${guess}`);
+  
+  if (guess < secretNumber) {
+    console.log("Too small!");
+  } else if (guess > secretNumber) {
+    console.log("Too big!");
+  } else {
+    console.log("You win!");
+  }
+  
+  readline.close();
+});
+```
+
+### Key Differences So Far
+
+1. **Error Handling**: 
+   - Rust: Explicit with `.expect()` or other methods
+   - JavaScript: Often implicit or with try/catch blocks
+
+2. **Type Conversion**:
+   - Rust: Explicit parsing with `.parse()` to convert strings to numbers
+   - JavaScript: Implicit conversion or explicit with `Number()`
+
+3. **Comparison**:
+   - Rust: Uses pattern matching with `match` expression
+   - JavaScript: Uses if/else statements
+
+### Adding a Loop for Multiple Guesses
+
+Let's update our Rust program to allow multiple guesses:
+
+```rust
+use std::io;
+use std::cmp::Ordering;
+use rand::Rng;
+
+fn main() {
+    println!("Guess the number!");
+    
+    let secret_number = rand::thread_rng().gen_range(1..=100);
+    
+    loop {
+        println!("Please input your guess:");
+        
+        let mut guess = String::new();
+        
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("Failed to read line");
+            
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Please type a number!");
+                continue;
+            }
+        };
+            
+        println!("You guessed: {}", guess);
+        
+        match guess.cmp(&secret_number) {
+            Ordering::Less => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
+            Ordering::Equal => {
+                println!("You win!");
+                break;
+            }
+        }
+    }
+}
+```
+
+## JavaScript Equivalent
+
+```javascript
+const readline = require('readline');
+
+function guessTheNumber() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  
+  console.log("Guess the number!");
+  
+  const secretNumber = Math.floor(Math.random() * 100) + 1;
+  
+  const askGuess = () => {
+    rl.question('Please input your guess: ', (guessInput) => {
+      const guess = Number(guessInput.trim());
+      
+      if (isNaN(guess)) {
+        console.log("Please type a number!");
+        askGuess();
+        return;
+      }
+      
+      console.log(`You guessed: ${guess}`);
+      
+      if (guess < secretNumber) {
+        console.log("Too small!");
+        askGuess();
+      } else if (guess > secretNumber) {
+        console.log("Too big!");
+        askGuess();
+      } else {
+        console.log("You win!");
+        rl.close();
+      }
+    });
+  };
+  
+  askGuess();
+}
+
+guessTheNumber();
+```
+
+### Improved Error Handling
+
+Notice how our Rust code now uses pattern matching to handle potential errors when parsing the input:
+
+```rust
+let guess: u32 = match guess.trim().parse() {
+    Ok(num) => num,
+    Err(_) => {
+        println!("Please type a number!");
+        continue;
+    }
+};
+```
+
+This is using Rust's `Result` type, which we'll explore more in the error handling section.
+
+### Running the Complete Game
+
+Run the Rust version:
+
+```bash
+cargo run
+```
+
+### Comparing the Full Implementations
+
+Let's highlight the key differences between our Rust and JavaScript implementations:
+
+1. **Memory Safety**: 
+   - Rust guarantees memory safety at compile time
+   - JavaScript relies on runtime checks and garbage collection
+
+2. **Error Handling**:
+   - Rust uses Result types that force us to handle errors explicitly
+   - JavaScript typically uses try/catch blocks or callbacks for error handling
+
+3. **Type System**:
+   - Rust is statically typed, requiring explicit type annotations
+   - JavaScript is dynamically typed with optional type systems like TypeScript
+
+4. **Concurrency Model**:
+   - Rust's ownership system prevents data races at compile time
+   - JavaScript uses an event loop with a single thread by default
+
+5. **Performance**:
+   - Rust compiles to native code with performance similar to C/C++
+   - JavaScript depends on the runtime's JIT compiler
+
+### Next Steps
+
+You've now successfully built a complete, interactive guessing game using Rust's language features. Next, we'll cover [Common Programming Concepts](/en/common-concepts/variables-mutability/) in more detail, starting with variables and mutability. 

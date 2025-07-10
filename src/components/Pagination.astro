@@ -2,6 +2,7 @@
 import { Icon } from '@astrojs/starlight/components';
 import type { Props } from '@astrojs/starlight/props';
 
+// console.log(Astro.locals.starlightRoute);
 const { dir, pagination } = Astro.props;
 const { prev, next } = pagination || {};
 const isRtl = dir === 'rtl';
