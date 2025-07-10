@@ -14,7 +14,8 @@ import HeaderLinks from "./HeaderLinks.astro";
 
 <div class="header-layout sl-flex">
   <div class="sl-flex">
-    <SiteTitle {...Astro.props} siteTitleHref={getRelativeLocaleUrl(Astro.currentLocale ?? 'en', 'home')} />
+    <SiteTitle {...Astro.props} siteTitleHref={getRelativeLocaleUrl(Astro.currentLocale ?? 'en', '')} />
+    
   </div>
   <div class="middle-group">
     <div class="sl-flex">
@@ -35,7 +36,7 @@ import HeaderLinks from "./HeaderLinks.astro";
       <Search {...Astro.props} />
     </div>
     
-    <ThemeSelect {...Astro.props} />
+    <!-- <ThemeSelect {...Astro.props} /> -->
     <LanguageSelect {...Astro.props} />
    
   </div>

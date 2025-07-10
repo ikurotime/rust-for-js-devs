@@ -6,7 +6,7 @@ description: Create a simple guessing game in Rust and compare with JavaScript i
 
 Now that we've covered the basics, let's build a simple guessing game to get a better feel for Rust. We'll build the same application in both Rust and JavaScript to highlight the differences and similarities.
 
-## Project Home
+### Project Home
 
 We'll create a number guessing game where:
 1. The program generates a random number between 1 and 100
@@ -14,7 +14,7 @@ We'll create a number guessing game where:
 3. The program provides feedback on each guess
 4. The game continues until the player guesses correctly
 
-## Setting Up the Rust Project
+### Setting Up the Rust Project
 
 Let's start by creating a new Rust project:
 
@@ -23,7 +23,7 @@ cargo new guessing_game
 cd guessing_game
 ```
 
-## The Initial Rust Program
+### The Initial Rust Program
 
 Open `src/main.rs` and replace its contents with:
 
@@ -45,7 +45,7 @@ fn main() {
 }
 ```
 
-## JavaScript Equivalent
+### JavaScript Equivalent
 
 For comparison, here's how we'd start in JavaScript:
 
@@ -65,7 +65,7 @@ readline.question('', (guess) => {
 });
 ```
 
-## Understanding the Rust Code
+### Understanding the Rust Code
 
 Let's break down the Rust code:
 
@@ -78,7 +78,7 @@ Key differences from JavaScript:
 - Variables are immutable by default in Rust; we need `mut` to make them mutable
 - In Rust, we handle errors explicitly with `.expect()` or other error handling methods
 
-## Adding Random Number Generation
+### Adding Random Number Generation
 
 Let's update our program to generate a random number. First, we need to add the `rand` crate to our dependencies.
 
@@ -123,7 +123,7 @@ fn main() {
 }
 ```
 
-## JavaScript Equivalent
+### JavaScript Equivalent
 
 ```javascript
 const readline = require('readline').createInterface({
@@ -156,7 +156,7 @@ readline.question('', (guessInput) => {
 });
 ```
 
-## Key Differences So Far
+### Key Differences So Far
 
 1. **Error Handling**: 
    - Rust: Explicit with `.expect()` or other methods
@@ -170,7 +170,7 @@ readline.question('', (guessInput) => {
    - Rust: Uses pattern matching with `match` expression
    - JavaScript: Uses if/else statements
 
-## Adding a Loop for Multiple Guesses
+### Adding a Loop for Multiple Guesses
 
 Let's update our Rust program to allow multiple guesses:
 
@@ -261,7 +261,7 @@ function guessTheNumber() {
 guessTheNumber();
 ```
 
-## Improved Error Handling
+### Improved Error Handling
 
 Notice how our Rust code now uses pattern matching to handle potential errors when parsing the input:
 
@@ -277,7 +277,7 @@ let guess: u32 = match guess.trim().parse() {
 
 This is using Rust's `Result` type, which we'll explore more in the error handling section.
 
-## Running the Complete Game
+### Running the Complete Game
 
 Run the Rust version:
 
@@ -285,7 +285,7 @@ Run the Rust version:
 cargo run
 ```
 
-## Comparing the Full Implementations
+### Comparing the Full Implementations
 
 Let's highlight the key differences between our Rust and JavaScript implementations:
 
@@ -309,6 +309,6 @@ Let's highlight the key differences between our Rust and JavaScript implementati
    - Rust compiles to native code with performance similar to C/C++
    - JavaScript depends on the runtime's JIT compiler
 
-## Next Steps
+### Next Steps
 
 You've now successfully built a complete, interactive guessing game using Rust's language features. Next, we'll cover [Common Programming Concepts](/en/common-concepts/variables-mutability/) in more detail, starting with variables and mutability. 

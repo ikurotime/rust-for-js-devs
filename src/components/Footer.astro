@@ -4,12 +4,14 @@ import { Icon } from '@astrojs/starlight/components';
 import config from '../../config';
 
 // const slug = Astro.props.entry.slug;
-const { lang, lastUpdated } = Astro.props;
-const { template } = Astro.props.entry.data;
+const { lang, lastUpdated } = Astro.locals.starlightRoute;
+
+const { template  } = Astro.locals.starlightRoute.entry.data;
 // const editLink = userConfig.editLink.baseUrl;
 
-let editUrl = Astro.props.editUrl;
+let editUrl = Astro.locals.starlightRoute.editUrl?.href;
 
+console.log(Astro.locals.starlightRoute.editUrl?.href);
 
 ---
 
